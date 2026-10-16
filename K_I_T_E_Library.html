@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%235ee6d0'/%3E%3Cpolygon points='11,8 22,16 11,24 14.5,16' fill='%230c0e0f'/%3E%3Ccircle cx='22' cy='24' r='1.6' fill='%230c0e0f'/%3E%3C/svg%3E">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0c0e0f">
+<title>K.I.T.E Library</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon.svg">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="K.I.T.E Library">
+<style>
+:root{--bg:#0c0e0f;--panel:#121517;--panel-2:#161a1c;--border:#22282b;--border-bright:#5ee6d0;--cyan:#5ee6d0;--amber:#f0b35e;--green:#7ee787;--red:#ff6b6b;--grey:#7b8389;--grey-dim:#52585c;--white:#e9edee;--sans:"Inter","Segoe UI","Helvetica Neue",Arial,system-ui,sans-serif}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{margin:0;padding:0;height:100%;background:var(--bg)}
+body{margin:0;padding:0;background:var(--bg);color:var(--white);font-family:"JetBrains Mono","IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;min-height:100vh;overscroll-behavior-y:none}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse at 50% -10%,rgba(94,230,208,.05),transparent 60%)}
+#app{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:0 16px 40px;min-height:100vh}
+.top-bar{display:flex;align-items:center;justify-content:space-between;padding:18px 0 14px;border-bottom:1px solid var(--border);margin-bottom:20px}
+.brand{display:flex;align-items:baseline;gap:10px}
+.brand .kite{font-size:20px;font-weight:700;color:var(--cyan);letter-spacing:.2em}
+.brand .sub{font-size:11px;color:var(--grey-dim);letter-spacing:.14em;text-transform:uppercase;font-weight:600}
+.user-area{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--grey)}
+.user-area .name{color:var(--white);font-weight:600}
+.tag{border:1px solid var(--border);border-radius:6px;padding:5px 10px;font-family:inherit;font-size:11.5px;color:var(--cyan);background:transparent;cursor:pointer}
+.tag:hover{border-color:var(--border-bright)}
+.tag.danger{color:var(--red);border-color:#5a2424}
+.search-wrap{margin-bottom:16px}
+.search-input{width:100%;background:var(--panel);border:1px solid var(--border);border-radius:10px;color:var(--white);font-family:inherit;font-size:15px;padding:14px 16px}
+.search-input:focus{outline:none;border-color:var(--cyan)}
+.filters{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:16px;scrollbar-width:none}
+.filters::-webkit-scrollbar{display:none}
+.chip{flex-shrink:0;background:transparent;border:1px solid var(--border);color:var(--grey);border-radius:20px;padding:7px 14px;font-family:inherit;font-size:12px;cursor:pointer;white-space:nowrap}
+.chip.active{background:rgba(94,230,208,.12);color:var(--cyan);border-color:var(--cyan)}
+.chip:hover{border-color:var(--border-bright)}
+.subject-head{font-family:var(--sans);font-size:34px;font-weight:800;color:var(--cyan);margin:44px 0 18px;line-height:1.1;letter-spacing:-.01em}
+section:first-of-type>.subject-head{margin-top:10px}
+.deck-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:26px 34px;padding:0 10px 10px 0}
+.deck-card{font-family:var(--sans);color:var(--cyan);background:var(--panel);border-radius:22px;box-shadow:7px 7px 0 var(--cyan);padding:16px 18px 18px;display:flex;flex-direction:column;gap:10px}
+.dc-row{display:flex;justify-content:space-between;align-items:baseline;gap:14px}
+.dc-title{font-size:20px;line-height:1.25;font-weight:500;min-width:0;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word}
+.dc-right{display:flex;gap:12px;align-items:baseline;flex-shrink:0;font-size:16px}
+.dc-author{max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dc-tags{font-size:15.5px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dc-tags.none{opacity:.45}
+.dc-time{font-size:15.5px;flex-shrink:0}
+.dc-actions{display:flex;gap:14px;margin-top:6px}
+.dc-btn{flex:1;background:#000;color:#fff;border:0;border-radius:12px;padding:12px 8px;font-family:var(--sans);font-size:14.5px;font-weight:700;cursor:pointer;box-shadow:4px 4px 0 var(--cyan);transition:transform .08s,box-shadow .08s}
+.dc-btn:hover{filter:brightness(1.25)}
+.dc-btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--cyan)}
+.dc-btn:disabled{opacity:.5;cursor:not-allowed}
+.empty-state{text-align:center;color:var(--grey);padding:60px 20px;font-size:13.5px;line-height:1.7}
+.empty-state .big{font-size:36px;margin-bottom:14px;opacity:.6}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:8px;border:1px solid var(--border);background:var(--panel-2);color:var(--white);font-family:inherit;font-size:13.5px;font-weight:600;padding:12px 18px;cursor:pointer;transition:transform .08s,border-color .15s,opacity .15s}
+.btn:active{transform:scale(.98)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn-primary{background:var(--cyan);color:#06231e;border-color:var(--cyan)}
+.btn-ghost{background:transparent;color:var(--grey);border-color:var(--border)}
+.btn-danger{background:transparent;color:var(--red);border-color:#5a2424}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap}
+.spinner{width:34px;height:34px;border:3px solid var(--border);border-top-color:var(--cyan);border-radius:50%;animation:spin .8s linear infinite;margin:40px auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading{text-align:center;color:var(--grey);font-size:13px;padding:30px}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:none;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto}
+.modal-overlay.show{display:flex}
+.modal{background:var(--panel);border:1px solid var(--border);border-radius:12px;max-width:600px;width:100%;padding:24px;margin:auto;box-shadow:0 24px 60px -20px rgba(0,0,0,.9)}
+.modal .close{float:right;background:transparent;border:none;color:var(--grey);font-size:20px;cursor:pointer;padding:0;line-height:1;margin-top:-4px}
+.modal h2{font-size:19px;color:var(--amber);margin:0 0 6px;font-weight:700;line-height:1.3;padding-right:30px}
+.modal .meta-row{color:var(--grey);font-size:12px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:12px}
+.modal .meta-row .sep{color:var(--grey-dim)}
+.modal .desc-block{background:var(--panel-2);border:1px solid var(--border);border-radius:8px;padding:14px;font-size:13.5px;color:var(--white);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;max-height:180px;overflow-y:auto}
+.modal .cards-preview{margin-bottom:18px}
+.modal .cards-preview .card-preview{background:var(--panel-2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:8px;font-size:13px}
+.modal .cards-preview .card-preview .q{color:var(--amber);margin-bottom:6px;font-weight:600}
+.modal .cards-preview .card-preview .a{color:var(--grey);line-height:1.5}
+.modal .cards-preview .more{text-align:center;color:var(--grey-dim);font-size:12px;margin-top:6px}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:8px}
+.auth-card{max-width:420px;margin:80px auto;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:28px 24px;box-shadow:0 24px 60px -20px rgba(0,0,0,.85)}
+.auth-brand{text-align:center;color:var(--grey);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px}
+.auth-title{font-size:20px;color:var(--amber);margin:0 0 6px;text-align:center;font-weight:700;letter-spacing:.02em}
+.auth-sub{text-align:center;color:var(--grey);font-size:12px;margin-bottom:20px;line-height:1.55}
+.auth-field{margin-bottom:12px}
+.auth-field label{display:block;color:var(--grey);font-size:11.5px;margin-bottom:5px;letter-spacing:.02em}
+.auth-field input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:inherit;font-size:14px;padding:12px 13px}
+.auth-field input:focus{outline:none;border-color:var(--cyan)}
+.auth-err{color:var(--red);font-size:12px;text-align:center;margin-top:12px;min-height:16px;line-height:1.4}
+.auth-link{text-align:center;color:var(--grey);font-size:12.5px;margin-top:16px}
+.auth-link a{color:var(--cyan);cursor:pointer;text-decoration:none}
+.auth-link a:hover{text-decoration:underline}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--panel-2);border:1px solid var(--border-bright);color:var(--white);padding:11px 18px;border-radius:8px;font-size:13px;z-index:200;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;max-width:90%;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.footnote{text-align:center;color:var(--grey-dim);font-size:10.5px;padding:24px 0 0;letter-spacing:.02em}
+@media (max-width:560px){
+  .deck-grid{grid-template-columns:1fr;gap:24px;padding-right:8px}
+  .subject-head{font-size:28px}
+  .brand .sub{display:none}
+  .modal{padding:18px;border-radius:10px}
+  .modal h2{font-size:17px}
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div class="modal-overlay" id="modalOverlay"></div>
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, getDocs, query, orderBy, limit, serverTimestamp, increment } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCe10S1IL7yd7vaT64siUZIDLDE2Yol1g0",
+  authDomain: "study-assistant-backend.firebaseapp.com",
+  projectId: "study-assistant-backend",
+  storageBucket: "study-assistant-backend.firebasestorage.app",
+  messagingSenderId: "189507822224",
+  appId: "1:189507822224:web:b0959b1ceef41481702e15"
+};
+
+const KITE_URL = "https://d4nd4d.github.io/K.I.T.E/"; // ← update if different
+
+const fbApp = initializeApp(firebaseConfig);
+const auth  = getAuth(fbApp);
+const db    = getFirestore(fbApp);
+
+let currentUser = null;
+let allDecks = [];
+let activeSubject = "All";
+let searchQuery = "";
+let currentDeck = null;
+let loadingDecks = true;
+
+/* ---------- helpers ---------- */
+function esc(s){const d=document.createElement("div");d.textContent=s==null?"":String(s);return d.innerHTML}
+function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove("show"),1800)}
+function fmtDate(ts){
+  if(!ts) return "—";
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  if(isNaN(d)) return "—";
+  return d.toLocaleDateString();
+}
+function timeAgo(ts){
+  if(!ts) return "—";
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  if(isNaN(d)) return "—";
+  const s = Math.floor((Date.now() - d.getTime()) / 1000);
+  if(s < 60) return "just now";
+  const m = Math.floor(s / 60);   if(m < 60) return m + "m ago";
+  const h = Math.floor(m / 60);   if(h < 24) return h + "h ago";
+  const days = Math.floor(h / 24); if(days < 30) return days + "d ago";
+  const mo = Math.floor(days / 30); if(mo < 12) return mo + "mo ago";
+  return Math.floor(days / 365) + "y ago";
+}
+function fullDate(ts){
+  if(!ts) return "";
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  return isNaN(d) ? "" : d.toLocaleString();
+}
+function friendlyAuthError(e){
+  const c = e && e.code ? e.code : "";
+  switch(c){
+    case "auth/invalid-email":        return "That email doesn't look right.";
+    case "auth/user-not-found":       return "No account with that email.";
+    case "auth/wrong-password":
+    case "auth/invalid-credential":   return "Incorrect email or password.";
+    case "auth/too-many-requests":    return "Too many attempts. Try again in a minute.";
+    case "auth/network-request-failed": return "Network error. Check your connection.";
+    default: return (e && e.message) || "Something went wrong.";
+  }
+}
+
+/* ---------- data ---------- */
+async function loadDecks(){
+  loadingDecks = true;
+  render();
+  try{
+    const q = query(collection(db, "public_decks"), orderBy("createdAt", "desc"), limit(200));
+    const snap = await getDocs(q);
+    allDecks = [];
+    snap.forEach(d => {
+      const data = d.data();
+      if(data.hidden) return;
+      allDecks.push({ id: d.id, ...data });
+    });
+  }catch(e){
+    console.warn("Failed to load decks:", e);
+    allDecks = [];
+  }
+  loadingDecks = false;
+  render();
+}
+
+function uniqueSubjects(){
+  const set = new Set();
+  allDecks.forEach(d => { if(d.subject) set.add(d.subject); });
+  return ["All", ...Array.from(set).sort()];
+}
+
+function groupedDecks(decks){
+  const map = new Map();
+  decks.forEach(d => {
+    const key = (d.subject && String(d.subject).trim()) || "Other";
+    if(!map.has(key)) map.set(key, []);
+    map.get(key).push(d);
+  });
+  return Array.from(map.entries()).sort((a, b) => {
+    if(a[0] === "Other") return 1;
+    if(b[0] === "Other") return -1;
+    return a[0].localeCompare(b[0]);
+  });
+}
+
+function filteredDecks(){
+  const q = searchQuery.trim().toLowerCase();
+  return allDecks.filter(d => {
+    if(activeSubject !== "All" && d.subject !== activeSubject) return false;
+    if(!q) return true;
+    const hay = `${d.title||""} ${d.description||""} ${d.subject||""} ${(d.tags||[]).join(" ")} ${d.ownerName||""}`.toLowerCase();
+    return hay.includes(q);
+  });
+}
+
+/* ---------- auth screens ---------- */
+function renderLogin(){
+  return `
+    <div class="auth-card">
+      <div class="auth-brand">K.I.T.E Library</div>
+      <div class="auth-title">Sign in</div>
+      <div class="auth-sub">Use the same email and password as your K.I.T.E account.</div>
+      <div class="auth-field"><label>Email</label><input type="email" id="loginEmail" autocomplete="email" placeholder="you@example.com"></div>
+      <div class="auth-field"><label>Password</label><input type="password" id="loginPassword" autocomplete="current-password" placeholder="••••••••"></div>
+      <button class="btn btn-primary" id="loginBtn" style="width:100%;margin-top:8px;">Sign in</button>
+      <div class="auth-err" id="loginErr"></div>
+      <div class="auth-link"><a id="forgotLink">Forgot password?</a></div>
+      <div class="auth-link">No account? <a id="createAcctLink" href="${KITE_URL}" target="_blank" rel="noopener">Create one on K.I.T.E →</a></div>
+      <div class="auth-link"><a id="backToBrowse">← Back to browsing</a></div>
+    </div>
+  `;
+}
+
+/* ---------- main views ---------- */
+function renderTopBar(){
+  let userBlock;
+  if(currentUser){
+    userBlock = `
+      <span class="name">${esc(currentUser.displayName || currentUser.email.split("@")[0])}</span>
+      <button class="tag" id="signOutBtn">Sign out</button>
+    `;
+  }else{
+    userBlock = `<button class="tag" id="signInBtn">Sign in</button>`;
+  }
+  return `
+    <div class="top-bar">
+      <div class="brand">
+        <span class="kite">K.I.T.E</span>
+        <span class="sub">Library</span>
+      </div>
+      <div class="user-area">${userBlock}</div>
+    </div>
+  `;
+}
+
+function renderBrowse(){
+  if(loadingDecks){
+    return renderTopBar() + `<div class="spinner"></div><div class="loading">Loading decks…</div>`;
+  }
+  const subjects = uniqueSubjects();
+  const decks = filteredDecks();
+
+  const chips = subjects.map(s =>
+    `<button class="chip ${activeSubject===s?"active":""}" data-subject="${esc(s)}">${esc(s)}</button>`
+  ).join("");
+
+  let gridHTML;
+  if(decks.length === 0){
+    if(allDecks.length === 0){
+      gridHTML = `<div class="empty-state"><div class="big">📭</div><div>No decks published yet.</div><div style="margin-top:8px;color:var(--grey-dim);">Be the first — publish a deck from K.I.T.E.</div></div>`;
+    }else{
+      gridHTML = `<div class="empty-state"><div class="big">🔍</div><div>No decks match.</div><div style="margin-top:8px;color:var(--grey-dim);">Try a different search or subject.</div></div>`;
+    }
+  }else{
+    gridHTML = groupedDecks(decks).map(([subject, list]) => `
+      <section>
+        <h2 class="subject-head">${esc(subject)}</h2>
+        <div class="deck-grid">${list.map(deckCardHTML).join("")}</div>
+      </section>
+    `).join("");
+  }
+
+  return `
+    ${renderTopBar()}
+    <div class="search-wrap">
+      <input type="text" class="search-input" id="searchInput" placeholder="Search decks, subjects, tags…" value="${esc(searchQuery)}" autofocus>
+    </div>
+    <div class="filters">${chips}</div>
+    ${gridHTML}
+    <div class="footnote">Decks are shared by K.I.T.E users. Import any deck to study it in the app.</div>
+  `;
+}
+
+function deckTagsHTML(d){
+  const tags = (d.tags || []).map(t => String(t).trim()).filter(Boolean);
+  if(!tags.length) return `<div class="dc-tags none">{ no tags }</div>`;
+  const shown = tags.slice(0, 3).join(", ");
+  const extra = tags.length > 3 ? ` +${tags.length - 3}` : "";
+  return `<div class="dc-tags" title="${esc(tags.join(", "))}">{ ${esc(shown)}${extra} }</div>`;
+}
+
+function deckCardHTML(d){
+  const n = d.cardCount || 0;
+  return `
+    <div class="deck-card">
+      <div class="dc-row">
+        <div class="dc-title">${esc(d.title || "Untitled")}</div>
+        <div class="dc-right">
+          <span class="dc-count">${n} card${n===1?"":"s"}</span>
+          <span class="dc-author">${esc(d.ownerName || "anonymous")}</span>
+        </div>
+      </div>
+      <div class="dc-row">
+        ${deckTagsHTML(d)}
+        <div class="dc-time" title="${esc(fullDate(d.createdAt))}">${esc(timeAgo(d.createdAt))}</div>
+      </div>
+      <div class="dc-actions">
+        <button class="dc-btn" data-import-deck="${esc(d.id)}">Import</button>
+        <button class="dc-btn" data-preview-deck="${esc(d.id)}">Preview</button>
+      </div>
+    </div>
+  `;
+}
+
+function renderDeckPreview(d){
+  const preview = (d.cards || []).slice(0, 3).map(c => `
+    <div class="card-preview">
+      <div class="q">${esc(c.q || c.question || "")}</div>
+      <div class="a">${esc(c.a || c.answer || "")}</div>
+    </div>
+  `).join("");
+  const moreCount = Math.max(0, (d.cardCount || 0) - 3);
+  return `
+    <div class="modal" id="deckModal">
+      <button class="close" id="closeModal">×</button>
+      <h2>${esc(d.title || "Untitled")}</h2>
+      <div class="meta-row">
+        ${d.subject ? `<span style="color:var(--amber);">${esc(d.subject)}</span><span class="sep">·</span>` : ""}
+        <span>${d.cardCount || 0} cards</span>
+        <span class="sep">·</span>
+        <span>${d.importCount || 0} imports</span>
+        <span class="sep">·</span>
+        <span>by ${esc(d.ownerName || "anonymous")}</span>
+        <span class="sep">·</span>
+        <span title="${esc(fullDate(d.createdAt))}">${esc(timeAgo(d.createdAt))}</span>
+      </div>
+      ${(d.tags && d.tags.length) ? `<div style="color:var(--cyan);font-size:12px;margin-bottom:12px;">{ ${esc(d.tags.join(", "))} }</div>` : ""}
+      ${d.description ? `<div class="desc-block">${esc(d.description)}</div>` : ""}
+      ${preview ? `
+        <div class="cards-preview">
+          <div style="font-size:11px;color:var(--grey);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Preview</div>
+          ${preview}
+          ${moreCount > 0 ? `<div class="more">…and ${moreCount} more card${moreCount===1?"":"s"}</div>` : ""}
+        </div>
+      ` : ""}
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="cancelImportBtn">Close</button>
+        <button class="btn btn-primary" id="importDeckBtn">Import to my K.I.T.E account</button>
+      </div>
+    </div>
+  `;
+}
+
+/* ---------- actions ---------- */
+async function doLogin(){
+  const errEl = document.getElementById("loginErr");
+  const email = document.getElementById("loginEmail").value.trim();
+  const pass  = document.getElementById("loginPassword").value;
+  errEl.style.color = "var(--red)";
+  errEl.textContent = "";
+  if(!email || !pass){ errEl.textContent = "Fill in both fields."; return; }
+  try{
+    await signInWithEmailAndPassword(auth, email, pass);
+    // onAuthStateChanged will re-render
+  }catch(e){
+    errEl.textContent = friendlyAuthError(e);
+  }
+}
+
+async function doSignOut(){
+  if(!confirm("Sign out?")) return;
+  try{ await signOut(auth); }catch(e){ toast("Sign out failed"); }
+}
+
+async function doImportDeck(deck, btn){
+  if(!currentUser){ toast("Please sign in first"); showLogin(); return; }
+  const d = deck || currentDeck;
+  if(!d) return;
+  const idleLabel = btn ? btn.textContent : "";
+  if(btn){ btn.disabled = true; btn.textContent = "Importing…"; }
+
+  try{
+    const ref = doc(db, "study_data", currentUser.uid);
+    const snap = await getDoc(ref);
+    let data;
+    if(!snap.exists()){
+      data = { flashcards: {}, notes: {}, topics: {}, study_sessions: [] };
+    }else{
+      data = snap.data();
+      data.flashcards = data.flashcards || {};
+      data.notes = data.notes || {};
+      data.topics = data.topics || {};
+      data.study_sessions = data.study_sessions || [];
+    }
+
+    const subject = d.subject || "Imported";
+    const topic = d.title || "Imported Deck";
+    data.flashcards[subject] = data.flashcards[subject] || [];
+    data.topics[subject] = data.topics[subject] || [];
+    if(!data.topics[subject].includes(topic)) data.topics[subject].push(topic);
+
+    // Add cards
+    const existingQs = new Set(data.flashcards[subject].map(c => (c.question||"").trim().toLowerCase()));
+    let added = 0;
+    (d.cards || []).forEach(card => {
+      const q = (card.q || card.question || "").trim();
+      const a = (card.a || card.answer || "").trim();
+      if(!q || !a) return;
+      const key = q.toLowerCase();
+      if(existingQs.has(key)) return;
+      data.flashcards[subject].push({
+        question: q, answer: a, topic,
+        review_count: 0, last_reviewed: null,
+        created: new Date().toISOString()
+      });
+      existingQs.add(key);
+      added++;
+    });
+
+    await setDoc(ref, { ...data, updatedAt: serverTimestamp() });
+    await updateDoc(doc(db, "public_decks", d.id), { importCount: increment(1) });
+
+    d.importCount = (d.importCount || 0) + 1;
+    toast(`Imported ${added} card${added===1?"":"s"} into "${subject}"`);
+    closeModal();
+    if(btn && document.body.contains(btn)){ btn.textContent = "Imported"; }
+  }catch(e){
+    console.error(e);
+    toast("Import failed: " + ((e && e.message) || "unknown"));
+    if(btn){ btn.disabled = false; btn.textContent = idleLabel; }
+  }
+}
+
+/* ---------- modal ---------- */
+function openModal(html){
+  const overlay = document.getElementById("modalOverlay");
+  overlay.innerHTML = html;
+  overlay.classList.add("show");
+}
+function closeModal(){
+  const overlay = document.getElementById("modalOverlay");
+  overlay.classList.remove("show");
+  overlay.innerHTML = "";
+  currentDeck = null;
+}
+
+/* ---------- render ---------- */
+function render(){
+  const app = document.getElementById("app");
+  app.innerHTML = renderBrowse();
+  attach();
+}
+
+function renderLoginScreen(){
+  const app = document.getElementById("app");
+  app.innerHTML = renderLogin();
+  attachLogin();
+}
+
+function showLogin(){ renderLoginScreen(); }
+
+function attach(){
+  const signIn = document.getElementById("signInBtn");
+  if(signIn) signIn.addEventListener("click", showLogin);
+
+  const signOutBtn = document.getElementById("signOutBtn");
+  if(signOutBtn) signOutBtn.addEventListener("click", doSignOut);
+
+  const searchInput = document.getElementById("searchInput");
+  if(searchInput){
+    let t;
+    searchInput.addEventListener("input", () => {
+      clearTimeout(t);
+      t = setTimeout(() => {
+        searchQuery = searchInput.value;
+        const pos = searchInput.selectionStart;
+        render();
+        const ni = document.getElementById("searchInput");
+        if(ni){ ni.focus(); try{ ni.setSelectionRange(pos,pos); }catch(e){} }
+      }, 120);
+    });
+  }
+
+  document.querySelectorAll("[data-subject]").forEach(chip => {
+    chip.addEventListener("click", () => {
+      activeSubject = chip.dataset.subject;
+      render();
+    });
+  });
+
+  document.querySelectorAll("[data-preview-deck]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const d = allDecks.find(x => x.id === btn.dataset.previewDeck);
+      if(!d) return;
+      currentDeck = d;
+      openModal(renderDeckPreview(d));
+      attachModal();
+    });
+  });
+
+  document.querySelectorAll("[data-import-deck]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const d = allDecks.find(x => x.id === btn.dataset.importDeck);
+      if(!d) return;
+      doImportDeck(d, btn);
+    });
+  });
+}
+
+function attachLogin(){
+  const loginBtn = document.getElementById("loginBtn");
+  if(loginBtn) loginBtn.addEventListener("click", doLogin);
+  const passInput = document.getElementById("loginPassword");
+  if(passInput) passInput.addEventListener("keydown", e => { if(e.key === "Enter") doLogin(); });
+
+  const forgot = document.getElementById("forgotLink");
+  if(forgot) forgot.addEventListener("click", async () => {
+    const email = document.getElementById("loginEmail").value.trim();
+    const errEl = document.getElementById("loginErr");
+    if(!email){ errEl.style.color="var(--red)"; errEl.textContent="Enter your email first, then click 'Forgot password'."; return; }
+    try{
+      await sendPasswordResetEmail(auth, email);
+      errEl.style.color = "var(--green)";
+      errEl.textContent = "Reset link sent — check your inbox.";
+    }catch(e){
+      errEl.style.color = "var(--red)";
+      errEl.textContent = friendlyAuthError(e);
+    }
+  });
+
+  const back = document.getElementById("backToBrowse");
+  if(back) back.addEventListener("click", () => { render(); });
+}
+
+function attachModal(){
+  const close = document.getElementById("closeModal");
+  if(close) close.addEventListener("click", closeModal);
+  const cancel = document.getElementById("cancelImportBtn");
+  if(cancel) cancel.addEventListener("click", closeModal);
+  const importBtn = document.getElementById("importDeckBtn");
+  if(importBtn) importBtn.addEventListener("click", () => doImportDeck(currentDeck, importBtn));
+
+  const overlay = document.getElementById("modalOverlay");
+  overlay.addEventListener("click", e => { if(e.target === overlay) closeModal(); });
+}
+
+/* ---------- auth state ---------- */
+onAuthStateChanged(auth, (user) => {
+  currentUser = user;
+  // After login, always re-render the browse view (deck grid)
+  render();
+});
+
+/* ---------- init ---------- */
+loadDecks();
+
+/* ---------- service worker ---------- */
+if("serviceWorker" in navigator){
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js")
+      .then(() => console.log("Library SW registered"))
+      .catch(err => console.warn("SW registration failed:", err));
+  });
+}
+</script>
+</body>
+</html>
