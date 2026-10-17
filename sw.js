@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'kite-library-v2';
+const CACHE_VERSION = 'kite-library-v3';
 const APP_SHELL = [
   './',
   './index.html',
