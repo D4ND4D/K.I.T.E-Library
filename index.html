@@ -7,7 +7,6 @@
 <meta name="theme-color" content="#0c0e0f">
 <script>
   (function(){ try{ document.documentElement.setAttribute("data-theme", localStorage.getItem("d4n_theme_v1") || "default"); }catch(e){} })();
-  // Chrome fires this once the site is installable. Keep it so the Profile page can offer an Install button.
   window.addEventListener("beforeinstallprompt", function(e){ e.preventDefault(); window.__deferredInstall = e; window.dispatchEvent(new Event("kite-installable")); });
   window.addEventListener("appinstalled", function(){ window.__deferredInstall = null; window.dispatchEvent(new Event("kite-installable")); });
 </script>
