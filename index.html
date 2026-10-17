@@ -7,10 +7,13 @@
 <meta name="theme-color" content="#0c0e0f">
 <script>
   (function(){ try{ document.documentElement.setAttribute("data-theme", localStorage.getItem("d4n_theme_v1") || "default"); }catch(e){} })();
+  // Chrome fires this once the site is installable. Keep it so the Profile page can offer an Install button.
+  window.addEventListener("beforeinstallprompt", function(e){ e.preventDefault(); window.__deferredInstall = e; window.dispatchEvent(new Event("kite-installable")); });
+  window.addEventListener("appinstalled", function(){ window.__deferredInstall = null; window.dispatchEvent(new Event("kite-installable")); });
 </script>
 <title>K.I.T.E Library</title>
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon.svg">
+<link rel="apple-touch-icon" href="icon-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -226,6 +229,9 @@ section:first-of-type>.subject-head{margin-top:8px}
 .ar-sub{color:var(--grey);font-size:11.5px;margin-top:3px;display:flex;align-items:center;flex-wrap:wrap}
 .grant-input{flex:1;min-width:200px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:inherit;font-size:13px;padding:10px 12px}
 .grant-input:focus{outline:none;border-color:var(--cyan)}
+
+.pwa-status{font-size:12px;line-height:1.8;color:var(--grey)}
+.pwa-status .pn{color:var(--grey-dim)}
 
 /* ===== badges ===== */
 .badge{position:relative;display:inline-flex;width:18px;height:18px;flex-shrink:0;cursor:default;outline:none;vertical-align:middle;margin-left:4px}
@@ -461,6 +467,86 @@ const dotShow = (() => {
   onActivity();
   return { maybeIntro(){ if(introPlayed || !document.querySelector(".dot[data-dot]")) return; introPlayed = true; setTimeout(playIntro, 700); } };
 })();
+
+/* ---------- install the app (same check + button as K.I.T.E) ---------- */
+let pwaRows = null;      // last result, so re-rendering the page doesn't flash "Checking…"
+let pwaRan = false;      // run the check once per visit to the Profile page
+function isStandalone(){
+  return (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true;
+}
+function pwaCardHTML(){
+  const canInstall = !!window.__deferredInstall && !isStandalone();
+  return `
+    <div class="card">
+      <div class="qa-label" style="color:var(--cyan);">Install App</div>
+      <div id="pwaStatus" class="pwa-status">${pwaRows || "Checking…"}</div>
+      <button class="btn btn-primary" id="pwaInstallBtn" data-act="pwaInstall" style="margin-top:12px;${canInstall ? "" : "display:none;"}">Install K.I.T.E Library</button>
+    </div>
+  `;
+}
+function paintPwa(){
+  const box = document.getElementById("pwaStatus");
+  if(box) box.innerHTML = pwaRows || "Checking…";
+  const btn = document.getElementById("pwaInstallBtn");
+  if(btn) btn.style.display = (window.__deferredInstall && !isStandalone()) ? "" : "none";
+}
+async function runPwaCheck(){
+  const rows = [];
+  const add = (ok, label, note) => rows.push(`<div><span style="color:var(--${ok ? "green" : "red"});">${ok ? "✓" : "✗"}</span> ${esc(label)}${note ? ` <span class="pn">${esc(note)}</span>` : ""}</div>`);
+  if(isStandalone()){
+    pwaRows = `<div><span style="color:var(--green);">✓</span> Running as an installed app</div>`;
+    paintPwa();
+    return;
+  }
+  add(location.protocol === "https:" || location.hostname === "localhost", "Secure connection (HTTPS)");
+  const link = document.querySelector('link[rel="manifest"]');
+  let man = null, manUrl = null;
+  try{
+    manUrl = new URL(link.getAttribute("href"), location.href).href;
+    const r = await fetch(manUrl, { cache: "no-store" });
+    if(!r.ok) throw new Error("HTTP " + r.status);
+    man = await r.json();
+    add(true, "Manifest loads");
+  }catch(e){ add(false, "Manifest loads", String((e && e.message) || e)); }
+  if(man){
+    add(!!(man.name || man.short_name), "Has a name");
+    add(!!man.start_url, "Has start_url");
+    add(["standalone","fullscreen","minimal-ui"].includes(man.display), "Display mode is app-like", man.display || "missing");
+    const icons = man.icons || [];
+    for(const need of [192, 512]){
+      const ic = icons.find(i => /png/i.test(i.type || i.src) && (i.sizes || "").split(" ").some(z => parseInt(z, 10) === need));
+      if(!ic){ add(false, need + "px PNG icon listed"); continue; }
+      try{
+        const r = await fetch(new URL(ic.src, manUrl).href, { cache: "no-store" });
+        const ct = r.headers.get("content-type") || "";
+        add(r.ok && /image\/png/i.test(ct), need + "px PNG icon loads", r.ok ? ct : "HTTP " + r.status);
+      }catch(e){ add(false, need + "px PNG icon loads", "can't fetch"); }
+    }
+  }
+  let reg = null;
+  try{ reg = await navigator.serviceWorker.getRegistration(); }catch(e){}
+  add(!!reg, "Service worker registered");
+  add(!!(navigator.serviceWorker && navigator.serviceWorker.controller), "Service worker controlling this page", "reload once if this is ✗");
+  const ready = !!window.__deferredInstall;
+  if(/iphone|ipad|ipod/i.test(navigator.userAgent) && !ready){
+    rows.push(`<div><span style="color:var(--amber);">i</span> On iPhone or iPad: tap Share, then Add to Home Screen</div>`);
+  }else{
+    add(ready, "Browser says it can install", ready ? "" : "if the rows above are all ✓, wait a moment or use the browser menu → Install app");
+  }
+  pwaRows = rows.join("");
+  paintPwa();
+}
+async function doInstallApp(){
+  const ev = window.__deferredInstall;
+  if(!ev) return;
+  ev.prompt();
+  try{ await ev.userChoice; }catch(e){}
+  window.__deferredInstall = null;
+  paintPwa();
+}
+window.addEventListener("kite-installable", () => {
+  if(view === "profile" && currentUser){ pwaRan = true; runPwaCheck(); }
+});
 
 /* ---------- data ---------- */
 async function loadDecks(){
@@ -743,6 +829,7 @@ function renderProfile(){
       ${since ? row("Member since", esc(since.toLocaleDateString())) : ""}
       ${row("Status", esc(status))}
     </div>
+    ${pwaCardHTML()}
     <div class="btn-row">
       <a class="btn" href="${KITE_URL}">Go to KITE</a>
       <button class="btn btn-ghost" data-act="signout">Sign out</button>
@@ -1099,6 +1186,7 @@ function go(v, fromHash){
   }
   if(v === "admin" && !isMeAdmin()) v = "home";
   view = v; pendingView = null; showingLogin = false;
+  if(v === "profile") pwaRan = false;
   if(!fromHash) location.hash = (v === "home" ? "" : v);
   render();
   window.scrollTo(0, 0);
@@ -1117,6 +1205,7 @@ function render(){
       <main class="main"><div class="main-inner">${content}</div></main>
     </div>`;
   dotShow.maybeIntro();
+  if(!showingLogin && view === "profile" && currentUser && !pwaRan){ pwaRan = true; runPwaCheck(); }
 }
 
 /* ---------- events (one delegated listener, so re-rendering never loses a handler) ---------- */
@@ -1140,6 +1229,7 @@ appEl.addEventListener("click", e => {
       go("home");
       break;
     case "theme": showThemes(); break;
+    case "pwaInstall": doInstallApp(); break;
     case "signin": showLogin(); break;
     case "signout": doSignOut(); break;
     case "login": doLogin(); break;
