@@ -18,7 +18,7 @@
 html{margin:0;padding:0;height:100%;background:var(--bg)}
 body{margin:0;padding:0;background:var(--bg);color:var(--white);font-family:"JetBrains Mono","IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;min-height:100vh;overscroll-behavior-y:none}
 body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse at 50% -10%,rgba(94,230,208,.05),transparent 60%)}
-#app{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:0 16px 40px;min-height:100vh}
+#app{position:relative;z-index:1;min-height:100vh}
 .top-bar{display:flex;align-items:center;justify-content:space-between;padding:18px 0 14px;border-bottom:1px solid var(--border);margin-bottom:20px}
 .brand{display:flex;align-items:baseline;gap:10px}
 .brand .kite{font-size:20px;font-weight:700;color:var(--cyan);letter-spacing:.2em}
@@ -100,6 +100,83 @@ section:first-of-type>.subject-head{margin-top:10px}
   .modal{padding:18px;border-radius:10px}
   .modal h2{font-size:17px}
 }
+
+/* === Shell + sidebar === */
+.shell{display:flex;min-height:100vh}
+.sidebar{width:212px;flex-shrink:0;align-self:flex-start;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;background:#0a0c0d;border-right:3px solid #25292b;padding:14px 16px 16px 12px;overflow-y:auto;z-index:60}
+.sb-top{display:flex;flex-direction:column;gap:20px}
+.sb-profile-row{display:flex;align-items:center;gap:10px}
+.sb-profile-row .sb-btn{flex:1;min-width:0;width:auto}
+.sb-avatar{width:34px;height:34px;flex-shrink:0;border-radius:50%;background:#000;border:2px solid #25292b;display:flex;align-items:center;justify-content:center}
+.sb-avatar svg{width:20px;height:20px}
+.sb-btn{display:flex;align-items:center;justify-content:center;text-align:center;width:100%;background:#000;color:#fff;border:0;border-radius:10px;padding:11px 10px;font-family:var(--sans);font-size:16px;font-weight:700;line-height:1.25;cursor:pointer;text-decoration:none;box-shadow:4px 4px 0 var(--cyan);transition:transform .08s,box-shadow .08s}
+.sb-btn:hover{filter:brightness(1.25)}
+.sb-btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--cyan)}
+.sb-btn.active{color:var(--cyan)}
+.sb-btn.sb-admin{box-shadow:4px 4px 0 var(--amber)}
+.sb-btn.sb-admin:active{box-shadow:1px 1px 0 var(--amber)}
+.sb-btn.on{background:var(--cyan);color:#000}
+.sb-divider{height:3px;background:#25292b;margin:22px -16px 0 -12px;flex-shrink:0}
+.sb-bottom{margin-top:auto;display:flex;flex-direction:column;gap:20px;padding-top:20px}
+.main{flex:1;min-width:0;padding:0 22px 40px}
+.main-inner{max-width:760px;margin:0 auto}
+.menu-btn{display:none}
+.sb-backdrop{display:none}
+.user-area .name{display:inline-block;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* === Badges === */
+.badge{position:relative;display:inline-flex;width:18px;height:18px;flex-shrink:0;cursor:default;outline:none;vertical-align:middle;margin-left:4px}
+.badge svg{width:100%;height:100%}
+.badge::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);right:-8px;width:max-content;max-width:230px;background:#000;color:#fff;border:1px solid var(--cyan);border-radius:8px;padding:7px 10px;font:500 12px/1.35 var(--sans);text-align:left;white-space:normal;opacity:0;pointer-events:none;transition:opacity .12s;z-index:90}
+.badge:hover::after,.badge:focus::after{opacity:1}
+.dc-author{display:inline-flex;align-items:center;max-width:150px}
+.dc-author .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.modal .meta-row .by{display:inline-flex;align-items:center}
+
+/* === Pages === */
+.page-title{font-family:var(--sans);font-size:30px;font-weight:800;color:var(--cyan);margin:6px 0 16px;line-height:1.1}
+.summary{display:flex;flex-wrap:wrap;gap:10px 30px;font-family:var(--sans);color:var(--cyan);font-size:15px;margin-bottom:8px}
+.summary b{font-size:28px;font-weight:800;margin-right:8px;vertical-align:middle}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:22px 26px;margin:0 8px 26px 0}
+.stat-card{font-family:var(--sans);background:var(--panel);border-radius:18px;box-shadow:5px 5px 0 var(--cyan);padding:14px 16px;color:var(--cyan)}
+.stat-card .n{font-size:32px;font-weight:800;line-height:1.1}
+.stat-card .l{font-size:13.5px;margin-top:4px;opacity:.85}
+.prof-card{display:flex;align-items:center;gap:16px;font-family:var(--sans);margin:0 0 24px}
+.prof-avatar{width:68px;height:68px;border-radius:50%;background:#000;border:3px solid var(--cyan);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.prof-avatar svg{width:38px;height:38px}
+.prof-name{font-size:24px;font-weight:800;color:var(--white);display:flex;align-items:center;flex-wrap:wrap}
+.prof-name .badge{width:20px;height:20px;margin-left:8px}
+.prof-sub{color:var(--grey);font-size:14px;margin-top:3px;word-break:break-all}
+.detail-list{font-family:var(--sans);background:var(--panel);border:1px solid var(--border);border-radius:14px;margin-bottom:24px;overflow:hidden}
+.detail-row{display:flex;justify-content:space-between;gap:14px;padding:12px 16px;border-bottom:1px solid var(--border);font-size:14px}
+.detail-row:last-child{border-bottom:0}
+.detail-row .k{color:var(--grey);flex-shrink:0}
+.detail-row .v{color:var(--white);text-align:right;word-break:break-all}
+.note{color:var(--grey);font-size:12.5px;line-height:1.6;font-family:var(--sans);margin-top:14px}
+.dc-link{display:flex;align-items:center;justify-content:center;text-decoration:none}
+.dc-meta-line{font-size:13px;opacity:.8}
+.dc-flag{color:var(--amber);font-weight:700;font-size:12px}
+.sec-title{font-family:var(--sans);font-size:20px;font-weight:800;color:var(--amber);margin:30px 0 12px}
+.admin-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:var(--panel);font-family:var(--sans);margin-bottom:10px}
+.ar-main{flex:1;min-width:190px}
+.ar-title{color:var(--white);font-weight:700;font-size:15px;display:flex;align-items:center;flex-wrap:wrap;gap:2px}
+.ar-sub{color:var(--grey);font-size:12.5px;margin-top:3px;display:flex;align-items:center;flex-wrap:wrap}
+.mini-btn{background:#000;color:#fff;border:0;border-radius:8px;padding:8px 12px;font-family:var(--sans);font-size:12.5px;font-weight:700;cursor:pointer;box-shadow:3px 3px 0 var(--cyan);margin-right:3px}
+.mini-btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--cyan)}
+.mini-btn.on{background:var(--cyan);color:#000}
+.mini-btn.danger{box-shadow:3px 3px 0 var(--red)}
+.grant-input{flex:1;min-width:200px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:inherit;font-size:13px;padding:10px 12px}
+.grant-input:focus{outline:none;border-color:var(--cyan)}
+
+/* === Phone: sidebar becomes a slide-in menu === */
+@media (max-width:820px){
+  .sidebar{position:fixed;left:0;top:0;bottom:0;height:auto;align-self:stretch;transform:translateX(-105%);transition:transform .2s;z-index:200;box-shadow:12px 0 40px rgba(0,0,0,.6)}
+  .sidebar.open{transform:none}
+  .sb-backdrop.show{display:block;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:150}
+  .menu-btn{display:inline-block;margin-right:8px;align-self:center}
+  .main{padding:0 16px 40px}
+  .brand{align-items:center}
+}
 </style>
 </head>
 <body>
@@ -110,7 +187,7 @@ section:first-of-type>.subject-head{margin-top:10px}
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, getDocs, query, orderBy, limit, serverTimestamp, increment } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, getDocs, query, orderBy, limit, serverTimestamp, increment } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCe10S1IL7yd7vaT64siUZIDLDE2Yol1g0",
@@ -121,45 +198,63 @@ const firebaseConfig = {
   appId: "1:189507822224:web:b0959b1ceef41481702e15"
 };
 
-const KITE_URL = "https://d4nd4d.github.io/K.I.T.E/"; // ← update if different
+const KITE_URL = "https://d4nd4d.github.io/K.I.T.E/";
+const SUPER_ADMIN_UID = "EMTxL9cIU4dhRQeOptEaHfrhWty2";
+const HIDE_KEY = "kite_lib_hide_imported";
 
 const fbApp = initializeApp(firebaseConfig);
 const auth  = getAuth(fbApp);
 const db    = getFirestore(fbApp);
 
+/* ---------- state ---------- */
 let currentUser = null;
-let allDecks = [];
+let myProfile = null;            
+let myImports = {};              
+let badges = {};                 
+let allDecksRaw = [];            
+let allDecks = [];               
+const deckById = new Map();      
 let activeSubject = "All";
 let searchQuery = "";
 let currentDeck = null;
 let loadingDecks = true;
+let downloadsLoading = false;
+let view = "home";               
+let pendingView = null;
+let authReady = false;
+let showingLogin = false;
+let hideImported = false;
+try{ hideImported = localStorage.getItem(HIDE_KEY) === "1"; }catch(e){}
+const GATED = ["profile", "uploads", "downloads", "admin"];
+
+/* ---------- icons ---------- */
+const ICON_USER = `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="4.3" fill="#fff"/><path d="M3.8 21.2c0-4.7 3.7-7.3 8.2-7.3s8.2 2.6 8.2 7.3z" fill="#fff"/></svg>`;
+const ICON_VERIFIED = `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#1d9bf0"/><path d="M6.8 12.4l3.3 3.3 7-7.2" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const ICON_HAMMER = `<svg viewBox="0 0 24 24" aria-hidden="true" style="overflow:visible"><g transform="rotate(-45 12 12)"><rect x="3.5" y="3" width="17" height="8" rx="2" fill="#f5b301" stroke="#8a5d00" stroke-width="1"/><rect x="10.4" y="11" width="3.2" height="11" rx="1.4" fill="#d99a00" stroke="#8a5d00" stroke-width="1"/></g></svg>`;
 
 /* ---------- helpers ---------- */
-function esc(s){const d=document.createElement("div");d.textContent=s==null?"":String(s);return d.innerHTML}
-function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove("show"),1800)}
-function fmtDate(ts){
-  if(!ts) return "—";
-  const d = ts.toDate ? ts.toDate() : new Date(ts);
-  if(isNaN(d)) return "—";
-  return d.toLocaleDateString();
+function esc(s){
+  return String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
-function timeAgo(ts){
-  if(!ts) return "—";
+function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove("show"),2200)}
+function tsDate(ts){
+  if(!ts) return null;
   const d = ts.toDate ? ts.toDate() : new Date(ts);
-  if(isNaN(d)) return "—";
+  return isNaN(d) ? null : d;
+}
+function tsMs(ts){ const d = tsDate(ts); return d ? d.getTime() : 0; }
+function timeAgo(ts){
+  const d = tsDate(ts);
+  if(!d) return "—";
   const s = Math.floor((Date.now() - d.getTime()) / 1000);
   if(s < 60) return "just now";
-  const m = Math.floor(s / 60);   if(m < 60) return m + "m ago";
-  const h = Math.floor(m / 60);   if(h < 24) return h + "h ago";
+  const m = Math.floor(s / 60);    if(m < 60) return m + "m ago";
+  const h = Math.floor(m / 60);    if(h < 24) return h + "h ago";
   const days = Math.floor(h / 24); if(days < 30) return days + "d ago";
   const mo = Math.floor(days / 30); if(mo < 12) return mo + "mo ago";
   return Math.floor(days / 365) + "y ago";
 }
-function fullDate(ts){
-  if(!ts) return "";
-  const d = ts.toDate ? ts.toDate() : new Date(ts);
-  return isNaN(d) ? "" : d.toLocaleString();
-}
+function fullDate(ts){ const d = tsDate(ts); return d ? d.toLocaleString() : ""; }
 function friendlyAuthError(e){
   const c = e && e.code ? e.code : "";
   switch(c){
@@ -172,6 +267,20 @@ function friendlyAuthError(e){
     default: return (e && e.message) || "Something went wrong.";
   }
 }
+function plural(n, one, many){ return n + " " + (n === 1 ? one : (many || one + "s")); }
+
+/* ---------- who owns / who is admin ---------- */
+function ownerOf(d){ return (d && (d.ownerUid || d.ownerId || d.uid)) || ""; }
+function isAdminUid(uid){ return !!uid && (uid === SUPER_ADMIN_UID || (badges[uid] && badges[uid].admin === true)); }
+function isMeAdmin(){ return !!currentUser && isAdminUid(currentUser.uid); }
+function isMeSuper(){ return !!currentUser && currentUser.uid === SUPER_ADMIN_UID; }
+function badgesHTML(uid){
+  if(!uid) return "";
+  let h = "";
+  if(isAdminUid(uid)) h += `<span class="badge" tabindex="0" data-tip="This user is an admin">${ICON_HAMMER}</span>`;
+  if(badges[uid] && badges[uid].verified === true) h += `<span class="badge" tabindex="0" data-tip="This user has been verified for quality content">${ICON_VERIFIED}</span>`;
+  return h;
+}
 
 /* ---------- data ---------- */
 async function loadDecks(){
@@ -180,18 +289,53 @@ async function loadDecks(){
   try{
     const q = query(collection(db, "public_decks"), orderBy("createdAt", "desc"), limit(200));
     const snap = await getDocs(q);
-    allDecks = [];
+    allDecksRaw = [];
     snap.forEach(d => {
-      const data = d.data();
-      if(data.hidden) return;
-      allDecks.push({ id: d.id, ...data });
+      const x = { id: d.id, ...d.data() };
+      allDecksRaw.push(x);
+      deckById.set(x.id, x);
     });
   }catch(e){
     console.warn("Failed to load decks:", e);
-    allDecks = [];
+    allDecksRaw = [];
   }
+  allDecks = allDecksRaw.filter(d => !d.hidden);
   loadingDecks = false;
   render();
+}
+async function loadBadges(){
+  try{
+    const snap = await getDocs(collection(db, "badges"));
+    badges = {};
+    snap.forEach(d => { badges[d.id] = d.data(); });
+  }catch(e){
+    console.warn("Failed to load badges (add the badges rule in Firebase):", e);
+  }
+}
+async function loadMyProfile(){
+  if(!currentUser) return;
+  try{
+    const snap = await getDoc(doc(db, "users", currentUser.uid));
+    myProfile = snap.exists() ? snap.data() : {};
+    myImports = Object.assign({}, myProfile.importedDecks || {});
+  }catch(e){
+    console.warn("Failed to load profile:", e);
+    myProfile = {};
+  }
+}
+async function loadDownloads(){
+  const missing = Object.keys(myImports).filter(id => !deckById.has(id));
+  if(!missing.length) return;
+  downloadsLoading = true;
+  if(view === "downloads") render();
+  await Promise.all(missing.map(async id => {
+    try{
+      const s = await getDoc(doc(db, "public_decks", id));
+      deckById.set(id, s.exists() ? { id, ...s.data() } : null);
+    }catch(e){ deckById.set(id, null); }
+  }));
+  downloadsLoading = false;
+  if(view === "downloads") render();
 }
 
 function uniqueSubjects(){
@@ -199,7 +343,16 @@ function uniqueSubjects(){
   allDecks.forEach(d => { if(d.subject) set.add(d.subject); });
   return ["All", ...Array.from(set).sort()];
 }
-
+function filteredDecks(){
+  const q = searchQuery.trim().toLowerCase();
+  return allDecks.filter(d => {
+    if(activeSubject !== "All" && d.subject !== activeSubject) return false;
+    if(hideImported && myImports[d.id]) return false;
+    if(!q) return true;
+    const hay = `${d.title||""} ${d.description||""} ${d.subject||""} ${(d.tags||[]).join(" ")} ${d.ownerName||""}`.toLowerCase();
+    return hay.includes(q);
+  });
+}
 function groupedDecks(decks){
   const map = new Map();
   decks.forEach(d => {
@@ -213,18 +366,16 @@ function groupedDecks(decks){
     return a[0].localeCompare(b[0]);
   });
 }
-
-function filteredDecks(){
-  const q = searchQuery.trim().toLowerCase();
-  return allDecks.filter(d => {
-    if(activeSubject !== "All" && d.subject !== activeSubject) return false;
-    if(!q) return true;
-    const hay = `${d.title||""} ${d.description||""} ${d.subject||""} ${(d.tags||[]).join(" ")} ${d.ownerName||""}`.toLowerCase();
-    return hay.includes(q);
-  });
+function renderGroups(decks, cardFn){
+  return groupedDecks(decks).map(([subject, list]) => `
+    <section>
+      <h2 class="subject-head">${esc(subject)}</h2>
+      <div class="deck-grid">${list.map(cardFn).join("")}</div>
+    </section>
+  `).join("");
 }
 
-/* ---------- auth screens ---------- */
+/* ---------- auth screen ---------- */
 function renderLogin(){
   return `
     <div class="auth-card">
@@ -233,29 +384,50 @@ function renderLogin(){
       <div class="auth-sub">Use the same email and password as your K.I.T.E account.</div>
       <div class="auth-field"><label>Email</label><input type="email" id="loginEmail" autocomplete="email" placeholder="you@example.com"></div>
       <div class="auth-field"><label>Password</label><input type="password" id="loginPassword" autocomplete="current-password" placeholder="••••••••"></div>
-      <button class="btn btn-primary" id="loginBtn" style="width:100%;margin-top:8px;">Sign in</button>
+      <button class="btn btn-primary" data-act="login" style="width:100%;margin-top:8px;">Sign in</button>
       <div class="auth-err" id="loginErr"></div>
-      <div class="auth-link"><a id="forgotLink">Forgot password?</a></div>
-      <div class="auth-link">No account? <a id="createAcctLink" href="${KITE_URL}" target="_blank" rel="noopener">Create one on K.I.T.E →</a></div>
-      <div class="auth-link"><a id="backToBrowse">← Back to browsing</a></div>
+      <div class="auth-link"><a data-act="forgot">Forgot password?</a></div>
+      <div class="auth-link">No account? <a href="${KITE_URL}" target="_blank" rel="noopener">Create one on K.I.T.E →</a></div>
+      <div class="auth-link"><a data-act="backBrowse">← Back to browsing</a></div>
     </div>
   `;
 }
 
-/* ---------- main views ---------- */
+/* ---------- shell: sidebar + top bar ---------- */
+function renderSidebar(){
+  const nav = (v, label, extra) => `<button class="sb-btn${view===v?" active":""}${extra||""}" data-act="nav" data-arg="${v}">${label}</button>`;
+  return `
+    <aside class="sidebar" id="sidebar">
+      <div class="sb-top">
+        <div class="sb-profile-row">
+          <div class="sb-avatar">${ICON_USER}</div>
+          ${nav("profile", "Profile")}
+        </div>
+        ${nav("home", "Home")}
+        ${nav("uploads", "My uploads")}
+        ${nav("downloads", "Downloads")}
+        ${isMeAdmin() ? nav("admin", "Admin", " sb-admin") : ""}
+      </div>
+      <div class="sb-divider"></div>
+      <div class="sb-bottom">
+        <a class="sb-btn" href="${KITE_URL}">Go to KITE</a>
+        <button class="sb-btn${hideImported?" on":""}" data-act="hideImported" aria-pressed="${hideImported}">Hide decks I've already imported</button>
+      </div>
+    </aside>
+  `;
+}
 function renderTopBar(){
   let userBlock;
   if(currentUser){
-    userBlock = `
-      <span class="name">${esc(currentUser.displayName || currentUser.email.split("@")[0])}</span>
-      <button class="tag" id="signOutBtn">Sign out</button>
-    `;
+    const nm = (myProfile && myProfile.username) || currentUser.displayName || currentUser.email.split("@")[0];
+    userBlock = `<span class="name">${esc(nm)}</span>${badgesHTML(currentUser.uid)}<button class="tag" data-act="signout">Sign out</button>`;
   }else{
-    userBlock = `<button class="tag" id="signInBtn">Sign in</button>`;
+    userBlock = `<button class="tag" data-act="signin">Sign in</button>`;
   }
   return `
     <div class="top-bar">
       <div class="brand">
+        <button class="tag menu-btn" data-act="menu" aria-label="Open menu">Menu</button>
         <span class="kite">K.I.T.E</span>
         <span class="sub">Library</span>
       </div>
@@ -264,44 +436,7 @@ function renderTopBar(){
   `;
 }
 
-function renderBrowse(){
-  if(loadingDecks){
-    return renderTopBar() + `<div class="spinner"></div><div class="loading">Loading decks…</div>`;
-  }
-  const subjects = uniqueSubjects();
-  const decks = filteredDecks();
-
-  const chips = subjects.map(s =>
-    `<button class="chip ${activeSubject===s?"active":""}" data-subject="${esc(s)}">${esc(s)}</button>`
-  ).join("");
-
-  let gridHTML;
-  if(decks.length === 0){
-    if(allDecks.length === 0){
-      gridHTML = `<div class="empty-state"><div class="big">📭</div><div>No decks published yet.</div><div style="margin-top:8px;color:var(--grey-dim);">Be the first — publish a deck from K.I.T.E.</div></div>`;
-    }else{
-      gridHTML = `<div class="empty-state"><div class="big">🔍</div><div>No decks match.</div><div style="margin-top:8px;color:var(--grey-dim);">Try a different search or subject.</div></div>`;
-    }
-  }else{
-    gridHTML = groupedDecks(decks).map(([subject, list]) => `
-      <section>
-        <h2 class="subject-head">${esc(subject)}</h2>
-        <div class="deck-grid">${list.map(deckCardHTML).join("")}</div>
-      </section>
-    `).join("");
-  }
-
-  return `
-    ${renderTopBar()}
-    <div class="search-wrap">
-      <input type="text" class="search-input" id="searchInput" placeholder="Search decks, subjects, tags…" value="${esc(searchQuery)}" autofocus>
-    </div>
-    <div class="filters">${chips}</div>
-    ${gridHTML}
-    <div class="footnote">Decks are shared by K.I.T.E users. Import any deck to study it in the app.</div>
-  `;
-}
-
+/* ---------- deck cards ---------- */
 function deckTagsHTML(d){
   const tags = (d.tags || []).map(t => String(t).trim()).filter(Boolean);
   if(!tags.length) return `<div class="dc-tags none">{ no tags }</div>`;
@@ -309,30 +444,236 @@ function deckTagsHTML(d){
   const extra = tags.length > 3 ? ` +${tags.length - 3}` : "";
   return `<div class="dc-tags" title="${esc(tags.join(", "))}">{ ${esc(shown)}${extra} }</div>`;
 }
-
-function deckCardHTML(d){
+function authorHTML(d){
+  return `<span class="dc-author"><span class="nm">${esc(d.ownerName || "anonymous")}</span>${badgesHTML(ownerOf(d))}</span>`;
+}
+function deckCardHTML(d, opts){
+  opts = opts || {};
   const n = d.cardCount || 0;
+  const timeText = opts.timeText || timeAgo(d.createdAt);
   return `
     <div class="deck-card">
       <div class="dc-row">
         <div class="dc-title">${esc(d.title || "Untitled")}</div>
         <div class="dc-right">
-          <span class="dc-count">${n} card${n===1?"":"s"}</span>
-          <span class="dc-author">${esc(d.ownerName || "anonymous")}</span>
+          <span class="dc-count">${plural(n, "card")}</span>
+          ${authorHTML(d)}
         </div>
+      </div>
+      <div class="dc-row">
+        ${deckTagsHTML(d)}
+        <div class="dc-time" title="${esc(fullDate(d.createdAt))}">${esc(timeText)}</div>
+      </div>
+      <div class="dc-actions">
+        <button class="dc-btn" data-act="import" data-arg="${esc(d.id)}">Import</button>
+        <button class="dc-btn" data-act="preview" data-arg="${esc(d.id)}">Preview</button>
+      </div>
+    </div>
+  `;
+}
+function uploadCardHTML(d){
+  const imp = d.importCount || 0;
+  return `
+    <div class="deck-card">
+      <div class="dc-row">
+        <div class="dc-title">${esc(d.title || "Untitled")}</div>
+        <div class="dc-right"><span class="dc-count">${plural(imp, "download")}</span></div>
       </div>
       <div class="dc-row">
         ${deckTagsHTML(d)}
         <div class="dc-time" title="${esc(fullDate(d.createdAt))}">${esc(timeAgo(d.createdAt))}</div>
       </div>
-      <div class="dc-actions">
-        <button class="dc-btn" data-import-deck="${esc(d.id)}">Import</button>
-        <button class="dc-btn" data-preview-deck="${esc(d.id)}">Preview</button>
-      </div>
+      <div class="dc-meta-line">${plural(d.cardCount || 0, "card")}${d.hidden ? ` · <span class="dc-flag">Hidden by an admin</span>` : ""}</div>
+      <div class="dc-actions"><button class="dc-btn" data-act="preview" data-arg="${esc(d.id)}">Preview</button></div>
     </div>
   `;
 }
 
+/* ---------- views ---------- */
+function emptyBlock(emoji, line1, line2){
+  return `<div class="empty-state"><div class="big">${emoji}</div><div>${line1}</div>${line2 ? `<div style="margin-top:8px;color:var(--grey-dim);">${line2}</div>` : ""}</div>`;
+}
+
+function renderBrowse(){
+  if(loadingDecks){
+    return `<div class="spinner"></div><div class="loading">Loading decks…</div>`;
+  }
+  const chips = uniqueSubjects().map(s =>
+    `<button class="chip ${activeSubject===s?"active":""}" data-act="subject" data-arg="${esc(s)}">${esc(s)}</button>`
+  ).join("");
+  const decks = filteredDecks();
+  let body;
+  if(decks.length === 0){
+    if(allDecks.length === 0) body = emptyBlock("📭", "No decks published yet.", "Be the first — publish a deck from K.I.T.E.");
+    else if(hideImported && !searchQuery.trim() && activeSubject === "All") body = emptyBlock("📭", "You've already imported every deck here.", "Turn off “Hide decks I've already imported” to see them again.");
+    else body = emptyBlock("🔍", "No decks match.", "Try a different search or subject.");
+  }else{
+    body = renderGroups(decks, d => deckCardHTML(d));
+  }
+  return `
+    <div class="search-wrap">
+      <input type="text" class="search-input" id="searchInput" placeholder="Search decks, subjects, tags…" value="${esc(searchQuery)}">
+    </div>
+    <div class="filters">${chips}</div>
+    ${body}
+    <div class="footnote">Decks are shared by K.I.T.E users. Import any deck to study it in the app.</div>
+  `;
+}
+
+function myUploads(){
+  if(!currentUser) return [];
+  return allDecksRaw.filter(d => ownerOf(d) === currentUser.uid);
+}
+function sumImports(list){ return list.reduce((n, d) => n + (d.importCount || 0), 0); }
+
+function renderProfile(){
+  const u = currentUser;
+  const name = (myProfile && myProfile.username) || u.displayName || u.email.split("@")[0];
+  const mine = myUploads();
+  const since = myProfile && myProfile.createdAt ? tsDate(myProfile.createdAt) : null;
+  const status = [isAdminUid(u.uid) ? "Admin" : "", badges[u.uid] && badges[u.uid].verified ? "Verified" : ""].filter(Boolean).join(" · ") || "Member";
+  return `
+    <h1 class="page-title">Profile</h1>
+    <div class="prof-card">
+      <div class="prof-avatar">${ICON_USER}</div>
+      <div>
+        <div class="prof-name"><span>${esc(name)}</span>${badgesHTML(u.uid)}</div>
+        <div class="prof-sub">${esc(u.email)}</div>
+      </div>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-card"><div class="n">${sumImports(mine)}</div><div class="l">downloads of your uploads</div></div>
+      <div class="stat-card"><div class="n">${mine.length}</div><div class="l">decks uploaded</div></div>
+      <div class="stat-card"><div class="n">${Object.keys(myImports).length}</div><div class="l">decks you've downloaded</div></div>
+    </div>
+    <div class="detail-list">
+      <div class="detail-row"><span class="k">Name</span><span class="v">${esc(name)}</span></div>
+      <div class="detail-row"><span class="k">Email</span><span class="v">${esc(u.email)}</span></div>
+      ${myProfile && myProfile.displayId ? `<div class="detail-row"><span class="k">User ID</span><span class="v">${esc(myProfile.displayId)}</span></div>` : ""}
+      ${since ? `<div class="detail-row"><span class="k">Member since</span><span class="v">${esc(since.toLocaleDateString())}</span></div>` : ""}
+      <div class="detail-row"><span class="k">Status</span><span class="v">${esc(status)}</span></div>
+    </div>
+    <div class="btn-row">
+      <a class="dc-btn dc-link" href="${KITE_URL}">Go to KITE</a>
+      <button class="dc-btn" data-act="signout">Sign out</button>
+    </div>
+    <div class="note">Your password is never shown here. To change your password or delete your account, use Settings in K.I.T.E.</div>
+  `;
+}
+
+function renderUploads(){
+  if(loadingDecks) return `<h1 class="page-title">My uploads</h1><div class="spinner"></div>`;
+  const mine = myUploads().sort((a, b) => tsMs(b.createdAt) - tsMs(a.createdAt));
+  const body = mine.length
+    ? renderGroups(mine, uploadCardHTML)
+    : emptyBlock("📭", "You haven't uploaded any decks yet.", "Publish a deck from K.I.T.E and it will show up here.");
+  return `
+    <h1 class="page-title">My uploads</h1>
+    <div class="summary">
+      <span><b>${sumImports(mine)}</b>total downloads</span>
+      <span><b>${mine.length}</b>${mine.length === 1 ? "deck" : "decks"}</span>
+    </div>
+    ${body}
+  `;
+}
+
+function renderDownloads(){
+  const ids = Object.keys(myImports).sort((a, b) => tsMs(myImports[b]) - tsMs(myImports[a]));
+  let body;
+  if(downloadsLoading){
+    body = `<div class="spinner"></div>`;
+  }else if(!ids.length){
+    body = emptyBlock("📭", "You haven't downloaded any decks yet.", "Import a deck from Home and it will show up here.");
+  }else{
+    const found = [], gone = [];
+    ids.forEach(id => {
+      const d = deckById.get(id);
+      if(d && (!d.hidden || ownerOf(d) === currentUser.uid)) found.push(d); else gone.push(id);
+    });
+    const timeFor = d => "Imported " + timeAgo(myImports[d.id]);
+    body = (found.length ? groupedDecks(found).map(([subject, list]) => `
+      <section>
+        <h2 class="subject-head">${esc(subject)}</h2>
+        <div class="deck-grid">${list.map(d => deckCardHTML(d, { timeText: timeFor(d) })).join("")}</div>
+      </section>`).join("") : "")
+      + (gone.length ? `<section><h2 class="subject-head">Unavailable</h2><div class="deck-grid">${gone.map(id => `
+        <div class="deck-card"><div class="dc-title">This deck is no longer available</div>
+        <div class="dc-meta-line">Imported ${esc(timeAgo(myImports[id]))}. Your copy of the cards is still in K.I.T.E.</div></div>`).join("")}</div></section>` : "");
+  }
+  return `
+    <h1 class="page-title">Downloads</h1>
+    <div class="summary"><span><b>${ids.length}</b>${ids.length === 1 ? "deck" : "decks"} downloaded</span></div>
+    ${body}
+  `;
+}
+
+function peopleList(){
+  const map = new Map();
+  allDecksRaw.forEach(d => {
+    const uid = ownerOf(d);
+    if(!uid) return;
+    if(!map.has(uid)) map.set(uid, { uid, name: d.ownerName || "anonymous", decks: 0, imports: 0 });
+    const p = map.get(uid);
+    p.decks++; p.imports += (d.importCount || 0);
+  });
+  Object.keys(badges).forEach(uid => {
+    if(!map.has(uid)) map.set(uid, { uid, name: "(no uploads yet)", decks: 0, imports: 0 });
+  });
+  if(!map.has(SUPER_ADMIN_UID)) map.set(SUPER_ADMIN_UID, { uid: SUPER_ADMIN_UID, name: "Owner", decks: 0, imports: 0 });
+  return Array.from(map.values()).sort((a, b) => b.imports - a.imports || a.name.localeCompare(b.name));
+}
+
+function renderAdmin(){
+  const sup = isMeSuper();
+  const people = peopleList().map(p => {
+    const b = badges[p.uid] || {};
+    const verified = b.verified === true;
+    const admin = isAdminUid(p.uid);
+    return `
+      <div class="admin-row">
+        <div class="ar-main">
+          <div class="ar-title">${esc(p.name)}${badgesHTML(p.uid)}</div>
+          <div class="ar-sub">${plural(p.decks, "deck")} · ${plural(p.imports, "download")} · ${esc(p.uid.slice(0, 8))}…</div>
+        </div>
+        <button class="mini-btn${verified ? " on" : ""}" data-act="adminVerify" data-arg="${esc(p.uid)}">${verified ? "Remove check" : "Give check"}</button>
+        ${sup && p.uid !== SUPER_ADMIN_UID ? `<button class="mini-btn${admin ? " on" : ""}" data-act="adminAdmin" data-arg="${esc(p.uid)}">${admin ? "Remove admin" : "Make admin"}</button>` : ""}
+      </div>`;
+  }).join("");
+  const decks = allDecksRaw.slice().sort((a, b) => tsMs(b.createdAt) - tsMs(a.createdAt)).map(d => `
+      <div class="admin-row">
+        <div class="ar-main">
+          <div class="ar-title">${esc(d.title || "Untitled")}${d.hidden ? ` <span class="dc-flag">Hidden</span>` : ""}</div>
+          <div class="ar-sub">by ${esc(d.ownerName || "anonymous")}${badgesHTML(ownerOf(d))} · ${plural(d.cardCount || 0, "card")} · ${plural(d.importCount || 0, "download")} · ${esc(timeAgo(d.createdAt))}</div>
+        </div>
+        <button class="mini-btn" data-act="preview" data-arg="${esc(d.id)}">Preview</button>
+        <button class="mini-btn${d.hidden ? " on" : ""}" data-act="adminHide" data-arg="${esc(d.id)}">${d.hidden ? "Unhide" : "Hide"}</button>
+        <button class="mini-btn danger" data-act="adminDelete" data-arg="${esc(d.id)}">Delete</button>
+      </div>`).join("");
+  return `
+    <h1 class="page-title" style="color:var(--amber);">Admin</h1>
+    <div class="sec-title">People</div>
+    <div class="note" style="margin:-4px 0 12px;">The blue check shows next to a person's name on all of their decks. Everyone who has uploaded a deck is listed here.</div>
+    ${people}
+    <div class="sec-title">Give a badge by User UID</div>
+    <div class="admin-row">
+      <input class="grant-input" id="grantUid" placeholder="Firebase UID (Authentication tab in the Firebase console)">
+      <button class="mini-btn" data-act="grantVerify">Give check</button>
+      ${sup ? `<button class="mini-btn" data-act="grantAdmin">Make admin</button>` : ""}
+    </div>
+    <div class="sec-title">All decks (${allDecksRaw.length})</div>
+    ${decks || `<div class="note">No decks yet.</div>`}
+  `;
+}
+
+function renderView(){
+  if(view === "profile" && currentUser)   return renderProfile();
+  if(view === "uploads" && currentUser)   return renderUploads();
+  if(view === "downloads" && currentUser) return renderDownloads();
+  if(view === "admin" && isMeAdmin())     return renderAdmin();
+  return renderBrowse();
+}
+
+/* ---------- preview modal ---------- */
 function renderDeckPreview(d){
   const preview = (d.cards || []).slice(0, 3).map(c => `
     <div class="card-preview">
@@ -347,11 +688,11 @@ function renderDeckPreview(d){
       <h2>${esc(d.title || "Untitled")}</h2>
       <div class="meta-row">
         ${d.subject ? `<span style="color:var(--amber);">${esc(d.subject)}</span><span class="sep">·</span>` : ""}
-        <span>${d.cardCount || 0} cards</span>
+        <span>${plural(d.cardCount || 0, "card")}</span>
         <span class="sep">·</span>
-        <span>${d.importCount || 0} imports</span>
+        <span>${plural(d.importCount || 0, "download")}</span>
         <span class="sep">·</span>
-        <span>by ${esc(d.ownerName || "anonymous")}</span>
+        <span class="by">by ${esc(d.ownerName || "anonymous")}${badgesHTML(ownerOf(d))}</span>
         <span class="sep">·</span>
         <span title="${esc(fullDate(d.createdAt))}">${esc(timeAgo(d.createdAt))}</span>
       </div>
@@ -371,6 +712,27 @@ function renderDeckPreview(d){
     </div>
   `;
 }
+function openModal(html){
+  const overlay = document.getElementById("modalOverlay");
+  overlay.innerHTML = html;
+  overlay.classList.add("show");
+}
+function closeModal(){
+  const overlay = document.getElementById("modalOverlay");
+  overlay.classList.remove("show");
+  overlay.innerHTML = "";
+  currentDeck = null;
+}
+function attachModal(){
+  const close = document.getElementById("closeModal");
+  if(close) close.addEventListener("click", closeModal);
+  const cancel = document.getElementById("cancelImportBtn");
+  if(cancel) cancel.addEventListener("click", closeModal);
+  const importBtn = document.getElementById("importDeckBtn");
+  if(importBtn) importBtn.addEventListener("click", () => doImportDeck(currentDeck, importBtn));
+  const overlay = document.getElementById("modalOverlay");
+  overlay.onclick = e => { if(e.target === overlay) closeModal(); };
+}
 
 /* ---------- actions ---------- */
 async function doLogin(){
@@ -382,12 +744,23 @@ async function doLogin(){
   if(!email || !pass){ errEl.textContent = "Fill in both fields."; return; }
   try{
     await signInWithEmailAndPassword(auth, email, pass);
-    // onAuthStateChanged will re-render
   }catch(e){
     errEl.textContent = friendlyAuthError(e);
   }
 }
-
+async function doForgot(){
+  const email = document.getElementById("loginEmail").value.trim();
+  const errEl = document.getElementById("loginErr");
+  if(!email){ errEl.style.color="var(--red)"; errEl.textContent="Enter your email first, then click 'Forgot password'."; return; }
+  try{
+    await sendPasswordResetEmail(auth, email);
+    errEl.style.color = "var(--green)";
+    errEl.textContent = "Reset link sent — check your inbox.";
+  }catch(e){
+    errEl.style.color = "var(--red)";
+    errEl.textContent = friendlyAuthError(e);
+  }
+}
 async function doSignOut(){
   if(!confirm("Sign out?")) return;
   try{ await signOut(auth); }catch(e){ toast("Sign out failed"); }
@@ -420,7 +793,6 @@ async function doImportDeck(deck, btn){
     data.topics[subject] = data.topics[subject] || [];
     if(!data.topics[subject].includes(topic)) data.topics[subject].push(topic);
 
-    // Add cards
     const existingQs = new Set(data.flashcards[subject].map(c => (c.question||"").trim().toLowerCase()));
     let added = 0;
     (d.cards || []).forEach(card => {
@@ -439,12 +811,24 @@ async function doImportDeck(deck, btn){
     });
 
     await setDoc(ref, { ...data, updatedAt: serverTimestamp() });
-    await updateDoc(doc(db, "public_decks", d.id), { importCount: increment(1) });
 
-    d.importCount = (d.importCount || 0) + 1;
+    
+    const alreadyImported = !!myImports[d.id];
+    try{
+      await updateDoc(doc(db, "users", currentUser.uid), { ["importedDecks." + d.id]: serverTimestamp() });
+      myImports[d.id] = new Date();
+    }catch(e){ console.warn("Could not record the import:", e); }
+    if(!alreadyImported && ownerOf(d) !== currentUser.uid){
+      try{
+        await updateDoc(doc(db, "public_decks", d.id), { importCount: increment(1) });
+        d.importCount = (d.importCount || 0) + 1;
+      }catch(e){ console.warn("Could not update the download count:", e); }
+    }
+
     toast(`Imported ${added} card${added===1?"":"s"} into "${subject}"`);
     closeModal();
     if(btn && document.body.contains(btn)){ btn.textContent = "Imported"; }
+    render();
   }catch(e){
     console.error(e);
     toast("Import failed: " + ((e && e.message) || "unknown"));
@@ -452,127 +836,170 @@ async function doImportDeck(deck, btn){
   }
 }
 
-/* ---------- modal ---------- */
-function openModal(html){
-  const overlay = document.getElementById("modalOverlay");
-  overlay.innerHTML = html;
-  overlay.classList.add("show");
+/* ---- admin actions ---- */
+function adminError(e){
+  console.error(e);
+  toast((e && e.code === "permission-denied") ? "Permission denied. Check the library rules in Firebase." : "Something went wrong.");
 }
-function closeModal(){
-  const overlay = document.getElementById("modalOverlay");
-  overlay.classList.remove("show");
-  overlay.innerHTML = "";
-  currentDeck = null;
+async function setBadge(uid, field, value){
+  if(!uid) return;
+  try{
+    await setDoc(doc(db, "badges", uid), { [field]: value }, { merge: true });
+    badges[uid] = Object.assign({}, badges[uid] || {}, { [field]: value });
+    toast(field === "verified" ? (value ? "Blue check given" : "Blue check removed") : (value ? "Admin added" : "Admin removed"));
+    render();
+  }catch(e){ adminError(e); }
 }
+async function setDeckHidden(id, hidden){
+  try{
+    await updateDoc(doc(db, "public_decks", id), { hidden });
+    const d = deckById.get(id); if(d) d.hidden = hidden;
+    allDecks = allDecksRaw.filter(x => !x.hidden);
+    toast(hidden ? "Deck hidden" : "Deck visible again");
+    render();
+  }catch(e){ adminError(e); }
+}
+async function deleteDeckAdmin(id){
+  const d = deckById.get(id);
+  if(!confirm(`Delete "${(d && d.title) || "this deck"}" for good? This can't be undone.`)) return;
+  try{
+    await deleteDoc(doc(db, "public_decks", id));
+    allDecksRaw = allDecksRaw.filter(x => x.id !== id);
+    allDecks = allDecksRaw.filter(x => !x.hidden);
+    deckById.set(id, null);
+    toast("Deck deleted");
+    render();
+  }catch(e){ adminError(e); }
+}
+
+/* ---------- navigation ---------- */
+function viewFromHash(){
+  const h = location.hash.replace("#", "");
+  return GATED.includes(h) ? h : "home";
+}
+function closeSidebar(){
+  const sb = document.getElementById("sidebar"), bd = document.getElementById("sbBackdrop");
+  if(sb) sb.classList.remove("open");
+  if(bd) bd.classList.remove("show");
+}
+function go(v, fromHash){
+  if(!authReady){ pendingView = v; return; }
+  if(GATED.includes(v) && !currentUser){
+    pendingView = v;
+    if(!fromHash) location.hash = v;
+    showLogin();
+    return;
+  }
+  if(v === "admin" && !isMeAdmin()) v = "home";
+  view = v; pendingView = null; showingLogin = false;
+  if(!fromHash) location.hash = (v === "home" ? "" : v);
+  render();
+  window.scrollTo(0, 0);
+  if(v === "downloads") loadDownloads();
+}
+function showLogin(){ showingLogin = true; render(); }
 
 /* ---------- render ---------- */
 function render(){
   const app = document.getElementById("app");
-  app.innerHTML = renderBrowse();
-  attach();
+  const content = showingLogin ? renderLogin() : (renderTopBar() + renderView());
+  app.innerHTML = `
+    <div class="shell">
+      ${renderSidebar()}
+      <div class="sb-backdrop" id="sbBackdrop" data-act="closeMenu"></div>
+      <main class="main"><div class="main-inner">${content}</div></main>
+    </div>`;
 }
 
-function renderLoginScreen(){
-  const app = document.getElementById("app");
-  app.innerHTML = renderLogin();
-  attachLogin();
-}
-
-function showLogin(){ renderLoginScreen(); }
-
-function attach(){
-  const signIn = document.getElementById("signInBtn");
-  if(signIn) signIn.addEventListener("click", showLogin);
-
-  const signOutBtn = document.getElementById("signOutBtn");
-  if(signOutBtn) signOutBtn.addEventListener("click", doSignOut);
-
-  const searchInput = document.getElementById("searchInput");
-  if(searchInput){
-    let t;
-    searchInput.addEventListener("input", () => {
-      clearTimeout(t);
-      t = setTimeout(() => {
-        searchQuery = searchInput.value;
-        const pos = searchInput.selectionStart;
-        render();
-        const ni = document.getElementById("searchInput");
-        if(ni){ ni.focus(); try{ ni.setSelectionRange(pos,pos); }catch(e){} }
-      }, 120);
-    });
-  }
-
-  document.querySelectorAll("[data-subject]").forEach(chip => {
-    chip.addEventListener("click", () => {
-      activeSubject = chip.dataset.subject;
-      render();
-    });
-  });
-
-  document.querySelectorAll("[data-preview-deck]").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const d = allDecks.find(x => x.id === btn.dataset.previewDeck);
-      if(!d) return;
-      currentDeck = d;
-      openModal(renderDeckPreview(d));
-      attachModal();
-    });
-  });
-
-  document.querySelectorAll("[data-import-deck]").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const d = allDecks.find(x => x.id === btn.dataset.importDeck);
-      if(!d) return;
-      doImportDeck(d, btn);
-    });
-  });
-}
-
-function attachLogin(){
-  const loginBtn = document.getElementById("loginBtn");
-  if(loginBtn) loginBtn.addEventListener("click", doLogin);
-  const passInput = document.getElementById("loginPassword");
-  if(passInput) passInput.addEventListener("keydown", e => { if(e.key === "Enter") doLogin(); });
-
-  const forgot = document.getElementById("forgotLink");
-  if(forgot) forgot.addEventListener("click", async () => {
-    const email = document.getElementById("loginEmail").value.trim();
-    const errEl = document.getElementById("loginErr");
-    if(!email){ errEl.style.color="var(--red)"; errEl.textContent="Enter your email first, then click 'Forgot password'."; return; }
-    try{
-      await sendPasswordResetEmail(auth, email);
-      errEl.style.color = "var(--green)";
-      errEl.textContent = "Reset link sent — check your inbox.";
-    }catch(e){
-      errEl.style.color = "var(--red)";
-      errEl.textContent = friendlyAuthError(e);
+/* ---------- events ---------- */
+const appEl = document.getElementById("app");
+appEl.addEventListener("click", e => {
+  const el = e.target.closest("[data-act]");
+  if(!el) return;
+  const act = el.dataset.act, arg = el.dataset.arg;
+  switch(act){
+    case "nav": closeSidebar(); go(arg); break;
+    case "menu": {
+      const sb = document.getElementById("sidebar"), bd = document.getElementById("sbBackdrop");
+      if(sb) sb.classList.add("open"); if(bd) bd.classList.add("show");
+      break;
     }
-  });
-
-  const back = document.getElementById("backToBrowse");
-  if(back) back.addEventListener("click", () => { render(); });
-}
-
-function attachModal(){
-  const close = document.getElementById("closeModal");
-  if(close) close.addEventListener("click", closeModal);
-  const cancel = document.getElementById("cancelImportBtn");
-  if(cancel) cancel.addEventListener("click", closeModal);
-  const importBtn = document.getElementById("importDeckBtn");
-  if(importBtn) importBtn.addEventListener("click", () => doImportDeck(currentDeck, importBtn));
-
-  const overlay = document.getElementById("modalOverlay");
-  overlay.addEventListener("click", e => { if(e.target === overlay) closeModal(); });
-}
+    case "closeMenu": closeSidebar(); break;
+    case "hideImported":
+      if(!currentUser){ toast("Sign in to use this"); showLogin(); break; }
+      hideImported = !hideImported;
+      try{ localStorage.setItem(HIDE_KEY, hideImported ? "1" : "0"); }catch(err){}
+      go("home");
+      break;
+    case "signin": showLogin(); break;
+    case "signout": doSignOut(); break;
+    case "login": doLogin(); break;
+    case "forgot": doForgot(); break;
+    case "backBrowse": showingLogin = false; pendingView = null; render(); break;
+    case "subject": activeSubject = arg; render(); break;
+    case "preview": {
+      const d = deckById.get(arg); if(!d) return;
+      currentDeck = d; openModal(renderDeckPreview(d)); attachModal();
+      break;
+    }
+    case "import": {
+      const d = deckById.get(arg); if(!d) return;
+      doImportDeck(d, el);
+      break;
+    }
+    case "adminVerify": setBadge(arg, "verified", !(badges[arg] && badges[arg].verified === true)); break;
+    case "adminAdmin":  setBadge(arg, "admin", !isAdminUid(arg)); break;
+    case "adminHide":   { const d = deckById.get(arg); setDeckHidden(arg, !(d && d.hidden)); break; }
+    case "adminDelete": deleteDeckAdmin(arg); break;
+    case "grantVerify": case "grantAdmin": {
+      const input = document.getElementById("grantUid");
+      const uid = input ? input.value.trim() : "";
+      if(uid.length < 20){ toast("Paste the full Firebase UID"); break; }
+      setBadge(uid, act === "grantVerify" ? "verified" : "admin", true);
+      break;
+    }
+  }
+});
+let searchTimer;
+appEl.addEventListener("input", e => {
+  if(e.target.id !== "searchInput") return;
+  const input = e.target;
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => {
+    searchQuery = input.value;
+    const pos = input.selectionStart;
+    render();
+    const ni = document.getElementById("searchInput");
+    if(ni){ ni.focus(); try{ ni.setSelectionRange(pos, pos); }catch(err){} }
+  }, 120);
+});
+appEl.addEventListener("keydown", e => {
+  if(e.target.id === "loginPassword" && e.key === "Enter") doLogin();
+});
+window.addEventListener("hashchange", () => {
+  const v = viewFromHash();
+  if(v === view && !showingLogin) return;
+  go(v, true);
+});
 
 /* ---------- auth state ---------- */
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
+  authReady = true;
   currentUser = user;
-  // After login, always re-render the browse view (deck grid)
+  myProfile = null; myImports = {};
+  if(user) showingLogin = false;
+  if(!user && GATED.includes(view)) view = "home";
   render();
+  if(user) await loadMyProfile();
+  if(user && pendingView){ const v = pendingView; pendingView = null; go(v, true); }
+  else if(!user && pendingView){ showLogin(); }
+  else render();
+  if(user && view === "downloads") loadDownloads();
 });
 
 /* ---------- init ---------- */
+if(viewFromHash() !== "home") pendingView = viewFromHash();
+loadBadges().then(() => render());
 loadDecks();
 
 /* ---------- service worker ---------- */
@@ -583,6 +1010,7 @@ if("serviceWorker" in navigator){
       .catch(err => console.warn("SW registration failed:", err));
   });
 }
+
 </script>
 </body>
 </html>
