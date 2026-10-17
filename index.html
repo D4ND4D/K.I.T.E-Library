@@ -5,6 +5,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#0c0e0f">
+<script>
+  (function(){ try{ document.documentElement.setAttribute("data-theme", localStorage.getItem("d4n_theme_v1") || "default"); }catch(e){} })();
+</script>
 <title>K.I.T.E Library</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon.svg">
@@ -13,169 +16,282 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="apple-mobile-web-app-title" content="K.I.T.E Library">
 <style>
-:root{--bg:#0c0e0f;--panel:#121517;--panel-2:#161a1c;--border:#22282b;--border-bright:#5ee6d0;--cyan:#5ee6d0;--amber:#f0b35e;--green:#7ee787;--red:#ff6b6b;--grey:#7b8389;--grey-dim:#52585c;--white:#e9edee;--sans:"Inter","Segoe UI","Helvetica Neue",Arial,system-ui,sans-serif}
+/* ============ THEMES ============ */
+:root, [data-theme="default"]{
+  --bg:#0c0e0f; --panel:#121517; --panel-2:#161a1c;
+  --border:#22282b; --border-bright:#5ee6d0;
+  --cyan:#5ee6d0; --amber:#f0b35e; --green:#7ee787; --red:#ff6b6b;
+  --magenta:#c792ea;
+  --grey:#7b8389; --grey-dim:#52585c; --white:#e9edee;
+  --on-primary:#06231e;
+}
+[data-theme="light"]{
+  --bg:#f4f6f7; --panel:#ffffff; --panel-2:#eef1f3;
+  --border:#d6dbdf; --border-bright:#0e8c7a;
+  --cyan:#0e8c7a; --amber:#b26a00; --green:#1e8e3e; --red:#d93025;
+  --magenta:#8e44ad;
+  --grey:#5f6368; --grey-dim:#9aa0a6; --white:#1a1d1f;
+  --on-primary:#ffffff;
+}
+[data-theme="nord"]{
+  --bg:#2e3440; --panel:#3b4252; --panel-2:#434c5e;
+  --border:#4c566a; --border-bright:#88c0d0;
+  --cyan:#88c0d0; --amber:#ebcb8b; --green:#a3be8c; --red:#bf616a;
+  --magenta:#b48ead;
+  --grey:#81a1c1; --grey-dim:#616e88; --white:#eceff4;
+  --on-primary:#2e3440;
+}
+[data-theme="dracula"]{
+  --bg:#191a21; --panel:#21222c; --panel-2:#282a36;
+  --border:#44475a; --border-bright:#bd93f9;
+  --cyan:#8be9fd; --amber:#f1fa8c; --green:#50fa7b; --red:#ff5555;
+  --magenta:#ff79c6;
+  --grey:#6272a4; --grey-dim:#4a5374; --white:#f8f8f2;
+  --on-primary:#191a21;
+}
+[data-theme="gruvbox"]{
+  --bg:#1d2021; --panel:#282828; --panel-2:#32302f;
+  --border:#3c3836; --border-bright:#83a598;
+  --cyan:#83a598; --amber:#fabd2f; --green:#b8bb26; --red:#fb4934;
+  --magenta:#d3869b;
+  --grey:#a89984; --grey-dim:#665c54; --white:#ebdbb2;
+  --on-primary:#1d2021;
+}
+[data-theme="catppuccin"]{
+  --bg:#11111b; --panel:#1e1e2e; --panel-2:#181825;
+  --border:#313244; --border-bright:#cba6f7;
+  --cyan:#89dceb; --amber:#f9e2af; --green:#a6e3a1; --red:#f38ba8;
+  --magenta:#f5c2e7;
+  --grey:#a6adc8; --grey-dim:#6c7086; --white:#cdd6f4;
+  --on-primary:#11111b;
+}
+[data-theme="tokyonight"]{
+  --bg:#1a1b26; --panel:#1f2335; --panel-2:#24283b;
+  --border:#2f334d; --border-bright:#7aa2f7;
+  --cyan:#7dcfff; --amber:#e0af68; --green:#9ece6a; --red:#f7768e;
+  --magenta:#bb9af7;
+  --grey:#a9b1d6; --grey-dim:#565f89; --white:#c0caf5;
+  --on-primary:#1a1b26;
+}
+[data-theme="rosepine"]{
+  --bg:#191724; --panel:#1f1d2e; --panel-2:#26233a;
+  --border:#403d52; --border-bright:#ebbcba;
+  --cyan:#9ccfd8; --amber:#f6c177; --green:#31748f; --red:#eb6f92;
+  --magenta:#c4a7e7;
+  --grey:#908caa; --grey-dim:#6e6a86; --white:#e0def4;
+  --on-primary:#191724;
+}
+[data-theme="onedark"]{
+  --bg:#21252b; --panel:#282c34; --panel-2:#2c313a;
+  --border:#3b4048; --border-bright:#61afef;
+  --cyan:#56b6c2; --amber:#e5c07b; --green:#98c379; --red:#e06c75;
+  --magenta:#c678dd;
+  --grey:#abb2bf; --grey-dim:#5c6370; --white:#dcdfe4;
+  --on-primary:#21252b;
+}
+[data-theme="solarized"]{
+  --bg:#fdf6e3; --panel:#eee8d5; --panel-2:#e7e0c9;
+  --border:#d5cdb6; --border-bright:#268bd2;
+  --cyan:#268bd2; --amber:#b58900; --green:#859900; --red:#dc322f;
+  --magenta:#d33682;
+  --grey:#657b83; --grey-dim:#93a1a1; --white:#073642;
+  --on-primary:#fdf6e3;
+}
+
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html{margin:0;padding:0;height:100%;background:var(--bg)}
+html{margin:0;padding:0;background:var(--bg)}
 body{margin:0;padding:0;background:var(--bg);color:var(--white);font-family:"JetBrains Mono","IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;min-height:100vh;overscroll-behavior-y:none}
-body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse at 50% -10%,rgba(94,230,208,.05),transparent 60%)}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse at 50% -10%,color-mix(in srgb, var(--cyan) 5%, transparent),transparent 60%)}
 #app{position:relative;z-index:1;min-height:100vh}
+
+/* ===== terminal window (same as K.I.T.E) ===== */
+.term{background:var(--panel);border:1px solid var(--border);border-radius:10px;box-shadow:0 0 0 1px color-mix(in srgb, var(--cyan) 4%, transparent),0 10px 30px -10px rgba(0,0,0,.6);overflow:hidden;display:flex;flex-direction:column;width:100%}
+.titlebar{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--panel-2);border-bottom:1px solid var(--border)}
+.dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;transition:background .18s,box-shadow .18s}
+.dot.r{background:#ff5f56}.dot.y{background:#ffbd2e}.dot.g{background:#27c93f}
+.dot.hint{background:#4d9fff!important;box-shadow:0 0 8px rgba(77,159,255,.85)}
+.titlebar .path{margin-left:6px;font-size:11px;color:var(--grey-dim);letter-spacing:.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
+.titlebar-back{flex-shrink:0;background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--cyan);font-family:inherit;font-size:11.5px;font-weight:600;padding:5px 10px;cursor:pointer}
+.titlebar-back:active{background:color-mix(in srgb, var(--cyan) 10%, transparent)}
+.screen{padding:18px 16px 20px;flex:1;display:flex;flex-direction:column;min-height:0;overflow-y:auto}
+
+/* ===== buttons + menu rows (same as K.I.T.E) ===== */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:8px;border:1px solid var(--border);background:var(--panel-2);color:var(--white);font-family:inherit;font-size:14px;font-weight:600;padding:13px 16px;cursor:pointer;width:100%;transition:transform .08s,border-color .15s,opacity .15s;text-decoration:none}
+.btn:active{transform:scale(.98)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn-primary{background:var(--cyan);color:var(--on-primary);border-color:var(--cyan)}
+.btn-danger{background:transparent;color:var(--red);border-color:color-mix(in srgb, var(--red) 40%, var(--border))}
+.btn-ghost{background:transparent;color:var(--grey);border-color:var(--border)}
+.btn.sm{width:auto;padding:8px 12px;font-size:12.5px}
+.btn-row{display:flex;gap:10px;margin-top:14px}
+.btn-row .btn{flex:1;width:auto}
+.menu{display:flex;flex-direction:column;gap:8px}
+.menu-item{display:flex;align-items:center;gap:8px;background:var(--panel-2);border:1px solid var(--border);border-radius:8px;padding:12px 11px;cursor:pointer;transition:border-color .15s,transform .08s;text-align:left;color:var(--white);font-family:inherit;font-size:14px;width:100%;text-decoration:none}
+.menu-item:active{transform:scale(.985)}
+.menu-item:hover{border-color:var(--border-bright)}
+.menu-item .mk{color:var(--cyan);font-weight:700;width:10px;flex-shrink:0;visibility:hidden}
+.menu-item.active .mk{visibility:visible}
+.menu-item .num{color:var(--cyan);font-weight:700;min-width:22px;flex-shrink:0}
+.menu-item .label{flex:1;line-height:1.3}
+.menu-item .meta{color:var(--grey-dim);font-size:11.5px;flex-shrink:0}
+.menu-item.active{border-color:var(--border-bright)}
+.menu-item.active .label{color:var(--cyan)}
+.menu-item.admin .num,.menu-item.admin .label{color:var(--amber)}
+.menu-item.accent .num,.menu-item.accent .label{color:var(--green)}
+.menu-item.on{border-color:var(--border-bright)}
+.menu-item.on .label{color:var(--cyan)}
+hr.div{border:none;border-top:1px solid var(--border);margin:14px 0}
+
+/* ===== layout: sidebar window + page ===== */
+.shell{display:flex;min-height:100vh}
+.sidebar{width:252px;flex-shrink:0;align-self:flex-start;position:sticky;top:0;height:100vh;padding:14px 0 14px 14px;z-index:60}
+.sb-term{height:100%}
+.sb-screen{padding:14px 12px 14px}
+.sb-spacer{flex:1;min-height:12px}
+.main{flex:1;min-width:0;padding:0 22px 40px}
+.main-inner{max-width:760px;margin:0 auto}
+.menu-btn{display:none}
+.sb-backdrop{display:none}
 .top-bar{display:flex;align-items:center;justify-content:space-between;padding:18px 0 14px;border-bottom:1px solid var(--border);margin-bottom:20px}
 .brand{display:flex;align-items:baseline;gap:10px}
 .brand .kite{font-size:20px;font-weight:700;color:var(--cyan);letter-spacing:.2em}
 .brand .sub{font-size:11px;color:var(--grey-dim);letter-spacing:.14em;text-transform:uppercase;font-weight:600}
 .user-area{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--grey)}
-.user-area .name{color:var(--white);font-weight:600}
+.user-area .name{color:var(--white);font-weight:600;display:inline-block;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tag{border:1px solid var(--border);border-radius:6px;padding:5px 10px;font-family:inherit;font-size:11.5px;color:var(--cyan);background:transparent;cursor:pointer}
 .tag:hover{border-color:var(--border-bright)}
-.tag.danger{color:var(--red);border-color:#5a2424}
-.search-wrap{margin-bottom:16px}
-.search-input{width:100%;background:var(--panel);border:1px solid var(--border);border-radius:10px;color:var(--white);font-family:inherit;font-size:15px;padding:14px 16px}
+
+/* ===== search + filters ===== */
+.search-wrap{position:relative;margin-bottom:14px}
+.search-wrap .prompt{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--cyan);font-weight:700;pointer-events:none}
+.search-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:inherit;font-size:14.5px;padding:13px 13px 13px 32px}
 .search-input:focus{outline:none;border-color:var(--cyan)}
-.filters{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:16px;scrollbar-width:none}
+.filters{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:10px;scrollbar-width:none}
 .filters::-webkit-scrollbar{display:none}
 .chip{flex-shrink:0;background:transparent;border:1px solid var(--border);color:var(--grey);border-radius:20px;padding:7px 14px;font-family:inherit;font-size:12px;cursor:pointer;white-space:nowrap}
-.chip.active{background:rgba(94,230,208,.12);color:var(--cyan);border-color:var(--cyan)}
+.chip.active{background:color-mix(in srgb, var(--cyan) 12%, transparent);color:var(--cyan);border-color:var(--cyan)}
 .chip:hover{border-color:var(--border-bright)}
-.subject-head{font-family:var(--sans);font-size:34px;font-weight:800;color:var(--cyan);margin:44px 0 18px;line-height:1.1;letter-spacing:-.01em}
-section:first-of-type>.subject-head{margin-top:10px}
-.deck-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:26px 34px;padding:0 10px 10px 0}
-.deck-card{font-family:var(--sans);color:var(--cyan);background:var(--panel);border-radius:22px;box-shadow:7px 7px 0 var(--cyan);padding:16px 18px 18px;display:flex;flex-direction:column;gap:10px}
-.dc-row{display:flex;justify-content:space-between;align-items:baseline;gap:14px}
-.dc-title{font-size:20px;line-height:1.25;font-weight:500;min-width:0;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word}
-.dc-right{display:flex;gap:12px;align-items:baseline;flex-shrink:0;font-size:16px}
-.dc-author{max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.dc-tags{font-size:15.5px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.dc-tags.none{opacity:.45}
-.dc-time{font-size:15.5px;flex-shrink:0}
-.dc-actions{display:flex;gap:14px;margin-top:6px}
-.dc-btn{flex:1;background:#000;color:#fff;border:0;border-radius:12px;padding:12px 8px;font-family:var(--sans);font-size:14.5px;font-weight:700;cursor:pointer;box-shadow:4px 4px 0 var(--cyan);transition:transform .08s,box-shadow .08s}
-.dc-btn:hover{filter:brightness(1.25)}
-.dc-btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--cyan)}
-.dc-btn:disabled{opacity:.5;cursor:not-allowed}
-.empty-state{text-align:center;color:var(--grey);padding:60px 20px;font-size:13.5px;line-height:1.7}
-.empty-state .big{font-size:36px;margin-bottom:14px;opacity:.6}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:8px;border:1px solid var(--border);background:var(--panel-2);color:var(--white);font-family:inherit;font-size:13.5px;font-weight:600;padding:12px 18px;cursor:pointer;transition:transform .08s,border-color .15s,opacity .15s}
-.btn:active{transform:scale(.98)}
-.btn:disabled{opacity:.4;cursor:not-allowed}
-.btn-primary{background:var(--cyan);color:#06231e;border-color:var(--cyan)}
-.btn-ghost{background:transparent;color:var(--grey);border-color:var(--border)}
-.btn-danger{background:transparent;color:var(--red);border-color:#5a2424}
-.btn-row{display:flex;gap:10px;flex-wrap:wrap}
+
+/* ===== headings ===== */
+h1.page-title{font-size:18px;margin:6px 0 14px;color:var(--amber);font-weight:700;letter-spacing:.02em;display:flex;align-items:center;gap:8px}
+.cursor{display:inline-block;width:9px;height:16px;background:var(--amber);animation:blink 1.1s steps(1) infinite;vertical-align:-3px}
+@keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+.subject-head{font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--amber);margin:30px 0 12px;display:flex;align-items:baseline;gap:8px;text-transform:lowercase}
+.subject-head .prompt{color:var(--cyan)}
+.subject-head .cnt{color:var(--grey-dim);font-weight:500;font-size:11px}
+section:first-of-type>.subject-head{margin-top:8px}
+.sec-title{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--amber);margin:28px 0 12px}
+.summary{display:flex;flex-wrap:wrap;gap:8px 26px;color:var(--grey);font-size:12.5px;margin-bottom:6px}
+.summary b{color:var(--cyan);font-size:22px;margin-right:8px;vertical-align:middle}
+.note{color:var(--grey);font-size:12px;line-height:1.6;margin-top:14px}
+
+/* ===== deck = small terminal window ===== */
+.deck-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.deck-term{transition:border-color .15s}
+.deck-term:hover{border-color:var(--border-bright)}
+.deck-term .titlebar .path{color:var(--cyan);font-size:12.5px;font-weight:600}
+.deck-body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:7px}
+.kv{display:flex;gap:12px;font-size:12.5px;align-items:center;min-width:0}
+.kv .k{color:var(--grey-dim);width:66px;flex-shrink:0}
+.kv .v{color:var(--white);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center}
+.tagtxt{color:var(--cyan);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dim{color:var(--grey-dim)}
+.hot{color:var(--cyan);font-weight:700}
+.dc-flag{color:var(--amber);font-weight:700;font-size:11.5px}
+.dk-actions{display:flex;gap:10px;margin-top:8px}
+.dk-actions .btn{flex:1;width:auto;padding:9px 10px;font-size:12.5px}
+.dc-author{display:inline-flex;align-items:center;max-width:100%;min-width:0}
+.dc-author .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+
+/* ===== cards, stats, rows ===== */
+.card{background:var(--panel-2);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:14px}
+.qa-label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:0 0 14px}
+.stat-card{background:var(--panel-2);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center}
+.stat-card .n{font-size:26px;font-weight:700;color:var(--cyan);line-height:1.1}
+.stat-card .l{font-size:11px;color:var(--grey);margin-top:4px}
+.prof-card{display:flex;align-items:center;gap:14px}
+.prof-avatar{width:56px;height:56px;border-radius:50%;background:var(--bg);border:2px solid var(--cyan);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.prof-avatar svg{width:30px;height:30px}
+.prof-avatar svg *{fill:var(--cyan)}
+.prof-name{font-size:19px;font-weight:700;color:var(--white);display:flex;align-items:center;flex-wrap:wrap}
+.prof-name .badge{width:20px;height:20px;margin-left:8px}
+.prof-sub{color:var(--grey);font-size:12.5px;margin-top:3px;word-break:break-all}
+.auth-info-row{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);font-size:12.5px;color:var(--grey)}
+.auth-info-row:last-child{border-bottom:none;padding-bottom:0}
+.auth-info-row .val{color:var(--white);font-weight:600;text-align:right;word-break:break-all}
+.row-card{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;padding:12px 14px;border:1px solid var(--border);border-radius:8px;background:var(--panel-2);margin-bottom:10px}
+.ar-main{flex:1;min-width:190px}
+.ar-title{color:var(--white);font-weight:700;font-size:13.5px;display:flex;align-items:center;flex-wrap:wrap;gap:2px}
+.ar-sub{color:var(--grey);font-size:11.5px;margin-top:3px;display:flex;align-items:center;flex-wrap:wrap}
+.grant-input{flex:1;min-width:200px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:inherit;font-size:13px;padding:10px 12px}
+.grant-input:focus{outline:none;border-color:var(--cyan)}
+
+/* ===== badges ===== */
+.badge{position:relative;display:inline-flex;width:18px;height:18px;flex-shrink:0;cursor:default;outline:none;vertical-align:middle;margin-left:4px}
+.badge svg{width:100%;height:100%}
+.badge::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);right:-8px;width:max-content;max-width:230px;background:var(--bg);color:var(--white);border:1px solid var(--cyan);border-radius:8px;padding:7px 10px;font:500 12px/1.35 inherit;font-family:inherit;text-align:left;white-space:normal;opacity:0;pointer-events:none;transition:opacity .12s;z-index:90}
+.badge:hover::after,.badge:focus::after{opacity:1}
+
+/* ===== states ===== */
+.empty-state{text-align:center;color:var(--grey);padding:40px 10px;font-size:13.5px;line-height:1.6}
+.empty-state .big{font-size:28px;margin-bottom:10px}
 .spinner{width:34px;height:34px;border:3px solid var(--border);border-top-color:var(--cyan);border-radius:50%;animation:spin .8s linear infinite;margin:40px auto}
 @keyframes spin{to{transform:rotate(360deg)}}
-.loading{text-align:center;color:var(--grey);font-size:13px;padding:30px}
+.loading{text-align:center;color:var(--grey);font-size:13px;padding:10px}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--panel-2);border:1px solid var(--border-bright);color:var(--white);padding:10px 16px;border-radius:8px;font-size:13px;z-index:300;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;max-width:90%;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.footnote{text-align:center;color:var(--grey-dim);font-size:10.5px;padding:24px 0 0;letter-spacing:.02em}
+
+/* ===== popups = terminal windows ===== */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:none;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto}
 .modal-overlay.show{display:flex}
-.modal{background:var(--panel);border:1px solid var(--border);border-radius:12px;max-width:600px;width:100%;padding:24px;margin:auto;box-shadow:0 24px 60px -20px rgba(0,0,0,.9)}
-.modal .close{float:right;background:transparent;border:none;color:var(--grey);font-size:20px;cursor:pointer;padding:0;line-height:1;margin-top:-4px}
-.modal h2{font-size:19px;color:var(--amber);margin:0 0 6px;font-weight:700;line-height:1.3;padding-right:30px}
-.modal .meta-row{color:var(--grey);font-size:12px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:12px}
+.modal.term{max-width:600px;margin:auto;max-height:none;box-shadow:0 24px 60px -20px rgba(0,0,0,.9)}
+.modal-body{padding:16px}
+.modal h2{font-size:17px;color:var(--amber);margin:0 0 8px;font-weight:700;line-height:1.3}
+.modal .meta-row{color:var(--grey);font-size:12px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center}
 .modal .meta-row .sep{color:var(--grey-dim)}
-.modal .desc-block{background:var(--panel-2);border:1px solid var(--border);border-radius:8px;padding:14px;font-size:13.5px;color:var(--white);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;max-height:180px;overflow-y:auto}
-.modal .cards-preview{margin-bottom:18px}
-.modal .cards-preview .card-preview{background:var(--panel-2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:8px;font-size:13px}
-.modal .cards-preview .card-preview .q{color:var(--amber);margin-bottom:6px;font-weight:600}
-.modal .cards-preview .card-preview .a{color:var(--grey);line-height:1.5}
+.modal .meta-row .by{display:inline-flex;align-items:center}
+.modal .desc-block{background:var(--panel-2);border:1px solid var(--border);border-radius:8px;padding:14px;font-size:13px;color:var(--white);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;max-height:200px;overflow-y:auto}
+.modal .cards-preview{margin-bottom:16px}
+.modal .card-preview{background:var(--panel-2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:8px;font-size:13px}
+.modal .card-preview .q{color:var(--amber);margin-bottom:6px;font-weight:600}
+.modal .card-preview .a{color:var(--grey);line-height:1.5}
 .modal .cards-preview .more{text-align:center;color:var(--grey-dim);font-size:12px;margin-top:6px}
 .modal-actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:8px}
-.auth-card{max-width:420px;margin:80px auto;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:28px 24px;box-shadow:0 24px 60px -20px rgba(0,0,0,.85)}
-.auth-brand{text-align:center;color:var(--grey);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px}
+.modal-actions .btn{width:auto}
+.theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px}
+.theme-option{display:flex;align-items:center;gap:10px;width:100%;background:transparent;border:1px solid var(--border);color:var(--white);font-family:inherit;font-size:12.5px;padding:8px 9px;border-radius:6px;cursor:pointer;text-align:left}
+.theme-option:hover{background:var(--panel-2)}
+.theme-option.active{border-color:var(--border-bright);background:var(--panel-2)}
+.theme-swatch{display:flex;gap:3px;flex-shrink:0}
+.theme-swatch span{width:12px;height:12px;border-radius:3px;display:block;border:1px solid rgba(0,0,0,.15)}
+
+/* ===== sign-in ===== */
+.auth-term{max-width:420px;margin:60px auto}
+.auth-term .screen{padding:24px 22px}
+.auth-brand{text-align:center;color:var(--grey);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px}
 .auth-title{font-size:20px;color:var(--amber);margin:0 0 6px;text-align:center;font-weight:700;letter-spacing:.02em}
-.auth-sub{text-align:center;color:var(--grey);font-size:12px;margin-bottom:20px;line-height:1.55}
+.auth-sub{text-align:center;color:var(--grey);font-size:12px;margin-bottom:20px;line-height:1.5}
 .auth-field{margin-bottom:12px}
 .auth-field label{display:block;color:var(--grey);font-size:11.5px;margin-bottom:5px;letter-spacing:.02em}
-.auth-field input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:inherit;font-size:14px;padding:12px 13px}
+.auth-field input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:inherit;font-size:14px;padding:11px 12px}
 .auth-field input:focus{outline:none;border-color:var(--cyan)}
+.auth-btn{width:100%;padding:13px;font-size:14.5px;margin-top:6px}
 .auth-err{color:var(--red);font-size:12px;text-align:center;margin-top:12px;min-height:16px;line-height:1.4}
 .auth-link{text-align:center;color:var(--grey);font-size:12.5px;margin-top:16px}
 .auth-link a{color:var(--cyan);cursor:pointer;text-decoration:none}
 .auth-link a:hover{text-decoration:underline}
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--panel-2);border:1px solid var(--border-bright);color:var(--white);padding:11px 18px;border-radius:8px;font-size:13px;z-index:200;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;max-width:90%;text-align:center}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.footnote{text-align:center;color:var(--grey-dim);font-size:10.5px;padding:24px 0 0;letter-spacing:.02em}
-@media (max-width:560px){
-  .deck-grid{grid-template-columns:1fr;gap:24px;padding-right:8px}
-  .subject-head{font-size:28px}
-  .brand .sub{display:none}
-  .modal{padding:18px;border-radius:10px}
-  .modal h2{font-size:17px}
-}
 
-/* === Shell + sidebar === */
-.shell{display:flex;min-height:100vh}
-.sidebar{width:212px;flex-shrink:0;align-self:flex-start;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;background:#0a0c0d;border-right:3px solid #25292b;padding:14px 16px 16px 12px;overflow-y:auto;z-index:60}
-.sb-top{display:flex;flex-direction:column;gap:20px}
-.sb-profile-row{display:flex;align-items:center;gap:10px}
-.sb-profile-row .sb-btn{flex:1;min-width:0;width:auto}
-.sb-avatar{width:34px;height:34px;flex-shrink:0;border-radius:50%;background:#000;border:2px solid #25292b;display:flex;align-items:center;justify-content:center}
-.sb-avatar svg{width:20px;height:20px}
-.sb-btn{display:flex;align-items:center;justify-content:center;text-align:center;width:100%;background:#000;color:#fff;border:0;border-radius:10px;padding:11px 10px;font-family:var(--sans);font-size:16px;font-weight:700;line-height:1.25;cursor:pointer;text-decoration:none;box-shadow:4px 4px 0 var(--cyan);transition:transform .08s,box-shadow .08s}
-.sb-btn:hover{filter:brightness(1.25)}
-.sb-btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--cyan)}
-.sb-btn.active{color:var(--cyan)}
-.sb-btn.sb-admin{box-shadow:4px 4px 0 var(--amber)}
-.sb-btn.sb-admin:active{box-shadow:1px 1px 0 var(--amber)}
-.sb-btn.on{background:var(--cyan);color:#000}
-.sb-divider{height:3px;background:#25292b;margin:22px -16px 0 -12px;flex-shrink:0}
-.sb-bottom{margin-top:auto;display:flex;flex-direction:column;gap:20px;padding-top:20px}
-.main{flex:1;min-width:0;padding:0 22px 40px}
-.main-inner{max-width:760px;margin:0 auto}
-.menu-btn{display:none}
-.sb-backdrop{display:none}
-.user-area .name{display:inline-block;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-
-/* === Badges === */
-.badge{position:relative;display:inline-flex;width:18px;height:18px;flex-shrink:0;cursor:default;outline:none;vertical-align:middle;margin-left:4px}
-.badge svg{width:100%;height:100%}
-.badge::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);right:-8px;width:max-content;max-width:230px;background:#000;color:#fff;border:1px solid var(--cyan);border-radius:8px;padding:7px 10px;font:500 12px/1.35 var(--sans);text-align:left;white-space:normal;opacity:0;pointer-events:none;transition:opacity .12s;z-index:90}
-.badge:hover::after,.badge:focus::after{opacity:1}
-.dc-author{display:inline-flex;align-items:center;max-width:150px}
-.dc-author .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
-.modal .meta-row .by{display:inline-flex;align-items:center}
-
-/* === Pages === */
-.page-title{font-family:var(--sans);font-size:30px;font-weight:800;color:var(--cyan);margin:6px 0 16px;line-height:1.1}
-.summary{display:flex;flex-wrap:wrap;gap:10px 30px;font-family:var(--sans);color:var(--cyan);font-size:15px;margin-bottom:8px}
-.summary b{font-size:28px;font-weight:800;margin-right:8px;vertical-align:middle}
-.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:22px 26px;margin:0 8px 26px 0}
-.stat-card{font-family:var(--sans);background:var(--panel);border-radius:18px;box-shadow:5px 5px 0 var(--cyan);padding:14px 16px;color:var(--cyan)}
-.stat-card .n{font-size:32px;font-weight:800;line-height:1.1}
-.stat-card .l{font-size:13.5px;margin-top:4px;opacity:.85}
-.prof-card{display:flex;align-items:center;gap:16px;font-family:var(--sans);margin:0 0 24px}
-.prof-avatar{width:68px;height:68px;border-radius:50%;background:#000;border:3px solid var(--cyan);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.prof-avatar svg{width:38px;height:38px}
-.prof-name{font-size:24px;font-weight:800;color:var(--white);display:flex;align-items:center;flex-wrap:wrap}
-.prof-name .badge{width:20px;height:20px;margin-left:8px}
-.prof-sub{color:var(--grey);font-size:14px;margin-top:3px;word-break:break-all}
-.detail-list{font-family:var(--sans);background:var(--panel);border:1px solid var(--border);border-radius:14px;margin-bottom:24px;overflow:hidden}
-.detail-row{display:flex;justify-content:space-between;gap:14px;padding:12px 16px;border-bottom:1px solid var(--border);font-size:14px}
-.detail-row:last-child{border-bottom:0}
-.detail-row .k{color:var(--grey);flex-shrink:0}
-.detail-row .v{color:var(--white);text-align:right;word-break:break-all}
-.note{color:var(--grey);font-size:12.5px;line-height:1.6;font-family:var(--sans);margin-top:14px}
-.dc-link{display:flex;align-items:center;justify-content:center;text-decoration:none}
-.dc-meta-line{font-size:13px;opacity:.8}
-.dc-flag{color:var(--amber);font-weight:700;font-size:12px}
-.sec-title{font-family:var(--sans);font-size:20px;font-weight:800;color:var(--amber);margin:30px 0 12px}
-.admin-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:var(--panel);font-family:var(--sans);margin-bottom:10px}
-.ar-main{flex:1;min-width:190px}
-.ar-title{color:var(--white);font-weight:700;font-size:15px;display:flex;align-items:center;flex-wrap:wrap;gap:2px}
-.ar-sub{color:var(--grey);font-size:12.5px;margin-top:3px;display:flex;align-items:center;flex-wrap:wrap}
-.mini-btn{background:#000;color:#fff;border:0;border-radius:8px;padding:8px 12px;font-family:var(--sans);font-size:12.5px;font-weight:700;cursor:pointer;box-shadow:3px 3px 0 var(--cyan);margin-right:3px}
-.mini-btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--cyan)}
-.mini-btn.on{background:var(--cyan);color:#000}
-.mini-btn.danger{box-shadow:3px 3px 0 var(--red)}
-.grant-input{flex:1;min-width:200px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:inherit;font-size:13px;padding:10px 12px}
-.grant-input:focus{outline:none;border-color:var(--cyan)}
-
-/* === Phone: sidebar becomes a slide-in menu === */
+/* ===== phone ===== */
 @media (max-width:820px){
-  .sidebar{position:fixed;left:0;top:0;bottom:0;height:auto;align-self:stretch;transform:translateX(-105%);transition:transform .2s;z-index:200;box-shadow:12px 0 40px rgba(0,0,0,.6)}
+  .sidebar{position:fixed;left:0;top:0;bottom:0;height:auto;align-self:stretch;width:262px;padding:12px 0 12px 12px;transform:translateX(-105%);transition:transform .2s;z-index:200}
   .sidebar.open{transform:none}
   .sb-backdrop.show{display:block;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:150}
   .menu-btn{display:inline-block;margin-right:8px;align-self:center}
-  .main{padding:0 16px 40px}
+  .main{padding:0 14px 40px}
   .brand{align-items:center}
+  .deck-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -185,6 +301,7 @@ section:first-of-type>.subject-head{margin-top:10px}
 <div class="toast" id="toast"></div>
 
 <script type="module">
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, getDocs, query, orderBy, limit, serverTimestamp, increment } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -199,6 +316,7 @@ const firebaseConfig = {
 };
 
 const KITE_URL = "https://d4nd4d.github.io/K.I.T.E/";
+// The owner. Always an admin (gets the hammer + the Admin page) even without a badges document.
 const SUPER_ADMIN_UID = "EMTxL9cIU4dhRQeOptEaHfrhWty2";
 const HIDE_KEY = "kite_lib_hide_imported";
 
@@ -208,18 +326,18 @@ const db    = getFirestore(fbApp);
 
 /* ---------- state ---------- */
 let currentUser = null;
-let myProfile = null;            
-let myImports = {};              
-let badges = {};                 
-let allDecksRaw = [];            
-let allDecks = [];               
-const deckById = new Map();      
+let myProfile = null;            // users/{uid} document (username, displayId, createdAt...)
+let myImports = {};              // deckId -> time you imported it (users/{uid}.importedDecks)
+let badges = {};                 // uid -> { verified, admin }
+let allDecksRaw = [];            // every deck we loaded, including hidden ones
+let allDecks = [];               // visible decks only (what the Home page browses)
+const deckById = new Map();      // id -> deck, or null when the deck no longer exists
 let activeSubject = "All";
 let searchQuery = "";
 let currentDeck = null;
 let loadingDecks = true;
 let downloadsLoading = false;
-let view = "home";               
+let view = "home";               // home | profile | uploads | downloads | admin
 let pendingView = null;
 let authReady = false;
 let showingLogin = false;
@@ -281,6 +399,68 @@ function badgesHTML(uid){
   if(badges[uid] && badges[uid].verified === true) h += `<span class="badge" tabindex="0" data-tip="This user has been verified for quality content">${ICON_VERIFIED}</span>`;
   return h;
 }
+
+/* ---------- themes (same list + same storage key as K.I.T.E) ---------- */
+const THEME_KEY = "d4n_theme_v1";
+const THEMES = [
+  {id:"default",    name:"Teal",        bg:"#0c0e0f", accent:"#5ee6d0"},
+  {id:"light",      name:"Light",       bg:"#f4f6f7", accent:"#0e8c7a"},
+  {id:"nord",       name:"Nord",        bg:"#2e3440", accent:"#88c0d0"},
+  {id:"dracula",    name:"Dracula",     bg:"#282a36", accent:"#bd93f9"},
+  {id:"gruvbox",    name:"Gruvbox",     bg:"#1d2021", accent:"#fabd2f"},
+  {id:"catppuccin", name:"Catppuccin",  bg:"#1e1e2e", accent:"#cba6f7"},
+  {id:"tokyonight", name:"Tokyo Night", bg:"#1a1b26", accent:"#7aa2f7"},
+  {id:"rosepine",   name:"Rosé Pine",   bg:"#191724", accent:"#ebbcba"},
+  {id:"onedark",    name:"One Dark",    bg:"#282c34", accent:"#61afef"},
+  {id:"solarized",  name:"Solarized",   bg:"#fdf6e3", accent:"#268bd2"}
+];
+function currentTheme(){
+  try{ const t = localStorage.getItem(THEME_KEY); return THEMES.some(x => x.id === t) ? t : "default"; }catch(e){ return "default"; }
+}
+function themeName(){ const t = THEMES.find(x => x.id === currentTheme()); return t ? t.name : "Teal"; }
+function applyTheme(id){
+  const t = THEMES.find(x => x.id === id) || THEMES[0];
+  document.documentElement.setAttribute("data-theme", t.id);
+  try{ localStorage.setItem(THEME_KEY, t.id); }catch(e){}
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if(meta) meta.setAttribute("content", t.bg);
+  document.querySelectorAll(".theme-option").forEach(b => b.classList.toggle("active", b.dataset.themeValue === t.id));
+}
+applyTheme(currentTheme());
+
+/* ---------- dot light show (same as K.I.T.E): one pulse on open, then every 3s after 90s idle ---------- */
+const dotShow = (() => {
+  const IDLE_MS = 90 * 1000, STEP_MS = 260, HOLD_MS = 1100, REPEAT_MS = 3000;
+  // dot 0 = red, 1 = yellow, 2 = green; RYG -> BYG -> BBG -> BBB (hold) -> RBB -> RYB -> RYG
+  const FRAMES = [[[0],STEP_MS],[[0,1],STEP_MS],[[0,1,2],HOLD_MS],[[1,2],STEP_MS],[[2],STEP_MS],[[],0]];
+  let idleTimer = null, seqTimers = [], playing = false, intro = false, introPlayed = false;
+  const paint = blues => document.querySelectorAll(".dot[data-dot]").forEach(d => {
+    d.classList.toggle("hint", blues.includes(parseInt(d.dataset.dot, 10)));
+  });
+  const stop = () => { playing = false; seqTimers.forEach(clearTimeout); seqTimers = []; paint([]); };
+  const playOnce = (repeat = true) => {
+    let t = 0, lastAt = 0;
+    FRAMES.forEach(([blues, ms]) => { const at = t; lastAt = at; seqTimers.push(setTimeout(() => paint(blues), at)); t += ms; });
+    if(repeat) seqTimers.push(setTimeout(() => { if(playing){ seqTimers = []; playOnce(); } }, lastAt + REPEAT_MS));
+    return lastAt;
+  };
+  const playIntro = () => {
+    if(playing) return;
+    intro = true; playing = true;
+    const end = playOnce(false);
+    seqTimers.push(setTimeout(() => { intro = false; playing = false; seqTimers = []; paint([]); }, end + 50));
+  };
+  const onActivity = () => {
+    if(playing && !intro) stop();
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(() => { playing = true; playOnce(); }, IDLE_MS);
+  };
+  ["pointerdown","pointermove","mousemove","keydown","touchstart","wheel","scroll","click"].forEach(ev => {
+    document.addEventListener(ev, onActivity, { passive: true, capture: true });
+  });
+  onActivity();
+  return { maybeIntro(){ if(introPlayed || !document.querySelector(".dot[data-dot]")) return; introPlayed = true; setTimeout(playIntro, 700); } };
+})();
 
 /* ---------- data ---------- */
 async function loadDecks(){
@@ -369,49 +549,59 @@ function groupedDecks(decks){
 function renderGroups(decks, cardFn){
   return groupedDecks(decks).map(([subject, list]) => `
     <section>
-      <h2 class="subject-head">${esc(subject)}</h2>
+      <h2 class="subject-head"><span class="prompt">$</span> ${esc(subject)} <span class="cnt">${list.length}</span></h2>
       <div class="deck-grid">${list.map(cardFn).join("")}</div>
     </section>
   `).join("");
 }
 
 /* ---------- auth screen ---------- */
+function dotsHTML(){ return `<span class="dot r" data-dot="0"></span><span class="dot y" data-dot="1"></span><span class="dot g" data-dot="2"></span>`; }
+function kv(k, v){ return `<div class="kv"><span class="k">${k}</span><span class="v">${v}</span></div>`; }
+
 function renderLogin(){
   return `
-    <div class="auth-card">
-      <div class="auth-brand">K.I.T.E Library</div>
-      <div class="auth-title">Sign in</div>
-      <div class="auth-sub">Use the same email and password as your K.I.T.E account.</div>
-      <div class="auth-field"><label>Email</label><input type="email" id="loginEmail" autocomplete="email" placeholder="you@example.com"></div>
-      <div class="auth-field"><label>Password</label><input type="password" id="loginPassword" autocomplete="current-password" placeholder="••••••••"></div>
-      <button class="btn btn-primary" data-act="login" style="width:100%;margin-top:8px;">Sign in</button>
-      <div class="auth-err" id="loginErr"></div>
-      <div class="auth-link"><a data-act="forgot">Forgot password?</a></div>
-      <div class="auth-link">No account? <a href="${KITE_URL}" target="_blank" rel="noopener">Create one on K.I.T.E →</a></div>
-      <div class="auth-link"><a data-act="backBrowse">← Back to browsing</a></div>
+    <div class="term auth-term">
+      <div class="titlebar">${dotsHTML()}<span class="path">kite-library — sign-in</span></div>
+      <div class="screen">
+        <div class="auth-brand">K.I.T.E Library</div>
+        <div class="auth-title">Sign in</div>
+        <div class="auth-sub">Use the same email and password as your K.I.T.E account.</div>
+        <div class="auth-field"><label>Email</label><input type="email" id="loginEmail" autocomplete="email" placeholder="you@example.com"></div>
+        <div class="auth-field"><label>Password</label><input type="password" id="loginPassword" autocomplete="current-password" placeholder="••••••••"></div>
+        <button class="btn btn-primary auth-btn" data-act="login">Sign in</button>
+        <div class="auth-err" id="loginErr"></div>
+        <div class="auth-link"><a data-act="forgot">Forgot password?</a></div>
+        <div class="auth-link">No account? <a href="${KITE_URL}" target="_blank" rel="noopener">Create one on K.I.T.E →</a></div>
+        <div class="auth-link"><a data-act="backBrowse">← Back to browsing</a></div>
+      </div>
     </div>
   `;
 }
 
 /* ---------- shell: sidebar + top bar ---------- */
 function renderSidebar(){
-  const nav = (v, label, extra) => `<button class="sb-btn${view===v?" active":""}${extra||""}" data-act="nav" data-arg="${v}">${label}</button>`;
+  const nav = (v, n, label, extra) => `<button class="menu-item${view===v?" active":""}${extra||""}" data-act="nav" data-arg="${v}"><span class="mk">&gt;</span><span class="num">${n}.</span><span class="label">${label}</span></button>`;
   return `
     <aside class="sidebar" id="sidebar">
-      <div class="sb-top">
-        <div class="sb-profile-row">
-          <div class="sb-avatar">${ICON_USER}</div>
-          ${nav("profile", "Profile")}
+      <div class="term sb-term">
+        <div class="titlebar">${dotsHTML()}<span class="path">kite@library:~</span></div>
+        <div class="screen sb-screen">
+          <div class="menu">
+            ${nav("profile", 1, "Profile")}
+            ${nav("home", 2, "Home")}
+            ${nav("uploads", 3, "My uploads")}
+            ${nav("downloads", 4, "Downloads")}
+            ${isMeAdmin() ? nav("admin", 5, "Admin", " admin") : ""}
+          </div>
+          <div class="sb-spacer"></div>
+          <hr class="div">
+          <div class="menu">
+            <button class="menu-item" data-act="theme"><span class="mk"></span><span class="num">~</span><span class="label">Theme</span><span class="meta">${esc(themeName())}</span></button>
+            <a class="menu-item accent" href="${KITE_URL}"><span class="mk"></span><span class="num">&rarr;</span><span class="label">Go to KITE</span></a>
+            <button class="menu-item${hideImported?" on":""}" data-act="hideImported" aria-pressed="${hideImported}"><span class="mk"></span><span class="num">${hideImported?"[x]":"[ ]"}</span><span class="label">Hide decks I've already imported</span></button>
+          </div>
         </div>
-        ${nav("home", "Home")}
-        ${nav("uploads", "My uploads")}
-        ${nav("downloads", "Downloads")}
-        ${isMeAdmin() ? nav("admin", "Admin", " sb-admin") : ""}
-      </div>
-      <div class="sb-divider"></div>
-      <div class="sb-bottom">
-        <a class="sb-btn" href="${KITE_URL}">Go to KITE</a>
-        <button class="sb-btn${hideImported?" on":""}" data-act="hideImported" aria-pressed="${hideImported}">Hide decks I've already imported</button>
       </div>
     </aside>
   `;
@@ -436,13 +626,13 @@ function renderTopBar(){
   `;
 }
 
-/* ---------- deck cards ---------- */
-function deckTagsHTML(d){
+/* ---------- deck cards (each deck is a little terminal window) ---------- */
+function tagsText(d){
   const tags = (d.tags || []).map(t => String(t).trim()).filter(Boolean);
-  if(!tags.length) return `<div class="dc-tags none">{ no tags }</div>`;
+  if(!tags.length) return `<span class="dim">none</span>`;
   const shown = tags.slice(0, 3).join(", ");
-  const extra = tags.length > 3 ? ` +${tags.length - 3}` : "";
-  return `<div class="dc-tags" title="${esc(tags.join(", "))}">{ ${esc(shown)}${extra} }</div>`;
+  const extra = tags.length > 3 ? `, +${tags.length - 3}` : "";
+  return `<span class="tagtxt" title="${esc(tags.join(", "))}">{ ${esc(shown)}${extra} }</span>`;
 }
 function authorHTML(d){
   return `<span class="dc-author"><span class="nm">${esc(d.ownerName || "anonymous")}</span>${badgesHTML(ownerOf(d))}</span>`;
@@ -450,23 +640,20 @@ function authorHTML(d){
 function deckCardHTML(d, opts){
   opts = opts || {};
   const n = d.cardCount || 0;
+  const timeLabel = opts.timeLabel || "uploaded";
   const timeText = opts.timeText || timeAgo(d.createdAt);
   return `
-    <div class="deck-card">
-      <div class="dc-row">
-        <div class="dc-title">${esc(d.title || "Untitled")}</div>
-        <div class="dc-right">
-          <span class="dc-count">${plural(n, "card")}</span>
-          ${authorHTML(d)}
+    <div class="term deck-term">
+      <div class="titlebar">${dotsHTML()}<span class="path" title="${esc(d.title || "Untitled")}">${esc(d.title || "Untitled")}</span></div>
+      <div class="deck-body">
+        ${kv("author", authorHTML(d))}
+        ${kv("cards", n)}
+        ${kv("tags", tagsText(d))}
+        ${kv(timeLabel, `<span title="${esc(fullDate(d.createdAt))}">${esc(timeText)}</span>`)}
+        <div class="dk-actions">
+          <button class="btn btn-primary" data-act="import" data-arg="${esc(d.id)}">Import</button>
+          <button class="btn btn-ghost" data-act="preview" data-arg="${esc(d.id)}">Preview</button>
         </div>
-      </div>
-      <div class="dc-row">
-        ${deckTagsHTML(d)}
-        <div class="dc-time" title="${esc(fullDate(d.createdAt))}">${esc(timeText)}</div>
-      </div>
-      <div class="dc-actions">
-        <button class="dc-btn" data-act="import" data-arg="${esc(d.id)}">Import</button>
-        <button class="dc-btn" data-act="preview" data-arg="${esc(d.id)}">Preview</button>
       </div>
     </div>
   `;
@@ -474,17 +661,16 @@ function deckCardHTML(d, opts){
 function uploadCardHTML(d){
   const imp = d.importCount || 0;
   return `
-    <div class="deck-card">
-      <div class="dc-row">
-        <div class="dc-title">${esc(d.title || "Untitled")}</div>
-        <div class="dc-right"><span class="dc-count">${plural(imp, "download")}</span></div>
+    <div class="term deck-term">
+      <div class="titlebar">${dotsHTML()}<span class="path" title="${esc(d.title || "Untitled")}">${esc(d.title || "Untitled")}</span></div>
+      <div class="deck-body">
+        ${kv("downloads", `<span class="hot">${imp}</span>`)}
+        ${kv("cards", d.cardCount || 0)}
+        ${kv("tags", tagsText(d))}
+        ${kv("uploaded", `<span title="${esc(fullDate(d.createdAt))}">${esc(timeAgo(d.createdAt))}</span>`)}
+        ${d.hidden ? kv("status", `<span class="dc-flag">Hidden by an admin</span>`) : ""}
+        <div class="dk-actions"><button class="btn btn-ghost" data-act="preview" data-arg="${esc(d.id)}">Preview</button></div>
       </div>
-      <div class="dc-row">
-        ${deckTagsHTML(d)}
-        <div class="dc-time" title="${esc(fullDate(d.createdAt))}">${esc(timeAgo(d.createdAt))}</div>
-      </div>
-      <div class="dc-meta-line">${plural(d.cardCount || 0, "card")}${d.hidden ? ` · <span class="dc-flag">Hidden by an admin</span>` : ""}</div>
-      <div class="dc-actions"><button class="dc-btn" data-act="preview" data-arg="${esc(d.id)}">Preview</button></div>
     </div>
   `;
 }
@@ -493,6 +679,7 @@ function uploadCardHTML(d){
 function emptyBlock(emoji, line1, line2){
   return `<div class="empty-state"><div class="big">${emoji}</div><div>${line1}</div>${line2 ? `<div style="margin-top:8px;color:var(--grey-dim);">${line2}</div>` : ""}</div>`;
 }
+function pageTitle(t, color){ return `<h1 class="page-title"${color ? ` style="color:${color};"` : ""}>${esc(t)}<span class="cursor"${color ? ` style="background:${color};"` : ""}></span></h1>`; }
 
 function renderBrowse(){
   if(loadingDecks){
@@ -512,6 +699,7 @@ function renderBrowse(){
   }
   return `
     <div class="search-wrap">
+      <span class="prompt">$</span>
       <input type="text" class="search-input" id="searchInput" placeholder="Search decks, subjects, tags…" value="${esc(searchQuery)}">
     </div>
     <div class="filters">${chips}</div>
@@ -532,9 +720,10 @@ function renderProfile(){
   const mine = myUploads();
   const since = myProfile && myProfile.createdAt ? tsDate(myProfile.createdAt) : null;
   const status = [isAdminUid(u.uid) ? "Admin" : "", badges[u.uid] && badges[u.uid].verified ? "Verified" : ""].filter(Boolean).join(" · ") || "Member";
+  const row = (k, v) => `<div class="auth-info-row"><span>${k}</span><span class="val">${v}</span></div>`;
   return `
-    <h1 class="page-title">Profile</h1>
-    <div class="prof-card">
+    ${pageTitle("Profile")}
+    <div class="card prof-card">
       <div class="prof-avatar">${ICON_USER}</div>
       <div>
         <div class="prof-name"><span>${esc(name)}</span>${badgesHTML(u.uid)}</div>
@@ -546,29 +735,30 @@ function renderProfile(){
       <div class="stat-card"><div class="n">${mine.length}</div><div class="l">decks uploaded</div></div>
       <div class="stat-card"><div class="n">${Object.keys(myImports).length}</div><div class="l">decks you've downloaded</div></div>
     </div>
-    <div class="detail-list">
-      <div class="detail-row"><span class="k">Name</span><span class="v">${esc(name)}</span></div>
-      <div class="detail-row"><span class="k">Email</span><span class="v">${esc(u.email)}</span></div>
-      ${myProfile && myProfile.displayId ? `<div class="detail-row"><span class="k">User ID</span><span class="v">${esc(myProfile.displayId)}</span></div>` : ""}
-      ${since ? `<div class="detail-row"><span class="k">Member since</span><span class="v">${esc(since.toLocaleDateString())}</span></div>` : ""}
-      <div class="detail-row"><span class="k">Status</span><span class="v">${esc(status)}</span></div>
+    <div class="card">
+      <div class="qa-label" style="color:var(--cyan);">Account</div>
+      ${row("Name", esc(name))}
+      ${row("Email", esc(u.email))}
+      ${myProfile && myProfile.displayId ? row("User ID", esc(myProfile.displayId)) : ""}
+      ${since ? row("Member since", esc(since.toLocaleDateString())) : ""}
+      ${row("Status", esc(status))}
     </div>
     <div class="btn-row">
-      <a class="dc-btn dc-link" href="${KITE_URL}">Go to KITE</a>
-      <button class="dc-btn" data-act="signout">Sign out</button>
+      <a class="btn" href="${KITE_URL}">Go to KITE</a>
+      <button class="btn btn-ghost" data-act="signout">Sign out</button>
     </div>
     <div class="note">Your password is never shown here. To change your password or delete your account, use Settings in K.I.T.E.</div>
   `;
 }
 
 function renderUploads(){
-  if(loadingDecks) return `<h1 class="page-title">My uploads</h1><div class="spinner"></div>`;
+  if(loadingDecks) return `${pageTitle("My uploads")}<div class="spinner"></div>`;
   const mine = myUploads().sort((a, b) => tsMs(b.createdAt) - tsMs(a.createdAt));
   const body = mine.length
     ? renderGroups(mine, uploadCardHTML)
     : emptyBlock("📭", "You haven't uploaded any decks yet.", "Publish a deck from K.I.T.E and it will show up here.");
   return `
-    <h1 class="page-title">My uploads</h1>
+    ${pageTitle("My uploads")}
     <div class="summary">
       <span><b>${sumImports(mine)}</b>total downloads</span>
       <span><b>${mine.length}</b>${mine.length === 1 ? "deck" : "decks"}</span>
@@ -590,18 +780,18 @@ function renderDownloads(){
       const d = deckById.get(id);
       if(d && (!d.hidden || ownerOf(d) === currentUser.uid)) found.push(d); else gone.push(id);
     });
-    const timeFor = d => "Imported " + timeAgo(myImports[d.id]);
+    const opts = d => ({ timeLabel: "imported", timeText: timeAgo(myImports[d.id]) });
     body = (found.length ? groupedDecks(found).map(([subject, list]) => `
       <section>
-        <h2 class="subject-head">${esc(subject)}</h2>
-        <div class="deck-grid">${list.map(d => deckCardHTML(d, { timeText: timeFor(d) })).join("")}</div>
+        <h2 class="subject-head"><span class="prompt">$</span> ${esc(subject)} <span class="cnt">${list.length}</span></h2>
+        <div class="deck-grid">${list.map(d => deckCardHTML(d, opts(d))).join("")}</div>
       </section>`).join("") : "")
-      + (gone.length ? `<section><h2 class="subject-head">Unavailable</h2><div class="deck-grid">${gone.map(id => `
-        <div class="deck-card"><div class="dc-title">This deck is no longer available</div>
-        <div class="dc-meta-line">Imported ${esc(timeAgo(myImports[id]))}. Your copy of the cards is still in K.I.T.E.</div></div>`).join("")}</div></section>` : "");
+      + (gone.length ? `<section><h2 class="subject-head"><span class="prompt">$</span> unavailable <span class="cnt">${gone.length}</span></h2><div class="deck-grid">${gone.map(id => `
+        <div class="term deck-term"><div class="titlebar">${dotsHTML()}<span class="path">no longer available</span></div>
+        <div class="deck-body">${kv("imported", esc(timeAgo(myImports[id])))}<div class="note" style="margin:4px 0 0;">This deck was removed. Your copy of the cards is still in K.I.T.E.</div></div></div>`).join("")}</div></section>` : "");
   }
   return `
-    <h1 class="page-title">Downloads</h1>
+    ${pageTitle("Downloads")}
     <div class="summary"><span><b>${ids.length}</b>${ids.length === 1 ? "deck" : "decks"} downloaded</span></div>
     ${body}
   `;
@@ -630,35 +820,35 @@ function renderAdmin(){
     const verified = b.verified === true;
     const admin = isAdminUid(p.uid);
     return `
-      <div class="admin-row">
+      <div class="row-card">
         <div class="ar-main">
           <div class="ar-title">${esc(p.name)}${badgesHTML(p.uid)}</div>
           <div class="ar-sub">${plural(p.decks, "deck")} · ${plural(p.imports, "download")} · ${esc(p.uid.slice(0, 8))}…</div>
         </div>
-        <button class="mini-btn${verified ? " on" : ""}" data-act="adminVerify" data-arg="${esc(p.uid)}">${verified ? "Remove check" : "Give check"}</button>
-        ${sup && p.uid !== SUPER_ADMIN_UID ? `<button class="mini-btn${admin ? " on" : ""}" data-act="adminAdmin" data-arg="${esc(p.uid)}">${admin ? "Remove admin" : "Make admin"}</button>` : ""}
+        <button class="btn sm${verified ? " btn-primary" : ""}" data-act="adminVerify" data-arg="${esc(p.uid)}">${verified ? "Remove check" : "Give check"}</button>
+        ${sup && p.uid !== SUPER_ADMIN_UID ? `<button class="btn sm${admin ? " btn-primary" : ""}" data-act="adminAdmin" data-arg="${esc(p.uid)}">${admin ? "Remove admin" : "Make admin"}</button>` : ""}
       </div>`;
   }).join("");
   const decks = allDecksRaw.slice().sort((a, b) => tsMs(b.createdAt) - tsMs(a.createdAt)).map(d => `
-      <div class="admin-row">
+      <div class="row-card">
         <div class="ar-main">
-          <div class="ar-title">${esc(d.title || "Untitled")}${d.hidden ? ` <span class="dc-flag">Hidden</span>` : ""}</div>
+          <div class="ar-title">${esc(d.title || "Untitled")}${d.hidden ? ` <span class="dc-flag">&nbsp;Hidden</span>` : ""}</div>
           <div class="ar-sub">by ${esc(d.ownerName || "anonymous")}${badgesHTML(ownerOf(d))} · ${plural(d.cardCount || 0, "card")} · ${plural(d.importCount || 0, "download")} · ${esc(timeAgo(d.createdAt))}</div>
         </div>
-        <button class="mini-btn" data-act="preview" data-arg="${esc(d.id)}">Preview</button>
-        <button class="mini-btn${d.hidden ? " on" : ""}" data-act="adminHide" data-arg="${esc(d.id)}">${d.hidden ? "Unhide" : "Hide"}</button>
-        <button class="mini-btn danger" data-act="adminDelete" data-arg="${esc(d.id)}">Delete</button>
+        <button class="btn sm btn-ghost" data-act="preview" data-arg="${esc(d.id)}">Preview</button>
+        <button class="btn sm${d.hidden ? " btn-primary" : ""}" data-act="adminHide" data-arg="${esc(d.id)}">${d.hidden ? "Unhide" : "Hide"}</button>
+        <button class="btn sm btn-danger" data-act="adminDelete" data-arg="${esc(d.id)}">Delete</button>
       </div>`).join("");
   return `
-    <h1 class="page-title" style="color:var(--amber);">Admin</h1>
+    ${pageTitle("Admin", "var(--amber)")}
     <div class="sec-title">People</div>
     <div class="note" style="margin:-4px 0 12px;">The blue check shows next to a person's name on all of their decks. Everyone who has uploaded a deck is listed here.</div>
     ${people}
     <div class="sec-title">Give a badge by User UID</div>
-    <div class="admin-row">
+    <div class="row-card">
       <input class="grant-input" id="grantUid" placeholder="Firebase UID (Authentication tab in the Firebase console)">
-      <button class="mini-btn" data-act="grantVerify">Give check</button>
-      ${sup ? `<button class="mini-btn" data-act="grantAdmin">Make admin</button>` : ""}
+      <button class="btn sm" data-act="grantVerify">Give check</button>
+      ${sup ? `<button class="btn sm" data-act="grantAdmin">Make admin</button>` : ""}
     </div>
     <div class="sec-title">All decks (${allDecksRaw.length})</div>
     ${decks || `<div class="note">No decks yet.</div>`}
@@ -683,34 +873,50 @@ function renderDeckPreview(d){
   `).join("");
   const moreCount = Math.max(0, (d.cardCount || 0) - 3);
   return `
-    <div class="modal" id="deckModal">
-      <button class="close" id="closeModal">×</button>
-      <h2>${esc(d.title || "Untitled")}</h2>
-      <div class="meta-row">
-        ${d.subject ? `<span style="color:var(--amber);">${esc(d.subject)}</span><span class="sep">·</span>` : ""}
-        <span>${plural(d.cardCount || 0, "card")}</span>
-        <span class="sep">·</span>
-        <span>${plural(d.importCount || 0, "download")}</span>
-        <span class="sep">·</span>
-        <span class="by">by ${esc(d.ownerName || "anonymous")}${badgesHTML(ownerOf(d))}</span>
-        <span class="sep">·</span>
-        <span title="${esc(fullDate(d.createdAt))}">${esc(timeAgo(d.createdAt))}</span>
-      </div>
-      ${(d.tags && d.tags.length) ? `<div style="color:var(--cyan);font-size:12px;margin-bottom:12px;">{ ${esc(d.tags.join(", "))} }</div>` : ""}
-      ${d.description ? `<div class="desc-block">${esc(d.description)}</div>` : ""}
-      ${preview ? `
-        <div class="cards-preview">
-          <div style="font-size:11px;color:var(--grey);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Preview</div>
-          ${preview}
-          ${moreCount > 0 ? `<div class="more">…and ${moreCount} more card${moreCount===1?"":"s"}</div>` : ""}
+    <div class="modal term" id="deckModal" role="dialog" aria-modal="true">
+      <div class="titlebar">${dotsHTML()}<span class="path">preview — ${esc(d.title || "Untitled")}</span><button class="titlebar-back" id="closeModal">close</button></div>
+      <div class="modal-body">
+        <h2>${esc(d.title || "Untitled")}</h2>
+        <div class="meta-row">
+          ${d.subject ? `<span style="color:var(--amber);">${esc(d.subject)}</span><span class="sep">·</span>` : ""}
+          <span>${plural(d.cardCount || 0, "card")}</span>
+          <span class="sep">·</span>
+          <span>${plural(d.importCount || 0, "download")}</span>
+          <span class="sep">·</span>
+          <span class="by">by ${esc(d.ownerName || "anonymous")}${badgesHTML(ownerOf(d))}</span>
+          <span class="sep">·</span>
+          <span title="${esc(fullDate(d.createdAt))}">${esc(timeAgo(d.createdAt))}</span>
         </div>
-      ` : ""}
-      <div class="modal-actions">
-        <button class="btn btn-ghost" id="cancelImportBtn">Close</button>
-        <button class="btn btn-primary" id="importDeckBtn">Import to my K.I.T.E account</button>
+        ${(d.tags && d.tags.length) ? `<div style="color:var(--cyan);font-size:12px;margin-bottom:12px;">{ ${esc(d.tags.join(", "))} }</div>` : ""}
+        ${d.description ? `<div class="desc-block">${esc(d.description)}</div>` : ""}
+        ${preview ? `
+          <div class="cards-preview">
+            <div class="qa-label" style="color:var(--grey);">Preview</div>
+            ${preview}
+            ${moreCount > 0 ? `<div class="more">…and ${moreCount} more card${moreCount===1?"":"s"}</div>` : ""}
+          </div>
+        ` : ""}
+        <div class="modal-actions">
+          <button class="btn btn-ghost sm" id="cancelImportBtn">Close</button>
+          <button class="btn btn-primary sm" id="importDeckBtn">Import to my K.I.T.E account</button>
+        </div>
       </div>
     </div>
   `;
+}
+function showThemes(){
+  openModal(`
+    <div class="modal term" role="dialog" aria-modal="true" aria-label="Theme">
+      <div class="titlebar">${dotsHTML()}<span class="path">theme</span><button class="titlebar-back" id="closeModal">close</button></div>
+      <div class="modal-body">
+        <div class="qa-label" style="color:var(--cyan);">Theme</div>
+        <div class="theme-grid" id="themeGrid">${THEMES.map(t => `<button class="theme-option${t.id===currentTheme()?" active":""}" data-theme-value="${t.id}"><span class="theme-swatch"><span style="background:${t.bg}"></span><span style="background:${t.accent}"></span></span><span>${esc(t.name)}</span></button>`).join("")}</div>
+        <div class="note">Saved on this device.</div>
+        <div class="modal-actions"><button class="btn btn-primary sm" id="cancelImportBtn">Done</button></div>
+      </div>
+    </div>`);
+  attachModal();
+  document.querySelectorAll("#themeGrid .theme-option").forEach(b => b.addEventListener("click", () => { applyTheme(b.dataset.themeValue); render(); }));
 }
 function openModal(html){
   const overlay = document.getElementById("modalOverlay");
@@ -812,7 +1018,8 @@ async function doImportDeck(deck, btn){
 
     await setDoc(ref, { ...data, updatedAt: serverTimestamp() });
 
-    
+    // Bookkeeping (best effort, so a rules problem here never makes the import look failed):
+    // remember it for the Downloads page, and count each person once (never the author themselves).
     const alreadyImported = !!myImports[d.id];
     try{
       await updateDoc(doc(db, "users", currentUser.uid), { ["importedDecks." + d.id]: serverTimestamp() });
@@ -836,7 +1043,7 @@ async function doImportDeck(deck, btn){
   }
 }
 
-/* ---- admin actions ---- */
+/* ---- admin actions (the real protection is in the Firestore rules) ---- */
 function adminError(e){
   console.error(e);
   toast((e && e.code === "permission-denied") ? "Permission denied. Check the library rules in Firebase." : "Something went wrong.");
@@ -909,9 +1116,10 @@ function render(){
       <div class="sb-backdrop" id="sbBackdrop" data-act="closeMenu"></div>
       <main class="main"><div class="main-inner">${content}</div></main>
     </div>`;
+  dotShow.maybeIntro();
 }
 
-/* ---------- events ---------- */
+/* ---------- events (one delegated listener, so re-rendering never loses a handler) ---------- */
 const appEl = document.getElementById("app");
 appEl.addEventListener("click", e => {
   const el = e.target.closest("[data-act]");
@@ -931,6 +1139,7 @@ appEl.addEventListener("click", e => {
       try{ localStorage.setItem(HIDE_KEY, hideImported ? "1" : "0"); }catch(err){}
       go("home");
       break;
+    case "theme": showThemes(); break;
     case "signin": showLogin(); break;
     case "signout": doSignOut(); break;
     case "login": doLogin(); break;
@@ -1010,6 +1219,7 @@ if("serviceWorker" in navigator){
       .catch(err => console.warn("SW registration failed:", err));
   });
 }
+
 
 </script>
 </body>
