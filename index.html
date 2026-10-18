@@ -280,6 +280,19 @@ section:first-of-type>.subject-head{margin-top:8px}
 .sum-line b{color:var(--cyan)}
 select.rep-select{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:inherit;font-size:14px;padding:11px 12px}
 
+/* ===== report triangle + menu (preview window) ===== */
+.report-wrap{position:relative;flex-shrink:0;display:inline-flex;align-items:center}
+.report-tri{position:relative;background:transparent;border:0;padding:3px;margin:0 2px;cursor:pointer;color:var(--red);display:inline-flex;border-radius:6px}
+.report-tri svg{width:22px;height:22px;display:block}
+.report-tri:hover,.report-wrap.open .report-tri{background:color-mix(in srgb, var(--red) 14%, transparent)}
+.report-tri::after{content:attr(data-tip);position:absolute;display:none;top:calc(100% + 6px);right:0;background:var(--bg);color:var(--white);border:1px solid var(--red);border-radius:6px;padding:3px 7px;font-family:inherit;font-size:10.5px;font-weight:500;line-height:1.3;white-space:nowrap;pointer-events:none;z-index:130}
+.report-tri:hover::after,.report-tri:focus-visible::after{display:block}
+.report-wrap.open .report-tri::after{display:none}
+.rep-menu{display:none;position:absolute;right:0;top:calc(100% + 8px);min-width:170px;background:var(--panel-2);border:1px solid var(--border-bright);border-radius:8px;padding:6px;z-index:120;box-shadow:0 10px 30px -10px rgba(0,0,0,.8)}
+.report-wrap.open .rep-menu{display:block}
+.rep-item{display:block;width:100%;text-align:left;background:transparent;border:0;border-radius:6px;color:var(--white);font-family:inherit;font-size:12.5px;padding:9px 10px;cursor:pointer;white-space:nowrap}
+.rep-item:hover{background:var(--panel)}
+
 /* ===== phone safety: nothing may be wider than the screen ===== */
 @media (max-width:520px){
   .brand .sub{display:none}
@@ -407,6 +420,9 @@ const ICON_USER = `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" c
 const ICON_VERIFIED = `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#1d9bf0"/><path d="M6.8 12.4l3.3 3.3 7-7.2" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 const ICON_HAMMER = `<svg viewBox="0 0 24 24" aria-hidden="true" style="overflow:visible"><g transform="rotate(-45 12 12)"><rect x="3.5" y="3" width="17" height="8" rx="2" fill="#f5b301" stroke="#8a5d00" stroke-width="1"/><rect x="10.4" y="11" width="3.2" height="11" rx="1.4" fill="#d99a00" stroke="#8a5d00" stroke-width="1"/></g></svg>`;
 
+const ICON_APPLE = `<svg viewBox="0 0 24 24" aria-hidden="true" style="overflow:visible"><path d="M12 7.6c-1.2-.9-2.7-1.3-4.2-1C5.2 7.1 3.9 9.5 4.3 12.4c.5 3.6 2.9 7.8 5.3 7.8 1 0 1.5-.5 2.4-.5s1.4.5 2.4.5c2.4 0 4.8-4.2 5.3-7.8.4-2.9-.9-5.3-3.5-5.8-1.5-.3-3 .1-4.2 1z" fill="#e5484d"/><path d="M12 7.4c-.1-1.9.8-3.4 2.7-4.2.2 1.9-.7 3.5-2.7 4.2z" fill="#3fb950"/><path d="M12 7.6v-1.3" stroke="#7a4a1d" stroke-width="1.3" stroke-linecap="round"/></svg>`;
+const ICON_REPORT = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.4 22 20.4H2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 9.6v4.6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17.3" r="1.25" fill="currentColor"/></svg>`;
+
 /* ---------- helpers ---------- */
 function esc(s){
   return String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -453,6 +469,7 @@ function badgesHTML(uid){
   if(!uid) return "";
   let h = "";
   if(isAdminUid(uid)) h += `<span class="badge" tabindex="0" data-tip="This user is an admin">${ICON_HAMMER}</span>`;
+  if(badges[uid] && badges[uid].teacher === true) h += `<span class="badge" tabindex="0" data-tip="Verified teacher">${ICON_APPLE}</span>`;
   if(badges[uid] && badges[uid].verified === true) h += `<span class="badge" tabindex="0" data-tip="This user has been verified for quality content">${ICON_VERIFIED}</span>`;
   return h;
 }
@@ -731,6 +748,11 @@ function renderSidebar(){
             ${nav("downloads", 4, "Downloads")}
             ${isMeAdmin() ? nav("admin", 5, "Admin" + (reports.length ? ` (${reports.length})` : ""), " admin") : ""}
           </div>
+          <hr class="div">
+          <div class="menu">
+            <button class="menu-item" data-act="openUpload"><span class="mk"></span><span class="num">&uarr;</span><span class="label">Upload Deck</span></button>
+            <button class="menu-item${view==="create"?" active":""}" data-act="nav" data-arg="create"><span class="mk">&gt;</span><span class="num">+</span><span class="label">Create Deck</span></button>
+          </div>
           <div class="sb-spacer"></div>
           <hr class="div">
           <div class="menu">
@@ -835,7 +857,6 @@ function renderBrowse(){
     body = renderGroups(decks, d => deckCardHTML(d));
   }
   return `
-    <div class="btn-row home-actions"><button class="btn btn-primary" data-act="openUpload">Upload Deck</button><button class="btn" data-act="newDeck">Create Deck</button></div>
     <div class="search-wrap">
       <span class="prompt">$</span>
       <input type="text" class="search-input" id="searchInput" placeholder="Search decks, subjects, tags…" value="${esc(searchQuery)}">
@@ -857,7 +878,7 @@ function renderProfile(){
   const name = (myProfile && myProfile.username) || u.displayName || u.email.split("@")[0];
   const mine = myUploads();
   const since = myProfile && myProfile.createdAt ? tsDate(myProfile.createdAt) : null;
-  const status = [isAdminUid(u.uid) ? "Admin" : "", badges[u.uid] && badges[u.uid].verified ? "Verified" : ""].filter(Boolean).join(" · ") || "Member";
+  const status = [isAdminUid(u.uid) ? "Admin" : "", badges[u.uid] && badges[u.uid].teacher ? "Teacher" : "", badges[u.uid] && badges[u.uid].verified ? "Verified" : ""].filter(Boolean).join(" · ") || "Member";
   const row = (k, v) => `<div class="auth-info-row"><span>${k}</span><span class="val">${v}</span></div>`;
   return `
     ${pageTitle("Profile")}
@@ -898,7 +919,6 @@ function renderUploads(){
     : emptyBlock("📭", "You haven't uploaded any decks yet.", "Publish a deck from K.I.T.E and it will show up here.");
   return `
     ${pageTitle("My uploads")}
-    <div class="btn-row home-actions"><button class="btn btn-primary" data-act="openUpload">Upload Deck</button><button class="btn" data-act="newDeck">Create Deck</button></div>
     <div class="summary">
       <span><b>${sumImports(mine)}</b>total downloads</span>
       <span><b>${mine.length}</b>${mine.length === 1 ? "deck" : "decks"}</span>
@@ -982,6 +1002,7 @@ function renderAdmin(){
   const { roles, uploaders } = peopleLists();
   const roleRows = roles.map(p => {
     const verified = !!(badges[p.uid] && badges[p.uid].verified === true);
+    const teacher = !!(badges[p.uid] && badges[p.uid].teacher === true);
     const admin = isAdminUid(p.uid);
     return `
       <div class="row-card">
@@ -990,6 +1011,7 @@ function renderAdmin(){
           <div class="ar-sub">${plural(p.decks, "deck")} · ${plural(p.imports, "download")} · ${esc(p.uid.slice(0, 8))}…</div>
         </div>
         <button class="btn sm${verified ? " btn-primary" : ""}" data-act="adminVerify" data-arg="${esc(p.uid)}">${verified ? "Remove check" : "Give check"}</button>
+        <button class="btn sm${teacher ? " btn-primary" : ""}" data-act="adminTeacher" data-arg="${esc(p.uid)}">${teacher ? "Remove teacher" : "Give teacher"}</button>
         ${sup && p.uid !== SUPER_ADMIN_UID ? `<button class="btn sm${admin ? " btn-primary" : ""}" data-act="adminAdmin" data-arg="${esc(p.uid)}">${admin ? "Remove admin" : "Make admin"}</button>` : ""}
       </div>`;
   }).join("");
@@ -1000,6 +1022,7 @@ function renderAdmin(){
           <div class="ar-sub">${plural(p.decks, "deck")} · ${plural(p.imports, "download")} · ${esc(p.uid.slice(0, 8))}…</div>
         </div>
         <button class="btn sm" data-act="adminVerify" data-arg="${esc(p.uid)}">Give check</button>
+        <button class="btn sm" data-act="adminTeacher" data-arg="${esc(p.uid)}">Give teacher</button>
         ${sup ? `<button class="btn sm" data-act="adminAdmin" data-arg="${esc(p.uid)}">Make admin</button>` : ""}
       </div>`).join("");
   const decks = allDecksRaw.slice().sort((a, b) => tsMs(b.createdAt) - tsMs(a.createdAt)).map(d => `
@@ -1025,6 +1048,7 @@ function renderAdmin(){
     <div class="row-card">
       <input class="grant-input" id="grantUid" placeholder="Firebase UID (Authentication tab in the Firebase console)">
       <button class="btn sm" data-act="grantVerify">Give check</button>
+      <button class="btn sm" data-act="grantTeacher">Give teacher</button>
       ${sup ? `<button class="btn sm" data-act="grantAdmin">Make admin</button>` : ""}
     </div>
     <div class="sec-title">All decks (${allDecksRaw.length})</div>
@@ -1042,6 +1066,9 @@ function renderView(){
 }
 
 /* ---------- preview modal ---------- */
+function reportMenuHTML(d){
+  return `<div class="report-wrap"><button class="report-tri" data-mact="reportMenu" data-tip="Report" aria-label="Report" aria-haspopup="true">${ICON_REPORT}</button><div class="rep-menu"><button class="rep-item" data-mact="reportDeck">Report this deck</button>${ownerOf(d) ? `<button class="rep-item" data-mact="reportUser">Report this user</button>` : ""}</div></div>`;
+}
 function renderDeckPreview(d){
   const st = deckStructure(d), counts = structureCounts(st);
   const preview = flatCards(d).slice(0, 3).map(c => `
@@ -1055,7 +1082,7 @@ function renderDeckPreview(d){
   const mine = !!currentUser && ownerOf(d) === currentUser.uid;
   return `
     <div class="modal term" id="deckModal" role="dialog" aria-modal="true">
-      <div class="titlebar">${dotsHTML()}<span class="path">preview — ${esc(d.title || "Untitled")}</span><button class="titlebar-back" id="closeModal">close</button></div>
+      <div class="titlebar">${dotsHTML()}<span class="path">preview — ${esc(d.title || "Untitled")}</span>${mine ? "" : reportMenuHTML(d)}<button class="titlebar-back" id="closeModal">close</button></div>
       <div class="modal-body">
         <h2>${esc(d.title || "Untitled")}</h2>
         <div class="meta-row">
@@ -1079,7 +1106,6 @@ function renderDeckPreview(d){
             ${moreCount > 0 ? `<div class="more">…and ${moreCount} more card${moreCount===1?"":"s"}</div>` : ""}
           </div>
         ` : ""}
-        ${mine ? "" : `<div class="rep-row"><button class="btn btn-ghost sm" data-mact="reportDeck">Report deck</button>${ownerOf(d) ? `<button class="btn btn-ghost sm" data-mact="reportUser">Report author</button>` : ""}</div>`}
         <div class="modal-actions">
           <button class="btn btn-ghost sm" id="cancelImportBtn">Close</button>
           <button class="btn btn-primary sm" id="importDeckBtn">Import to my K.I.T.E account</button>
@@ -1112,6 +1138,7 @@ function closeModal(){
   overlay.classList.remove("show");
   overlay.innerHTML = "";
   currentDeck = null;
+  importCtx = null;
 }
 function attachModal(){
   const close = document.getElementById("closeModal");
@@ -1119,7 +1146,7 @@ function attachModal(){
   const cancel = document.getElementById("cancelImportBtn");
   if(cancel) cancel.addEventListener("click", closeModal);
   const importBtn = document.getElementById("importDeckBtn");
-  if(importBtn) importBtn.addEventListener("click", () => doImportDeck(currentDeck, importBtn));
+  if(importBtn) importBtn.addEventListener("click", () => showImportChooser(currentDeck));
   const overlay = document.getElementById("modalOverlay");
   overlay.onclick = e => { if(e.target === overlay) closeModal(); };
 }
@@ -1161,12 +1188,13 @@ function adminError(e){
   console.error(e);
   toast((e && e.code === "permission-denied") ? "Permission denied. Check the library rules in Firebase." : "Something went wrong.");
 }
-function hasRole(uid){ return isAdminUid(uid) || !!(badges[uid] && badges[uid].verified === true); }
+function hasAnyFlag(b){ return !!b && (b.verified === true || b.admin === true || b.teacher === true); }
+function hasRole(uid){ return isAdminUid(uid) || hasAnyFlag(badges[uid]); }
 async function setBadge(uid, field, value){
   if(!uid) return;
   try{
     const next = Object.assign({}, badges[uid] || {}, { [field]: value });
-    if(next.verified === true || next.admin === true){
+    if(hasAnyFlag(next)){
       await setDoc(doc(db, "badges", uid), { [field]: value }, { merge: true });
       badges[uid] = next;
     }else{
@@ -1174,7 +1202,8 @@ async function setBadge(uid, field, value){
       if(badges[uid]) await deleteDoc(doc(db, "badges", uid));
       delete badges[uid];
     }
-    toast(field === "verified" ? (value ? "Blue check given" : "Blue check removed") : (value ? "Admin added" : "Admin removed"));
+    const msg = { verified: ["Blue check given", "Blue check removed"], teacher: ["Teacher badge given", "Teacher badge removed"], admin: ["Admin added", "Admin removed"] }[field];
+    toast(msg ? (value ? msg[0] : msg[1]) : "Updated");
     render();
   }catch(e){ adminError(e); }
 }
@@ -1182,7 +1211,7 @@ let badgesCleaned = false;
 async function cleanupStaleBadges(){
   if(badgesCleaned || !isMeAdmin()) return;
   badgesCleaned = true;
-  const stale = Object.keys(badges).filter(uid => !(badges[uid].verified === true || badges[uid].admin === true));
+  const stale = Object.keys(badges).filter(uid => !hasAnyFlag(badges[uid]));
   for(const uid of stale){
     try{ await deleteDoc(doc(db, "badges", uid)); delete badges[uid]; }catch(e){ console.warn("Could not clear an empty badge record:", e); }
   }
@@ -1262,14 +1291,15 @@ function sanitizeStructure(st){
 }
 
 /* ---------- K.I.T.E backup format (used for importing and for the download fallback) ---------- */
-function backupFromDeck(d){
+// target (optional) = { subject, topic }: put everything in that existing subject (and topic, if given)
+function backupFromDeck(d, target){
   const flashcards = {}, notes = {}, topics = {};
   const now = new Date().toISOString();
   deckStructure(d).forEach(s => {
-    const name = s.name || "Imported";
+    const name = (target && target.subject) || s.name || "Imported";
     flashcards[name] = flashcards[name] || []; notes[name] = notes[name] || []; topics[name] = topics[name] || [];
     (s.topics || []).forEach(t => {
-      const tn = t.name || "General";
+      const tn = (target && target.topic) || t.name || "General";
       if(!topics[name].includes(tn)) topics[name].push(tn);
       (t.cards || []).forEach(c => flashcards[name].push({ question: c.q, answer: c.a, topic: tn, review_count: 0, last_reviewed: null, created: now }));
       (t.notes || []).forEach(n => notes[name].push({ id: "note_" + rid() + rid(), title: n.title || "Untitled", content: n.content || "", topic: tn, created: now }));
@@ -1277,8 +1307,8 @@ function backupFromDeck(d){
   });
   return { type: "d4n_study_backup", version: 3, exported_at: now, flashcards, notes, topics, study_sessions: [] };
 }
-function downloadDeckFile(d){
-  const blob = new Blob([JSON.stringify(backupFromDeck(d), null, 2)], { type: "application/json" });
+function downloadDeckFile(d, target){
+  const blob = new Blob([JSON.stringify(backupFromDeck(d, target), null, 2)], { type: "application/json" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url; a.download = `${slugify(d.title)}-kite-deck.json`;
@@ -1288,7 +1318,8 @@ function downloadDeckFile(d){
 
 /* ---------- import into the person's K.I.T.E account (with the download fallback) ---------- */
 const FAIL_KEY = "kite_lib_import_fails_v1";
-let failedDeck = null, failedInfo = null;
+let failedDeck = null, failedInfo = null, failedTarget = null;
+let importCtx = null;
 function failSignature(e){ return String((e && e.code) || (e && e.message) || "unknown").slice(0, 80); }
 function bumpFailure(sig){
   let o = {};
@@ -1299,7 +1330,7 @@ function bumpFailure(sig){
 }
 function clearFailures(){ try{ localStorage.removeItem(FAIL_KEY); }catch(e){} }
 
-async function doImportDeck(deck, btn){
+async function doImportDeck(deck, btn, target){
   if(!currentUser){ toast("Please sign in first"); showLogin(); return; }
   const d = deck || currentDeck;
   if(!d) return;
@@ -1312,7 +1343,7 @@ async function doImportDeck(deck, btn){
     data.flashcards = data.flashcards || {}; data.notes = data.notes || {};
     data.topics = data.topics || {}; data.study_sessions = data.study_sessions || [];
 
-    const payload = backupFromDeck(d);
+    const payload = backupFromDeck(d, target);
     let addedCards = 0, addedNotes = 0;
     for(const subject in payload.flashcards){
       data.flashcards[subject] = data.flashcards[subject] || [];
@@ -1352,21 +1383,21 @@ async function doImportDeck(deck, btn){
     }
     const parts = [`${addedCards} card${addedCards === 1 ? "" : "s"}`];
     if(addedNotes) parts.push(`${addedNotes} note${addedNotes === 1 ? "" : "s"}`);
-    toast(`Imported ${parts.join(" and ")} into K.I.T.E`);
+    toast(`Imported ${parts.join(" and ")} into ${target && target.subject ? target.subject : "K.I.T.E"}`);
     closeModal();
     if(btn && document.body.contains(btn)){ btn.disabled = false; btn.textContent = "Imported"; }
     render();
   }catch(e){
     console.error(e);
     if(btn){ btn.disabled = false; btn.textContent = idleLabel; }
-    handleImportFailure(d, e);
+    handleImportFailure(d, e, target);
   }
 }
-function handleImportFailure(d, e){
+function handleImportFailure(d, e, target){
   const sig = failSignature(e);
   const count = bumpFailure(sig);
-  try{ downloadDeckFile(d); }catch(err){ console.warn("Fallback download failed:", err); }
-  failedDeck = d;
+  try{ downloadDeckFile(d, target); }catch(err){ console.warn("Fallback download failed:", err); }
+  failedDeck = d; failedTarget = target || null;
   failedInfo = { sig, message: String((e && e.message) || sig).slice(0, 200), count };
   showImportFailed();
 }
@@ -1390,6 +1421,99 @@ function showImportFailed(){
       </div>
     </div>`);
   attachModal();
+}
+
+/* ---------- import chooser: add it as it is, or into a subject/topic I already have ---------- */
+function showImportChooser(deck){
+  const d = deck || currentDeck;
+  if(!d) return;
+  if(!currentUser){ toast("Please sign in first"); closeModal(); showLogin(); return; }
+  const c = structureCounts(deckStructure(d));
+  openModal(`
+    <div class="modal term" role="dialog" aria-modal="true" aria-label="Import deck">
+      <div class="titlebar">${dotsHTML()}<span class="path">import — ${esc(d.title || "deck")}</span><button class="titlebar-back" id="closeModal">close</button></div>
+      <div class="modal-body">
+        <h2>Import deck</h2>
+        <div class="note" style="margin:0 0 12px;">${plural(c.cards, "card")}${c.notes ? ` · ${plural(c.notes, "note")}` : ""} · ${plural(c.topics, "topic")}</div>
+        <label class="check-row"><input type="radio" name="impMode" value="asis" checked><span>Add it as it is <span class="dim">— keeps the deck's own subjects and topics</span></span></label>
+        <label class="check-row"><input type="radio" name="impMode" value="existing" id="impExistingRadio" disabled><span>Add to one of my existing subjects <span class="dim" id="impExistingNote">— loading your subjects…</span></span></label>
+        <div id="impFields" style="display:none;margin:0 0 12px 26px;">
+          <div class="auth-field"><label>Subject</label><select class="rep-select" id="impSubject"></select></div>
+          <div class="auth-field"><label>Topic</label><select class="rep-select" id="impTopic"></select></div>
+          <div class="auth-field" id="impNewTopicWrap" style="display:none;"><label>New topic name</label><input type="text" id="impNewTopic" maxlength="${LIM.topicName}"></div>
+        </div>
+        <div class="auth-err" id="impErr"></div>
+        <div class="modal-actions">
+          <button class="btn btn-ghost sm" id="cancelImportBtn">Cancel</button>
+          <button class="btn btn-primary sm" data-mact="importConfirm">Import</button>
+        </div>
+      </div>
+    </div>`);
+  attachModal();
+  importCtx = { deck: d, subjects: null };
+  loadMySubjects();
+}
+async function loadMySubjects(){
+  const ctx = importCtx;
+  if(!ctx) return;
+  const subjects = {};
+  let failed = false;
+  try{
+    const snap = await getDoc(doc(db, "study_data", currentUser.uid));
+    const data = snap.exists() ? snap.data() : {};
+    const names = new Set([...Object.keys(data.flashcards || {}), ...Object.keys(data.topics || {}), ...Object.keys(data.notes || {})]);
+    names.forEach(n => {
+      const t = new Set((data.topics && data.topics[n]) || []);
+      ((data.flashcards && data.flashcards[n]) || []).forEach(c => { if(c.topic) t.add(c.topic); });
+      ((data.notes && data.notes[n]) || []).forEach(x => { if(x.topic) t.add(x.topic); });
+      subjects[n] = Array.from(t).sort();
+    });
+  }catch(e){ failed = true; }
+  if(importCtx !== ctx) return;                  // the chooser was closed while this loaded
+  ctx.subjects = subjects;
+  const radio = document.getElementById("impExistingRadio"), note = document.getElementById("impExistingNote");
+  if(!radio) return;
+  const names = Object.keys(subjects).sort();
+  if(!names.length){ if(note) note.textContent = failed ? "— couldn't load your subjects" : "— you don't have any subjects yet"; return; }
+  radio.disabled = false;
+  if(note) note.textContent = `— ${plural(names.length, "subject")} found`;
+  document.getElementById("impSubject").innerHTML = names.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join("");
+  fillImportTopics();
+}
+function fillImportTopics(){
+  const ctx = importCtx;
+  if(!ctx || !ctx.subjects) return;
+  const sub = document.getElementById("impSubject").value;
+  const topics = ctx.subjects[sub] || [];
+  document.getElementById("impTopic").innerHTML =
+    `<option value="__keep__">Keep the deck's own topics</option>` +
+    topics.map(t => `<option value="${esc(t)}">Put everything in: ${esc(t)}</option>`).join("") +
+    `<option value="__new__">A new topic…</option>`;
+  updateImportFields();
+}
+function updateImportFields(){
+  const mode = (document.querySelector('input[name="impMode"]:checked') || {}).value;
+  const f = document.getElementById("impFields");
+  if(f) f.style.display = mode === "existing" ? "" : "none";
+  const t = document.getElementById("impTopic"), w = document.getElementById("impNewTopicWrap");
+  if(w) w.style.display = (mode === "existing" && t && t.value === "__new__") ? "" : "none";
+}
+function confirmImport(btn){
+  const ctx = importCtx;
+  if(!ctx) return;
+  const mode = (document.querySelector('input[name="impMode"]:checked') || {}).value;
+  let target = null;
+  if(mode === "existing"){
+    const subject = document.getElementById("impSubject").value;
+    const tv = document.getElementById("impTopic").value;
+    let topic = null;
+    if(tv === "__new__"){
+      topic = (document.getElementById("impNewTopic").value || "").trim().slice(0, LIM.topicName);
+      if(!topic){ document.getElementById("impErr").textContent = "Type a name for the new topic."; return; }
+    }else if(tv !== "__keep__") topic = tv;
+    target = { subject, topic };
+  }
+  doImportDeck(ctx.deck, btn, target);
 }
 
 /* ---------- reports (decks, users, repeated import errors) ---------- */
@@ -1809,7 +1933,7 @@ function importFromDraft(btn){
   if(clean.error){ toast(clean.error); return; }
   if(!structureCounts(clean.structure).cards){ toast("Add at least one flashcard first."); return; }
   const title = (draft.title || "").trim() || "My deck";
-  doImportDeck({ title, subject: clean.structure[0].name, subjects: clean.structure }, btn);
+  showImportChooser({ title, subject: clean.structure[0].name, subjects: clean.structure });
 }
 
 /* ---------- PC: hovering a deck pulses its lights blue ---------- */
@@ -1907,7 +2031,7 @@ appEl.addEventListener("click", e => {
       break;
     case "theme": showThemes(); break;
     case "pwaInstall": doInstallApp(); break;
-    case "openUpload": showUploadModal(); break;
+    case "openUpload": closeSidebar(); showUploadModal(); break;
     case "newDeck": go("create"); break;
     case "addSubject": case "removeSubject": case "addTopic": case "removeTopic":
     case "addCard": case "removeCard": case "addNote": case "removeNote": draftAction(act, arg, el); break;
@@ -1929,18 +2053,19 @@ appEl.addEventListener("click", e => {
     }
     case "import": {
       const d = deckById.get(arg); if(!d) return;
-      doImportDeck(d, el);
+      showImportChooser(d);
       break;
     }
     case "adminVerify": setBadge(arg, "verified", !(badges[arg] && badges[arg].verified === true)); break;
     case "adminAdmin":  setBadge(arg, "admin", !isAdminUid(arg)); break;
+    case "adminTeacher": setBadge(arg, "teacher", !(badges[arg] && badges[arg].teacher === true)); break;
     case "adminHide":   { const d = deckById.get(arg); setDeckHidden(arg, !(d && d.hidden)); break; }
     case "adminDelete": deleteDeckAdmin(arg); break;
-    case "grantVerify": case "grantAdmin": {
+    case "grantVerify": case "grantAdmin": case "grantTeacher": {
       const input = document.getElementById("grantUid");
       const uid = input ? input.value.trim() : "";
       if(uid.length < 20){ toast("Paste the full Firebase UID"); break; }
-      setBadge(uid, act === "grantVerify" ? "verified" : "admin", true);
+      setBadge(uid, act === "grantVerify" ? "verified" : (act === "grantTeacher" ? "teacher" : "admin"), true);
       break;
     }
   }
@@ -1973,9 +2098,12 @@ appEl.addEventListener("keydown", e => {
 /* popups live outside #app, so they get their own click handler */
 const modalEl = document.getElementById("modalOverlay");
 modalEl.addEventListener("click", e => {
+  if(!e.target.closest(".report-wrap")) document.querySelectorAll(".report-wrap.open").forEach(w => w.classList.remove("open"));
   const el = e.target.closest("[data-mact]");
   if(!el) return;
   switch(el.dataset.mact){
+    case "reportMenu": el.closest(".report-wrap").classList.toggle("open"); break;
+    case "importConfirm": confirmImport(el); break;
     case "reportDeck": {
       if(!currentUser){ toast("Sign in to report"); closeModal(); showLogin(); break; }
       const d = currentDeck; if(!d) break;
@@ -1990,11 +2118,15 @@ modalEl.addEventListener("click", e => {
     }
     case "reportSend": sendPendingReport(); break;
     case "uploadPublish": doUploadPublish(); break;
-    case "importFailedDownload": if(failedDeck) downloadDeckFile(failedDeck); break;
+    case "importFailedDownload": if(failedDeck) downloadDeckFile(failedDeck, failedTarget); break;
     case "importFailedReport": sendImportErrorReport(); break;
   }
 });
-modalEl.addEventListener("change", e => { if(e.target.id === "uploadFile") handleUploadFile(e.target.files[0]); });
+modalEl.addEventListener("change", e => {
+  if(e.target.id === "uploadFile") handleUploadFile(e.target.files[0]);
+  else if(e.target.id === "impSubject") fillImportTopics();
+  else if(e.target.name === "impMode" || e.target.id === "impTopic") updateImportFields();
+});
 /* PC hover on a deck, and badge tooltips */
 if(canHover){
   appEl.addEventListener("mouseover", e => {
