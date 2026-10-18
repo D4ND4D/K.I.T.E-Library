@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'kite-library-v8';
+const CACHE_VERSION = 'kite-library-v9';
 
 
 const APP_SHELL = [
