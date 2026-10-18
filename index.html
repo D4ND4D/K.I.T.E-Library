@@ -7,6 +7,7 @@
 <meta name="theme-color" content="#0c0e0f">
 <script>
   (function(){ try{ document.documentElement.setAttribute("data-theme", localStorage.getItem("d4n_theme_v1") || "default"); }catch(e){} })();
+  // Chrome fires this once the site is installable. Keep it so the Profile page can offer an Install button.
   window.addEventListener("beforeinstallprompt", function(e){ e.preventDefault(); window.__deferredInstall = e; window.dispatchEvent(new Event("kite-installable")); });
   window.addEventListener("appinstalled", function(){ window.__deferredInstall = null; window.dispatchEvent(new Event("kite-installable")); });
 </script>
@@ -101,10 +102,10 @@
 }
 
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html{margin:0;padding:0;background:var(--bg)}
-body{margin:0;padding:0;background:var(--bg);color:var(--white);font-family:"JetBrains Mono","IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;min-height:100vh;overscroll-behavior-y:none}
+html{margin:0;padding:0;background:var(--bg);overflow-x:clip}
+body{margin:0;padding:0;background:var(--bg);color:var(--white);font-family:"JetBrains Mono","IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;min-height:100vh;overscroll-behavior-y:none;overflow-x:clip;max-width:100%}
 body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse at 50% -10%,color-mix(in srgb, var(--cyan) 5%, transparent),transparent 60%)}
-#app{position:relative;z-index:1;min-height:100vh}
+#app{position:relative;z-index:1;min-height:100vh;overflow-x:clip}
 
 /* ===== terminal window (same as K.I.T.E) ===== */
 .term{background:var(--panel);border:1px solid var(--border);border-radius:10px;box-shadow:0 0 0 1px color-mix(in srgb, var(--cyan) 4%, transparent),0 10px 30px -10px rgba(0,0,0,.6);overflow:hidden;display:flex;flex-direction:column;width:100%}
@@ -154,11 +155,11 @@ hr.div{border:none;border-top:1px solid var(--border);margin:14px 0}
 .main-inner{max-width:760px;margin:0 auto}
 .menu-btn{display:none}
 .sb-backdrop{display:none}
-.top-bar{display:flex;align-items:center;justify-content:space-between;padding:18px 0 14px;border-bottom:1px solid var(--border);margin-bottom:20px}
-.brand{display:flex;align-items:baseline;gap:10px}
+.top-bar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:space-between;padding:18px 0 14px;border-bottom:1px solid var(--border);margin-bottom:20px}
+.brand{display:flex;align-items:baseline;gap:10px;min-width:0}
 .brand .kite{font-size:20px;font-weight:700;color:var(--cyan);letter-spacing:.2em}
 .brand .sub{font-size:11px;color:var(--grey-dim);letter-spacing:.14em;text-transform:uppercase;font-weight:600}
-.user-area{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--grey)}
+.user-area{min-width:0;margin-left:auto;display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--grey)}
 .user-area .name{color:var(--white);font-weight:600;display:inline-block;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tag{border:1px solid var(--border);border-radius:6px;padding:5px 10px;font-family:inherit;font-size:11.5px;color:var(--cyan);background:transparent;cursor:pointer}
 .tag:hover{border-color:var(--border-bright)}
@@ -188,14 +189,14 @@ section:first-of-type>.subject-head{margin-top:8px}
 .note{color:var(--grey);font-size:12px;line-height:1.6;margin-top:14px}
 
 /* ===== deck = small terminal window ===== */
-.deck-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.deck-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr));gap:16px}
 .deck-term{transition:border-color .15s}
 .deck-term:hover{border-color:var(--border-bright)}
 .deck-term .titlebar .path{color:var(--cyan);font-size:12.5px;font-weight:600}
 .deck-body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:7px}
 .kv{display:flex;gap:12px;font-size:12.5px;align-items:center;min-width:0}
 .kv .k{color:var(--grey-dim);width:66px;flex-shrink:0}
-.kv .v{color:var(--white);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center}
+.kv .v{color:var(--white);min-width:0;white-space:nowrap;display:flex;align-items:center}
 .tagtxt{color:var(--cyan);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .dim{color:var(--grey-dim)}
 .hot{color:var(--cyan);font-weight:700}
@@ -235,8 +236,59 @@ section:first-of-type>.subject-head{margin-top:8px}
 /* ===== badges ===== */
 .badge{position:relative;display:inline-flex;width:18px;height:18px;flex-shrink:0;cursor:default;outline:none;vertical-align:middle;margin-left:4px}
 .badge svg{width:100%;height:100%}
-.badge::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);right:-8px;width:max-content;max-width:230px;background:var(--bg);color:var(--white);border:1px solid var(--cyan);border-radius:8px;padding:7px 10px;font:500 12px/1.35 inherit;font-family:inherit;text-align:left;white-space:normal;opacity:0;pointer-events:none;transition:opacity .12s;z-index:90}
-.badge:hover::after,.badge:focus::after{opacity:1}
+.badge::after{content:attr(data-tip);position:absolute;display:none;width:max-content;max-width:170px;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--bg);color:var(--white);border:1px solid var(--cyan);border-radius:6px;padding:4px 7px;font-family:inherit;font-size:10.5px;font-weight:500;line-height:1.3;text-align:left;white-space:normal;pointer-events:none;z-index:90}
+.badge:hover::after,.badge:focus::after{display:block}
+.badge.tip-up::after{top:auto;bottom:calc(100% + 6px)}
+.badge.tip-down::after{bottom:auto;top:calc(100% + 6px)}
+.badge.tip-l::after{left:-6px;right:auto;transform:none}
+.badge.tip-r::after{right:-6px;left:auto;transform:none}
+.badge.tip-c::after{left:50%;right:auto;transform:translateX(-50%)}
+
+/* ===== new: builder, upload, reports ===== */
+.home-actions{margin:0 0 14px}
+.auth-field textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:inherit;font-size:14px;padding:11px 12px;min-height:84px;resize:vertical}
+.auth-field textarea:focus{outline:none;border-color:var(--cyan)}
+.add-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.add-row input,.add-row textarea{flex:1;min-width:0;width:auto;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:inherit;font-size:13px;padding:10px 11px}
+.add-row textarea{min-height:64px;flex-basis:100%;resize:vertical}
+.add-row input:focus,.add-row textarea:focus{outline:none;border-color:var(--cyan)}
+.add-row .btn{flex-shrink:0}
+.sub-block{margin-bottom:16px}
+.sub-block .screen{padding:14px}
+.topic-block{background:var(--panel-2);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:12px}
+.topic-head{display:flex;align-items:center;gap:8px;justify-content:space-between;margin-bottom:10px}
+.topic-name{color:var(--cyan);font-weight:700;font-size:13px;min-width:0;overflow-wrap:anywhere}
+.topic-name .dim{font-weight:400;font-size:11px;margin-left:6px}
+.mini-label{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--grey-dim);margin:10px 0 6px}
+.li-row{display:flex;gap:10px;align-items:flex-start;justify-content:space-between;padding:8px 10px;border:1px solid var(--border);border-radius:6px;background:var(--bg);margin-bottom:6px;font-size:12.5px}
+.li-row .qa{min-width:0;flex:1;overflow-wrap:anywhere;line-height:1.5}
+.li-row .q{color:var(--amber)}
+.li-row .a{color:var(--grey)}
+.x-btn{flex-shrink:0;background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--red);font-family:inherit;font-size:11px;padding:3px 8px;cursor:pointer}
+.x-btn:hover{border-color:var(--red)}
+.check-row{display:flex;gap:10px;align-items:flex-start;padding:9px 10px;border:1px solid var(--border);border-radius:8px;background:var(--panel-2);margin-bottom:8px;font-size:13px;cursor:pointer}
+.check-row input{margin-top:2px;accent-color:var(--cyan);flex-shrink:0}
+.file-input{width:100%;font-family:inherit;font-size:13px;color:var(--grey);background:var(--panel-2);border:1px dashed var(--border-bright);border-radius:8px;padding:16px}
+.file-input::file-selector-button{background:var(--cyan);color:var(--on-primary);border:0;border-radius:6px;padding:8px 12px;margin-right:12px;font-family:inherit;font-weight:700;cursor:pointer}
+.rep-row{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}
+.type-chip{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--border-bright);border-radius:20px;padding:2px 9px;color:var(--cyan);margin-right:8px}
+.type-chip.user{color:var(--amber)}
+.type-chip.import_error{color:var(--red)}
+.report-body{flex:1;min-width:190px}
+.report-detail{color:var(--grey);font-size:12px;margin-top:4px;line-height:1.5;overflow-wrap:anywhere}
+.sum-line{color:var(--grey);font-size:12.5px;margin:6px 0 14px}
+.sum-line b{color:var(--cyan)}
+select.rep-select{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:inherit;font-size:14px;padding:11px 12px}
+
+/* ===== phone safety: nothing may be wider than the screen ===== */
+@media (max-width:520px){
+  .brand .sub{display:none}
+  .brand .kite{font-size:17px;letter-spacing:.14em}
+  .user-area .name{max-width:96px}
+  .modal-overlay{padding:10px}
+  .home-actions{flex-wrap:wrap}
+  .btn-row{flex-wrap:wrap}
+}
 
 /* ===== states ===== */
 .empty-state{text-align:center;color:var(--grey);padding:40px 10px;font-size:13.5px;line-height:1.6}
@@ -296,7 +348,7 @@ section:first-of-type>.subject-head{margin-top:8px}
   .menu-btn{display:inline-block;margin-right:8px;align-self:center}
   .main{padding:0 14px 40px}
   .brand{align-items:center}
-  .deck-grid{grid-template-columns:1fr}
+  .deck-grid{grid-template-columns:minmax(0,1fr)}
 }
 </style>
 </head>
@@ -348,7 +400,7 @@ let authReady = false;
 let showingLogin = false;
 let hideImported = false;
 try{ hideImported = localStorage.getItem(HIDE_KEY) === "1"; }catch(e){}
-const GATED = ["profile", "uploads", "downloads", "admin"];
+const GATED = ["profile", "uploads", "downloads", "create", "admin"];
 
 /* ---------- icons ---------- */
 const ICON_USER = `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="4.3" fill="#fff"/><path d="M3.8 21.2c0-4.7 3.7-7.3 8.2-7.3s8.2 2.6 8.2 7.3z" fill="#fff"/></svg>`;
@@ -464,7 +516,7 @@ const dotShow = (() => {
     document.addEventListener(ev, onActivity, { passive: true, capture: true });
   });
   onActivity();
-  return { maybeIntro(){ if(introPlayed || !document.querySelector(".dot[data-dot]")) return; introPlayed = true; setTimeout(playIntro, 700); } };
+  return { FRAMES, maybeIntro(){ if(introPlayed || !document.querySelector(".dot[data-dot]")) return; introPlayed = true; setTimeout(playIntro, 700); } };
 })();
 
 /* ---------- install the app (same check + button as K.I.T.E) ---------- */
@@ -677,7 +729,7 @@ function renderSidebar(){
             ${nav("home", 2, "Home")}
             ${nav("uploads", 3, "My uploads")}
             ${nav("downloads", 4, "Downloads")}
-            ${isMeAdmin() ? nav("admin", 5, "Admin", " admin") : ""}
+            ${isMeAdmin() ? nav("admin", 5, "Admin" + (reports.length ? ` (${reports.length})` : ""), " admin") : ""}
           </div>
           <div class="sb-spacer"></div>
           <hr class="div">
@@ -783,6 +835,7 @@ function renderBrowse(){
     body = renderGroups(decks, d => deckCardHTML(d));
   }
   return `
+    <div class="btn-row home-actions"><button class="btn btn-primary" data-act="openUpload">Upload Deck</button><button class="btn" data-act="newDeck">Create Deck</button></div>
     <div class="search-wrap">
       <span class="prompt">$</span>
       <input type="text" class="search-input" id="searchInput" placeholder="Search decks, subjects, tags…" value="${esc(searchQuery)}">
@@ -845,6 +898,7 @@ function renderUploads(){
     : emptyBlock("📭", "You haven't uploaded any decks yet.", "Publish a deck from K.I.T.E and it will show up here.");
   return `
     ${pageTitle("My uploads")}
+    <div class="btn-row home-actions"><button class="btn btn-primary" data-act="openUpload">Upload Deck</button><button class="btn" data-act="newDeck">Create Deck</button></div>
     <div class="summary">
       <span><b>${sumImports(mine)}</b>total downloads</span>
       <span><b>${mine.length}</b>${mine.length === 1 ? "deck" : "decks"}</span>
@@ -883,7 +937,7 @@ function renderDownloads(){
   `;
 }
 
-function peopleList(){
+function peopleLists(){
   const map = new Map();
   allDecksRaw.forEach(d => {
     const uid = ownerOf(d);
@@ -893,17 +947,41 @@ function peopleList(){
     p.decks++; p.imports += (d.importCount || 0);
   });
   Object.keys(badges).forEach(uid => {
-    if(!map.has(uid)) map.set(uid, { uid, name: "(no uploads yet)", decks: 0, imports: 0 });
+    if(hasRole(uid) && !map.has(uid)) map.set(uid, { uid, name: "(no uploads yet)", decks: 0, imports: 0 });
   });
   if(!map.has(SUPER_ADMIN_UID)) map.set(SUPER_ADMIN_UID, { uid: SUPER_ADMIN_UID, name: "Owner", decks: 0, imports: 0 });
-  return Array.from(map.values()).sort((a, b) => b.imports - a.imports || a.name.localeCompare(b.name));
+  const all = Array.from(map.values()).sort((a, b) => b.imports - a.imports || a.name.localeCompare(b.name));
+  return { roles: all.filter(p => hasRole(p.uid)), uploaders: all.filter(p => !hasRole(p.uid)) };
 }
-
+function reportRowHTML(r){
+  const label = r.type === "deck" ? "Deck" : (r.type === "user" ? "User" : "Import error");
+  let title = "", actions = "";
+  if(r.type === "deck"){
+    const id = r.deckId || r.targetId, d = deckById.get(id), gone = deckById.has(id) && !d;
+    title = esc(r.deckTitle || r.targetName || "Deck") + (gone ? ` <span class="dc-flag">&nbsp;(deck removed)</span>` : "");
+    if(d) actions = `<button class="btn sm btn-ghost" data-act="preview" data-arg="${esc(d.id)}">Preview</button><button class="btn sm${d.hidden ? " btn-primary" : ""}" data-act="adminHide" data-arg="${esc(d.id)}">${d.hidden ? "Unhide" : "Hide"}</button><button class="btn sm btn-danger" data-act="adminDelete" data-arg="${esc(d.id)}">Delete</button>`;
+  }else if(r.type === "user"){
+    title = esc(r.targetName || "User") + badgesHTML(r.targetId);
+    actions = `<button class="btn sm btn-danger" data-act="hideUserDecks" data-arg="${esc(r.targetId)}">Hide their decks</button>`;
+  }else{
+    title = esc(r.deckTitle || "Import to K.I.T.E");
+  }
+  actions += `<button class="btn sm btn-ghost" data-act="dismissReport" data-arg="${esc(r.id)}">Dismiss</button>`;
+  return `
+    <div class="row-card">
+      <div class="report-body">
+        <div class="ar-title"><span class="type-chip ${esc(r.type)}">${label}</span>${title}</div>
+        <div class="report-detail">${esc(r.reason || "")}${r.details ? " — " + esc(r.details) : ""}</div>
+        <div class="ar-sub">reported by ${esc(r.reporterName || "?")} · ${esc(timeAgo(r.createdAt))}${r.type === "import_error" && r.error ? " · " + esc(r.error) : ""}</div>
+      </div>
+      ${actions}
+    </div>`;
+}
 function renderAdmin(){
   const sup = isMeSuper();
-  const people = peopleList().map(p => {
-    const b = badges[p.uid] || {};
-    const verified = b.verified === true;
+  const { roles, uploaders } = peopleLists();
+  const roleRows = roles.map(p => {
+    const verified = !!(badges[p.uid] && badges[p.uid].verified === true);
     const admin = isAdminUid(p.uid);
     return `
       <div class="row-card">
@@ -915,6 +993,15 @@ function renderAdmin(){
         ${sup && p.uid !== SUPER_ADMIN_UID ? `<button class="btn sm${admin ? " btn-primary" : ""}" data-act="adminAdmin" data-arg="${esc(p.uid)}">${admin ? "Remove admin" : "Make admin"}</button>` : ""}
       </div>`;
   }).join("");
+  const uploaderRows = uploaders.map(p => `
+      <div class="row-card">
+        <div class="ar-main">
+          <div class="ar-title">${esc(p.name)}</div>
+          <div class="ar-sub">${plural(p.decks, "deck")} · ${plural(p.imports, "download")} · ${esc(p.uid.slice(0, 8))}…</div>
+        </div>
+        <button class="btn sm" data-act="adminVerify" data-arg="${esc(p.uid)}">Give check</button>
+        ${sup ? `<button class="btn sm" data-act="adminAdmin" data-arg="${esc(p.uid)}">Make admin</button>` : ""}
+      </div>`).join("");
   const decks = allDecksRaw.slice().sort((a, b) => tsMs(b.createdAt) - tsMs(a.createdAt)).map(d => `
       <div class="row-card">
         <div class="ar-main">
@@ -927,9 +1014,13 @@ function renderAdmin(){
       </div>`).join("");
   return `
     ${pageTitle("Admin", "var(--amber)")}
-    <div class="sec-title">People</div>
-    <div class="note" style="margin:-4px 0 12px;">The blue check shows next to a person's name on all of their decks. Everyone who has uploaded a deck is listed here.</div>
-    ${people}
+    <div class="sec-title">Reports (${reports.length})</div>
+    ${reports.length ? reports.map(reportRowHTML).join("") : `<div class="note">No reports right now.</div>`}
+    <div class="sec-title">Admins &amp; verified</div>
+    <div class="note" style="margin:-4px 0 12px;">Only people with a badge are listed here. Remove their last badge and they drop off this list.</div>
+    ${roleRows}
+    <div class="sec-title">Uploaders without a badge</div>
+    ${uploaderRows || `<div class="note">Everyone who has uploaded a deck already has a badge.</div>`}
     <div class="sec-title">Give a badge by User UID</div>
     <div class="row-card">
       <input class="grant-input" id="grantUid" placeholder="Firebase UID (Authentication tab in the Firebase console)">
@@ -945,19 +1036,23 @@ function renderView(){
   if(view === "profile" && currentUser)   return renderProfile();
   if(view === "uploads" && currentUser)   return renderUploads();
   if(view === "downloads" && currentUser) return renderDownloads();
+  if(view === "create" && currentUser)    return renderCreate();
   if(view === "admin" && isMeAdmin())     return renderAdmin();
   return renderBrowse();
 }
 
 /* ---------- preview modal ---------- */
 function renderDeckPreview(d){
-  const preview = (d.cards || []).slice(0, 3).map(c => `
+  const st = deckStructure(d), counts = structureCounts(st);
+  const preview = flatCards(d).slice(0, 3).map(c => `
     <div class="card-preview">
-      <div class="q">${esc(c.q || c.question || "")}</div>
-      <div class="a">${esc(c.a || c.answer || "")}</div>
+      <div class="q">${esc(c.q)}</div>
+      <div class="a">${esc(c.a)}</div>
     </div>
   `).join("");
-  const moreCount = Math.max(0, (d.cardCount || 0) - 3);
+  const total = d.cardCount || counts.cards;
+  const moreCount = Math.max(0, total - 3);
+  const mine = !!currentUser && ownerOf(d) === currentUser.uid;
   return `
     <div class="modal term" id="deckModal" role="dialog" aria-modal="true">
       <div class="titlebar">${dotsHTML()}<span class="path">preview — ${esc(d.title || "Untitled")}</span><button class="titlebar-back" id="closeModal">close</button></div>
@@ -965,7 +1060,8 @@ function renderDeckPreview(d){
         <h2>${esc(d.title || "Untitled")}</h2>
         <div class="meta-row">
           ${d.subject ? `<span style="color:var(--amber);">${esc(d.subject)}</span><span class="sep">·</span>` : ""}
-          <span>${plural(d.cardCount || 0, "card")}</span>
+          <span>${plural(total, "card")}</span>
+          ${counts.notes ? `<span class="sep">·</span><span>${plural(counts.notes, "note")}</span>` : ""}
           <span class="sep">·</span>
           <span>${plural(d.importCount || 0, "download")}</span>
           <span class="sep">·</span>
@@ -973,6 +1069,7 @@ function renderDeckPreview(d){
           <span class="sep">·</span>
           <span title="${esc(fullDate(d.createdAt))}">${esc(timeAgo(d.createdAt))}</span>
         </div>
+        ${(counts.subjects > 1 || counts.topics > 1) ? `<div class="note" style="margin:-6px 0 12px;">${plural(counts.subjects, "subject")} · ${plural(counts.topics, "topic")}</div>` : ""}
         ${(d.tags && d.tags.length) ? `<div style="color:var(--cyan);font-size:12px;margin-bottom:12px;">{ ${esc(d.tags.join(", "))} }</div>` : ""}
         ${d.description ? `<div class="desc-block">${esc(d.description)}</div>` : ""}
         ${preview ? `
@@ -982,6 +1079,7 @@ function renderDeckPreview(d){
             ${moreCount > 0 ? `<div class="more">…and ${moreCount} more card${moreCount===1?"":"s"}</div>` : ""}
           </div>
         ` : ""}
+        ${mine ? "" : `<div class="rep-row"><button class="btn btn-ghost sm" data-mact="reportDeck">Report deck</button>${ownerOf(d) ? `<button class="btn btn-ghost sm" data-mact="reportUser">Report author</button>` : ""}</div>`}
         <div class="modal-actions">
           <button class="btn btn-ghost sm" id="cancelImportBtn">Close</button>
           <button class="btn btn-primary sm" id="importDeckBtn">Import to my K.I.T.E account</button>
@@ -1058,90 +1156,37 @@ async function doSignOut(){
   try{ await signOut(auth); }catch(e){ toast("Sign out failed"); }
 }
 
-async function doImportDeck(deck, btn){
-  if(!currentUser){ toast("Please sign in first"); showLogin(); return; }
-  const d = deck || currentDeck;
-  if(!d) return;
-  const idleLabel = btn ? btn.textContent : "";
-  if(btn){ btn.disabled = true; btn.textContent = "Importing…"; }
-
-  try{
-    const ref = doc(db, "study_data", currentUser.uid);
-    const snap = await getDoc(ref);
-    let data;
-    if(!snap.exists()){
-      data = { flashcards: {}, notes: {}, topics: {}, study_sessions: [] };
-    }else{
-      data = snap.data();
-      data.flashcards = data.flashcards || {};
-      data.notes = data.notes || {};
-      data.topics = data.topics || {};
-      data.study_sessions = data.study_sessions || [];
-    }
-
-    const subject = d.subject || "Imported";
-    const topic = d.title || "Imported Deck";
-    data.flashcards[subject] = data.flashcards[subject] || [];
-    data.topics[subject] = data.topics[subject] || [];
-    if(!data.topics[subject].includes(topic)) data.topics[subject].push(topic);
-
-    const existingQs = new Set(data.flashcards[subject].map(c => (c.question||"").trim().toLowerCase()));
-    let added = 0;
-    (d.cards || []).forEach(card => {
-      const q = (card.q || card.question || "").trim();
-      const a = (card.a || card.answer || "").trim();
-      if(!q || !a) return;
-      const key = q.toLowerCase();
-      if(existingQs.has(key)) return;
-      data.flashcards[subject].push({
-        question: q, answer: a, topic,
-        review_count: 0, last_reviewed: null,
-        created: new Date().toISOString()
-      });
-      existingQs.add(key);
-      added++;
-    });
-
-    await setDoc(ref, { ...data, updatedAt: serverTimestamp() });
-
-    // Bookkeeping (best effort, so a rules problem here never makes the import look failed):
-    // remember it for the Downloads page, and count each person once (never the author themselves).
-    const alreadyImported = !!myImports[d.id];
-    try{
-      await updateDoc(doc(db, "users", currentUser.uid), { ["importedDecks." + d.id]: serverTimestamp() });
-      myImports[d.id] = new Date();
-    }catch(e){ console.warn("Could not record the import:", e); }
-    if(!alreadyImported && ownerOf(d) !== currentUser.uid){
-      try{
-        await updateDoc(doc(db, "public_decks", d.id), { importCount: increment(1) });
-        d.importCount = (d.importCount || 0) + 1;
-      }catch(e){ console.warn("Could not update the download count:", e); }
-    }
-
-    toast(`Imported ${added} card${added===1?"":"s"} into "${subject}"`);
-    closeModal();
-    if(btn && document.body.contains(btn)){ btn.textContent = "Imported"; }
-    render();
-  }catch(e){
-    console.error(e);
-    toast("Import failed: " + ((e && e.message) || "unknown"));
-    if(btn){ btn.disabled = false; btn.textContent = idleLabel; }
-  }
-}
-
 /* ---- admin actions (the real protection is in the Firestore rules) ---- */
 function adminError(e){
   console.error(e);
   toast((e && e.code === "permission-denied") ? "Permission denied. Check the library rules in Firebase." : "Something went wrong.");
 }
+function hasRole(uid){ return isAdminUid(uid) || !!(badges[uid] && badges[uid].verified === true); }
 async function setBadge(uid, field, value){
   if(!uid) return;
   try{
-    await setDoc(doc(db, "badges", uid), { [field]: value }, { merge: true });
-    badges[uid] = Object.assign({}, badges[uid] || {}, { [field]: value });
+    const next = Object.assign({}, badges[uid] || {}, { [field]: value });
+    if(next.verified === true || next.admin === true){
+      await setDoc(doc(db, "badges", uid), { [field]: value }, { merge: true });
+      badges[uid] = next;
+    }else{
+      // no roles left: delete the badge record so the nameplate disappears everywhere
+      if(badges[uid]) await deleteDoc(doc(db, "badges", uid));
+      delete badges[uid];
+    }
     toast(field === "verified" ? (value ? "Blue check given" : "Blue check removed") : (value ? "Admin added" : "Admin removed"));
     render();
   }catch(e){ adminError(e); }
+}
+let badgesCleaned = false;
+async function cleanupStaleBadges(){
+  if(badgesCleaned || !isMeAdmin()) return;
+  badgesCleaned = true;
+  const stale = Object.keys(badges).filter(uid => !(badges[uid].verified === true || badges[uid].admin === true));
+  for(const uid of stale){
+    try{ await deleteDoc(doc(db, "badges", uid)); delete badges[uid]; }catch(e){ console.warn("Could not clear an empty badge record:", e); }
+  }
+  if(stale.length) render();
 }
 async function setDeckHidden(id, hidden){
   try{
@@ -1163,6 +1208,637 @@ async function deleteDeckAdmin(id){
     toast("Deck deleted");
     render();
   }catch(e){ adminError(e); }
+}
+
+/* ---------- deck structure: subjects > topics > flashcards + notes (same shape as K.I.T.E) ---------- */
+const LIM = { subjects: 10, topicsPer: 30, cards: 500, notes: 100, subjectName: 40, topicName: 60, q: 600, a: 1500, noteTitle: 100, noteBody: 4000, docBytes: 900000 };
+function normQ(q){ return (q || "").trim().toLowerCase().replace(/\s+/g, " "); }
+function slugify(s){ return (s || "deck").toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9\-]/g, "").slice(0, 40) || "deck"; }
+const rid = () => Math.random().toString(36).slice(2, 8);
+
+function deckStructure(d){
+  if(d && Array.isArray(d.subjects) && d.subjects.length) return d.subjects;
+  const cards = ((d && d.cards) || []).map(c => ({ q: c.q || c.question || "", a: c.a || c.answer || "" })).filter(c => c.q && c.a);
+  return [{ name: (d && d.subject) || "Imported", topics: [{ name: (d && d.title) || "Imported Deck", cards, notes: [] }] }];
+}
+function structureCounts(st){
+  let cards = 0, notes = 0, topics = 0;
+  (st || []).forEach(s => (s.topics || []).forEach(t => { topics++; cards += (t.cards || []).length; notes += (t.notes || []).length; }));
+  return { subjects: (st || []).length, topics, cards, notes };
+}
+function flatCards(d){
+  const out = [];
+  deckStructure(d).forEach(s => (s.topics || []).forEach(t => (t.cards || []).forEach(c => out.push(c))));
+  return out;
+}
+// Clean + limit a structure before it is saved or published
+function sanitizeStructure(st){
+  const out = [];
+  let cards = 0, notes = 0;
+  for(const s of (st || [])){
+    const sn = String(s.name || "").trim().slice(0, LIM.subjectName);
+    if(!sn) continue;
+    const topics = [];
+    for(const t of (s.topics || []).slice(0, LIM.topicsPer)){
+      const tn = String(t.name || "General").trim().slice(0, LIM.topicName) || "General";
+      const cs = [], ns = [];
+      for(const c of (t.cards || [])){
+        const q = String(c.q || "").trim().slice(0, LIM.q), a = String(c.a || "").trim().slice(0, LIM.a);
+        if(q && a) cs.push({ q, a });
+      }
+      for(const n of (t.notes || [])){
+        const title = String(n.title || "").trim().slice(0, LIM.noteTitle) || "Untitled";
+        const content = String(n.content || "").trim().slice(0, LIM.noteBody);
+        if(content) ns.push({ title, content });
+      }
+      if(cs.length || ns.length){ topics.push({ name: tn, cards: cs, notes: ns }); cards += cs.length; notes += ns.length; }
+    }
+    if(topics.length) out.push({ name: sn, topics });
+  }
+  if(out.length > LIM.subjects) return { error: `Too many subjects (max ${LIM.subjects}).` };
+  if(cards > LIM.cards) return { error: `Too many flashcards (max ${LIM.cards} per deck).` };
+  if(notes > LIM.notes) return { error: `Too many notes (max ${LIM.notes} per deck).` };
+  return { structure: out, cards, notes };
+}
+
+/* ---------- K.I.T.E backup format (used for importing and for the download fallback) ---------- */
+function backupFromDeck(d){
+  const flashcards = {}, notes = {}, topics = {};
+  const now = new Date().toISOString();
+  deckStructure(d).forEach(s => {
+    const name = s.name || "Imported";
+    flashcards[name] = flashcards[name] || []; notes[name] = notes[name] || []; topics[name] = topics[name] || [];
+    (s.topics || []).forEach(t => {
+      const tn = t.name || "General";
+      if(!topics[name].includes(tn)) topics[name].push(tn);
+      (t.cards || []).forEach(c => flashcards[name].push({ question: c.q, answer: c.a, topic: tn, review_count: 0, last_reviewed: null, created: now }));
+      (t.notes || []).forEach(n => notes[name].push({ id: "note_" + rid() + rid(), title: n.title || "Untitled", content: n.content || "", topic: tn, created: now }));
+    });
+  });
+  return { type: "d4n_study_backup", version: 3, exported_at: now, flashcards, notes, topics, study_sessions: [] };
+}
+function downloadDeckFile(d){
+  const blob = new Blob([JSON.stringify(backupFromDeck(d), null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = `${slugify(d.title)}-kite-deck.json`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1500);
+}
+
+/* ---------- import into the person's K.I.T.E account (with the download fallback) ---------- */
+const FAIL_KEY = "kite_lib_import_fails_v1";
+let failedDeck = null, failedInfo = null;
+function failSignature(e){ return String((e && e.code) || (e && e.message) || "unknown").slice(0, 80); }
+function bumpFailure(sig){
+  let o = {};
+  try{ o = JSON.parse(localStorage.getItem(FAIL_KEY) || "{}"); }catch(e){}
+  o[sig] = (o[sig] || 0) + 1;
+  try{ localStorage.setItem(FAIL_KEY, JSON.stringify(o)); }catch(e){}
+  return o[sig];
+}
+function clearFailures(){ try{ localStorage.removeItem(FAIL_KEY); }catch(e){} }
+
+async function doImportDeck(deck, btn){
+  if(!currentUser){ toast("Please sign in first"); showLogin(); return; }
+  const d = deck || currentDeck;
+  if(!d) return;
+  const idleLabel = btn ? btn.textContent : "";
+  if(btn){ btn.disabled = true; btn.textContent = "Importing…"; }
+  try{
+    const ref = doc(db, "study_data", currentUser.uid);
+    const snap = await getDoc(ref);
+    const data = snap.exists() ? snap.data() : {};
+    data.flashcards = data.flashcards || {}; data.notes = data.notes || {};
+    data.topics = data.topics || {}; data.study_sessions = data.study_sessions || [];
+
+    const payload = backupFromDeck(d);
+    let addedCards = 0, addedNotes = 0;
+    for(const subject in payload.flashcards){
+      data.flashcards[subject] = data.flashcards[subject] || [];
+      data.notes[subject] = data.notes[subject] || [];
+      data.topics[subject] = data.topics[subject] || [];
+      const seenQ = new Set(data.flashcards[subject].map(c => normQ(c.question)));
+      payload.flashcards[subject].forEach(c => {
+        const k = normQ(c.question);
+        if(seenQ.has(k)) return;
+        data.flashcards[subject].push(c); seenQ.add(k); addedCards++;
+      });
+      const seenN = new Set(data.notes[subject].map(n => normQ(n.title) + "|" + normQ(n.content).slice(0, 60)));
+      (payload.notes[subject] || []).forEach(n => {
+        const k = normQ(n.title) + "|" + normQ(n.content).slice(0, 60);
+        if(seenN.has(k)) return;
+        data.notes[subject].push(n); seenN.add(k); addedNotes++;
+      });
+      (payload.topics[subject] || []).forEach(t => { if(!data.topics[subject].includes(t)) data.topics[subject].push(t); });
+    }
+    await setDoc(ref, { ...data, updatedAt: serverTimestamp() });
+    clearFailures();
+
+    // Bookkeeping for published decks (best effort, so a rules problem here never makes the import look failed):
+    // remember it for the Downloads page, and count each person once (never the author themselves).
+    if(d.id){
+      const alreadyImported = !!myImports[d.id];
+      try{
+        await updateDoc(doc(db, "users", currentUser.uid), { ["importedDecks." + d.id]: serverTimestamp() });
+        myImports[d.id] = new Date();
+      }catch(e){ console.warn("Could not record the import:", e); }
+      if(!alreadyImported && ownerOf(d) !== currentUser.uid){
+        try{
+          await updateDoc(doc(db, "public_decks", d.id), { importCount: increment(1) });
+          d.importCount = (d.importCount || 0) + 1;
+        }catch(e){ console.warn("Could not update the download count:", e); }
+      }
+    }
+    const parts = [`${addedCards} card${addedCards === 1 ? "" : "s"}`];
+    if(addedNotes) parts.push(`${addedNotes} note${addedNotes === 1 ? "" : "s"}`);
+    toast(`Imported ${parts.join(" and ")} into K.I.T.E`);
+    closeModal();
+    if(btn && document.body.contains(btn)){ btn.disabled = false; btn.textContent = "Imported"; }
+    render();
+  }catch(e){
+    console.error(e);
+    if(btn){ btn.disabled = false; btn.textContent = idleLabel; }
+    handleImportFailure(d, e);
+  }
+}
+function handleImportFailure(d, e){
+  const sig = failSignature(e);
+  const count = bumpFailure(sig);
+  try{ downloadDeckFile(d); }catch(err){ console.warn("Fallback download failed:", err); }
+  failedDeck = d;
+  failedInfo = { sig, message: String((e && e.message) || sig).slice(0, 200), count };
+  showImportFailed();
+}
+function showImportFailed(){
+  const f = failedInfo, d = failedDeck;
+  if(!f || !d) return;
+  const again = f.count >= 2;
+  openModal(`
+    <div class="modal term" role="dialog" aria-modal="true" aria-label="Import failed">
+      <div class="titlebar">${dotsHTML()}<span class="path">import-failed</span><button class="titlebar-back" id="closeModal">close</button></div>
+      <div class="modal-body">
+        <h2 style="color:var(--red);">Couldn't connect to your K.I.T.E account</h2>
+        <div class="note" style="margin:0 0 10px;">Error: ${esc(f.sig)}</div>
+        <div class="desc-block">We downloaded "${esc(d.title || "this deck")}" to your device instead. To add it yourself: open K.I.T.E, go to Import / Export, choose Import, and pick the file.</div>
+        ${again ? `<div class="note" style="margin:0 0 12px;color:var(--amber);">This has happened ${f.count} times now. If it keeps going wrong, send a report so an admin can look into it.</div>` : ""}
+        <div class="modal-actions">
+          ${again ? `<button class="btn btn-danger sm" data-mact="importFailedReport">Report this problem</button>` : ""}
+          <button class="btn btn-ghost sm" data-mact="importFailedDownload">Download again</button>
+          <button class="btn btn-primary sm" id="cancelImportBtn">Close</button>
+        </div>
+      </div>
+    </div>`);
+  attachModal();
+}
+
+/* ---------- reports (decks, users, repeated import errors) ---------- */
+const REPORT_REASONS = {
+  deck: ["Spam or junk", "Inappropriate content", "Copyright / copied material", "Wrong or low quality", "Other"],
+  user: ["Spam or junk", "Inappropriate behavior", "Pretending to be someone else", "Other"]
+};
+let reports = [];
+let pendingReport = null;
+async function loadReports(){
+  if(!isMeAdmin()) return;
+  try{
+    const snap = await getDocs(query(collection(db, "reports"), orderBy("createdAt", "desc"), limit(200)));
+    reports = [];
+    snap.forEach(d => reports.push({ id: d.id, ...d.data() }));
+  }catch(e){ console.warn("Failed to load reports (add the reports rule in Firebase):", e); reports = []; }
+  render();
+}
+function reporterName(){ return (myProfile && myProfile.username) || (currentUser && currentUser.displayName) || (currentUser && currentUser.email ? currentUser.email.split("@")[0] : "user"); }
+async function submitReport(rep){
+  if(!currentUser) throw { code: "app/no-user" };
+  const id = `${rep.type}_${rep.targetId || rep.deckId || "x"}_${currentUser.uid}`.replace(/[\/\s]/g, "_");
+  const data = Object.assign({}, rep, { reporterUid: currentUser.uid, reporterName: reporterName(), createdAt: serverTimestamp() });
+  await setDoc(doc(db, "reports", id), data);
+}
+function reportErrorMessage(e){
+  return (e && e.code === "permission-denied") ? "You've already sent this report. An admin will look at it." : "Couldn't send the report. Try again in a bit.";
+}
+function showReportModal(type, target){
+  pendingReport = { type, target };
+  const reasons = REPORT_REASONS[type] || REPORT_REASONS.deck;
+  openModal(`
+    <div class="modal term" role="dialog" aria-modal="true" aria-label="Report">
+      <div class="titlebar">${dotsHTML()}<span class="path">report-${esc(type)}</span><button class="titlebar-back" id="closeModal">close</button></div>
+      <div class="modal-body">
+        <h2>Report ${type === "deck" ? "deck" : "user"}</h2>
+        <div class="note" style="margin:0 0 12px;">${esc(target.name || "")}</div>
+        <div class="auth-field"><label>Reason</label><select class="rep-select" id="reportReason">${reasons.map(r => `<option>${esc(r)}</option>`).join("")}</select></div>
+        <div class="auth-field"><label>Details (optional)</label><textarea id="reportDetails" maxlength="300" placeholder="Anything that helps an admin check it"></textarea></div>
+        <div class="auth-err" id="reportErr"></div>
+        <div class="modal-actions">
+          <button class="btn btn-ghost sm" id="cancelImportBtn">Cancel</button>
+          <button class="btn btn-danger sm" data-mact="reportSend">Send report</button>
+        </div>
+      </div>
+    </div>`);
+  attachModal();
+}
+async function sendPendingReport(){
+  if(!pendingReport) return;
+  const { type, target } = pendingReport;
+  const errEl = document.getElementById("reportErr");
+  const rep = {
+    type, targetId: target.id, targetName: target.name || "",
+    reason: document.getElementById("reportReason").value,
+    details: (document.getElementById("reportDetails").value || "").trim().slice(0, 300),
+    status: "open"
+  };
+  if(type === "deck"){ rep.deckId = target.deckId || target.id; rep.deckTitle = target.name || ""; rep.ownerUid = target.ownerUid || ""; rep.ownerName = target.ownerName || ""; }
+  try{
+    await submitReport(rep);
+    closeModal(); toast("Report sent. Thank you.");
+  }catch(e){
+    if(errEl) errEl.textContent = reportErrorMessage(e);
+  }
+}
+async function sendImportErrorReport(){
+  const f = failedInfo, d = failedDeck;
+  if(!f || !d) return;
+  try{
+    await submitReport({
+      type: "import_error", targetId: d.id || "local", targetName: d.title || "", deckId: d.id || "", deckTitle: d.title || "",
+      reason: "Import to K.I.T.E keeps failing", details: `${f.message} (happened ${f.count} times)`, error: f.sig, count: f.count,
+      ua: String(navigator.userAgent || "").slice(0, 120), status: "open"
+    });
+    closeModal(); toast("Report sent. An admin will take a look.");
+  }catch(e){ toast(reportErrorMessage(e)); }
+}
+async function dismissReport(id){
+  try{
+    await deleteDoc(doc(db, "reports", id));
+    reports = reports.filter(r => r.id !== id);
+    toast("Report dismissed"); render();
+  }catch(e){ adminError(e); }
+}
+async function hideUsersDecks(uid){
+  const mine = allDecksRaw.filter(d => ownerOf(d) === uid && !d.hidden);
+  if(!mine.length){ toast("No visible decks from this user"); return; }
+  if(!confirm(`Hide all ${mine.length} deck${mine.length === 1 ? "" : "s"} from this user?`)) return;
+  try{
+    await Promise.all(mine.map(d => updateDoc(doc(db, "public_decks", d.id), { hidden: true })));
+    mine.forEach(d => { d.hidden = true; });
+    allDecks = allDecksRaw.filter(x => !x.hidden);
+    toast("Decks hidden"); render();
+  }catch(e){ adminError(e); }
+}
+
+/* ---------- publishing (used by Upload Deck and Create Deck) ---------- */
+async function publishDeck(structure, meta){
+  if(!currentUser) throw new Error("Sign in first.");
+  const clean = sanitizeStructure(structure);
+  if(clean.error) throw new Error(clean.error);
+  const counts = structureCounts(clean.structure);
+  if(!counts.cards) throw new Error("Add at least one flashcard first.");
+  const title = String(meta.title || "").trim().slice(0, 80);
+  if(title.length < 3) throw new Error("Give the deck a title (at least 3 characters).");
+  const tags = String(meta.tags || "").split(",").map(t => t.trim().slice(0, 24)).filter(Boolean).slice(0, 8);
+  const data = {
+    title, description: String(meta.description || "").trim().slice(0, 500), tags,
+    subject: clean.structure.length === 1 ? clean.structure[0].name : "Mixed",
+    subjects: clean.structure, cardCount: counts.cards, noteCount: counts.notes,
+    importCount: 0, ownerUid: currentUser.uid, ownerName: (myProfile && myProfile.username) || currentUser.displayName || "anonymous",
+    createdAt: serverTimestamp(), hidden: false
+  };
+  if(JSON.stringify(data).length > LIM.docBytes) throw new Error("This deck is too big to publish. Remove some cards or notes.");
+  const ref = doc(collection(db, "public_decks"));
+  await setDoc(ref, data);
+  const saved = Object.assign({ id: ref.id }, data, { createdAt: new Date() });
+  allDecksRaw.unshift(saved); allDecks = allDecksRaw.filter(d => !d.hidden); deckById.set(saved.id, saved);
+  return saved;
+}
+
+/* ---------- Upload Deck (from a file on the device) ---------- */
+let uploadState = null;
+function parseCSV(text){
+  const first = text.split(/\r?\n/).find(l => l.trim() && !l.startsWith("#")) || "";
+  const delim = first.includes("\t") ? "\t" : (first.includes(",") ? "," : (first.includes(";") ? ";" : ","));
+  const rows = []; let row = [], cur = "", inQ = false;
+  for(let i = 0; i < text.length; i++){
+    const ch = text[i];
+    if(inQ){
+      if(ch === '"'){ if(text[i + 1] === '"'){ cur += '"'; i++; } else inQ = false; } else cur += ch;
+    }else if(ch === '"' && cur === ""){ inQ = true; }
+    else if(ch === delim){ row.push(cur); cur = ""; }
+    else if(ch === "\n" || ch === "\r"){ if(ch === "\r" && text[i + 1] === "\n") i++; row.push(cur); cur = ""; rows.push(row); row = []; }
+    else cur += ch;
+  }
+  if(cur !== "" || row.length){ row.push(cur); rows.push(row); }
+  return rows;
+}
+function cardsFromRows(rows){
+  const out = [];
+  rows.forEach((r, i) => {
+    if(!r.length || String(r[0]).trim().startsWith("#")) return;
+    const q = String(r[0] || "").trim(), a = String(r[1] || "").trim(), t = String(r[2] || "").trim();
+    if(!q || !a) return;
+    if(i === 0 && /^(question|front|q)$/i.test(q) && /^(answer|back|a)$/i.test(a)) return;
+    out.push({ q, a, t });
+  });
+  return out;
+}
+function structureFromBackup(p){
+  const names = new Set([...Object.keys(p.flashcards || {}), ...Object.keys(p.notes || {})]);
+  const out = [];
+  names.forEach(name => {
+    const byTopic = new Map();
+    const get = t => { const k = t || "General"; if(!byTopic.has(k)) byTopic.set(k, { name: k, cards: [], notes: [] }); return byTopic.get(k); };
+    (p.flashcards[name] || []).forEach(c => { if(c && c.question && c.answer) get(c.topic).cards.push({ q: String(c.question), a: String(c.answer) }); });
+    ((p.notes && p.notes[name]) || []).forEach(n => { if(n && n.content) get(n.topic).notes.push({ title: String(n.title || "Untitled"), content: String(n.content) }); });
+    const topics = Array.from(byTopic.values());
+    if(topics.length) out.push({ name, topics });
+  });
+  return out;
+}
+function parseUploadText(fileName, text){
+  const base = fileName.replace(/\.[^/.]+$/, "").slice(0, 80);
+  const lower = fileName.toLowerCase();
+  if(lower.endsWith(".json")){
+    let p;
+    try{ p = JSON.parse(text); }catch(e){ return { error: "That file isn't valid JSON." }; }
+    if(p && (p.flashcards || p.notes) && !Array.isArray(p.flashcards)){
+      const st = structureFromBackup({ flashcards: p.flashcards || {}, notes: p.notes || {} });
+      if(!st.length) return { error: "No flashcards or notes found in that backup." };
+      return { kind: "backup", title: base, structure: st };
+    }
+    let list = Array.isArray(p) ? p : (Array.isArray(p && p.cards) ? p.cards : null);
+    if(!list) return { error: "Couldn't find any flashcards in that file." };
+    const cards = list.map(c => ({ q: String(c.q || c.question || "").trim(), a: String(c.a || c.answer || "").trim(), t: String(c.topic || c.t || "").trim() })).filter(c => c.q && c.a);
+    if(!cards.length) return { error: "Couldn't find any flashcards in that file." };
+    return { kind: "cards", title: (p && p.title) || base, subject: (p && p.subject) || "General", description: (p && p.description) || "", tags: ((p && p.tags) || []).join(", "), cards };
+  }
+  const cards = cardsFromRows(parseCSV(text));
+  if(!cards.length) return { error: "No flashcards found. Use one card per line: question, answer, and an optional topic." };
+  return { kind: "cards", title: base, subject: "General", description: "", tags: "", cards };
+}
+function showUploadModal(){
+  if(!currentUser){ toast("Sign in to upload a deck"); showLogin(); return; }
+  uploadState = null;
+  openModal(`
+    <div class="modal term" role="dialog" aria-modal="true" aria-label="Upload deck">
+      <div class="titlebar">${dotsHTML()}<span class="path">upload-deck</span><button class="titlebar-back" id="closeModal">close</button></div>
+      <div class="modal-body" id="uploadBody">${uploadPickHTML("")}</div>
+    </div>`);
+  attachModal();
+}
+function uploadPickHTML(err){
+  return `
+    <h2>Upload deck</h2>
+    <div class="note" style="margin:0 0 12px;">Choose a file from your device: a K.I.T.E backup (.json), a deck file (.json), or a .csv / .tsv / .txt with one flashcard per line (question, answer, optional topic).</div>
+    <input type="file" id="uploadFile" class="file-input" accept=".json,.csv,.tsv,.txt,application/json,text/csv,text/plain">
+    ${err ? `<div class="auth-err">${esc(err)}</div>` : ""}`;
+}
+function uploadReviewHTML(){
+  const u = uploadState;
+  let picker;
+  if(u.kind === "backup"){
+    picker = `<div class="qa-label" style="color:var(--cyan);">What to include</div>` + u.structure.map((s, i) => {
+      const c = structureCounts([s]);
+      return `<label class="check-row"><input type="checkbox" data-sub="${i}" checked><span>${esc(s.name)} <span class="dim">· ${plural(c.topics, "topic")} · ${plural(c.cards, "card")}${c.notes ? ` · ${plural(c.notes, "note")}` : ""}</span></span></label>`;
+    }).join("");
+  }else{
+    picker = `
+      <div class="sum-line"><b>${u.cards.length}</b> flashcard${u.cards.length === 1 ? "" : "s"} found</div>
+      <div class="auth-field"><label>Subject</label><input type="text" id="upSubject" maxlength="${LIM.subjectName}" value="${esc(u.subject || "General")}"></div>
+      <div class="auth-field"><label>Topic (cards without their own topic go here)</label><input type="text" id="upTopic" maxlength="${LIM.topicName}" value="${esc(u.title || "General")}"></div>`;
+  }
+  return `
+    <h2>Review &amp; publish</h2>
+    <div class="note" style="margin:0 0 12px;">From file: ${esc(u.fileName)}</div>
+    ${picker}
+    <div class="auth-field"><label>Deck title</label><input type="text" id="upTitle" maxlength="80" value="${esc(u.title || "")}"></div>
+    <div class="auth-field"><label>Description (optional)</label><textarea id="upDesc" maxlength="500">${esc(u.description || "")}</textarea></div>
+    <div class="auth-field"><label>Tags (comma separated, optional)</label><input type="text" id="upTags" value="${esc(u.tags || "")}"></div>
+    <div class="auth-err" id="upErr"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost sm" id="cancelImportBtn">Cancel</button>
+      <button class="btn btn-primary sm" data-mact="uploadPublish">Publish deck</button>
+    </div>`;
+}
+function handleUploadFile(file){
+  const body = document.getElementById("uploadBody");
+  if(!file || !body) return;
+  if(file.size > 2 * 1024 * 1024){ body.innerHTML = uploadPickHTML("That file is bigger than 2 MB."); return; }
+  const reader = new FileReader();
+  reader.onerror = () => { body.innerHTML = uploadPickHTML("Couldn't read that file."); };
+  reader.onload = ev => {
+    const parsed = parseUploadText(file.name, String(ev.target.result || ""));
+    if(parsed.error){ body.innerHTML = uploadPickHTML(parsed.error); return; }
+    uploadState = Object.assign({ fileName: file.name }, parsed);
+    body.innerHTML = uploadReviewHTML();
+  };
+  reader.readAsText(file);
+}
+function uploadStructure(){
+  const u = uploadState;
+  if(u.kind === "backup"){
+    const picked = Array.from(document.querySelectorAll("#uploadBody [data-sub]")).filter(c => c.checked).map(c => parseInt(c.dataset.sub, 10));
+    return picked.map(i => u.structure[i]);
+  }
+  const subject = (document.getElementById("upSubject").value || "General").trim();
+  const defTopic = (document.getElementById("upTopic").value || "General").trim() || "General";
+  const by = new Map();
+  u.cards.forEach(c => { const t = c.t || defTopic; if(!by.has(t)) by.set(t, []); by.get(t).push({ q: c.q, a: c.a }); });
+  return [{ name: subject, topics: Array.from(by.entries()).map(([name, cards]) => ({ name, cards, notes: [] })) }];
+}
+async function doUploadPublish(){
+  const errEl = document.getElementById("upErr");
+  const btn = document.querySelector('[data-mact="uploadPublish"]');
+  errEl.textContent = "";
+  if(btn){ btn.disabled = true; btn.textContent = "Publishing…"; }
+  try{
+    const saved = await publishDeck(uploadStructure(), {
+      title: document.getElementById("upTitle").value,
+      description: document.getElementById("upDesc").value,
+      tags: document.getElementById("upTags").value
+    });
+    closeModal(); toast(`Published "${saved.title}"`);
+    go("uploads");
+  }catch(e){
+    errEl.textContent = (e && e.code === "permission-denied") ? "Couldn't publish (permission denied). Check the library rules in Firebase." : ((e && e.message) || "Couldn't publish.");
+    if(btn){ btn.disabled = false; btn.textContent = "Publish deck"; }
+  }
+}
+
+/* ---------- Create Deck (build it on the site, same structure as K.I.T.E) ---------- */
+const DRAFT_KEY = "kite_lib_draft_v1";
+let pendingFocus = null;
+function blankDraft(){ return { title: "", description: "", tags: "", subjects: [] }; }
+let draft = (() => {
+  try{ const d = JSON.parse(localStorage.getItem(DRAFT_KEY) || "null"); if(d && Array.isArray(d.subjects)) return Object.assign(blankDraft(), d); }catch(e){}
+  return blankDraft();
+})();
+function saveDraft(){ try{ localStorage.setItem(DRAFT_KEY, JSON.stringify(draft)); }catch(e){} }
+function draftStructure(){
+  return draft.subjects.map(s => ({ name: s.name, topics: s.topics.map(t => ({ name: t.name, cards: t.cards, notes: t.notes })) }));
+}
+function findTopic(tid){
+  for(const s of draft.subjects){ const t = s.topics.find(x => x.id === tid); if(t) return { s, t }; }
+  return null;
+}
+function draftTotals(){ return structureCounts(draftStructure()); }
+
+function renderDraftTopic(t){
+  const cards = t.cards.map((c, i) => `
+      <div class="li-row"><div class="qa"><div class="q">Q: ${esc(c.q)}</div><div class="a">A: ${esc(c.a)}</div></div><button class="x-btn" data-act="removeCard" data-arg="${t.id}|${i}">Remove</button></div>`).join("");
+  const notes = t.notes.map((n, i) => `
+      <div class="li-row"><div class="qa"><div class="q">${esc(n.title)}</div><div class="a">${esc(n.content.length > 120 ? n.content.slice(0, 120) + "…" : n.content)}</div></div><button class="x-btn" data-act="removeNote" data-arg="${t.id}|${i}">Remove</button></div>`).join("");
+  return `
+    <div class="topic-block">
+      <div class="topic-head">
+        <div class="topic-name">${esc(t.name)}<span class="dim">${plural(t.cards.length, "card")} · ${plural(t.notes.length, "note")}</span></div>
+        <button class="x-btn" data-act="removeTopic" data-arg="${t.id}">Remove topic</button>
+      </div>
+      <div class="mini-label">Flashcards</div>
+      ${cards || `<div class="note" style="margin:0 0 8px;">No flashcards yet.</div>`}
+      <div class="add-row" data-topic="${t.id}">
+        <input type="text" data-in="cardQ" maxlength="${LIM.q}" placeholder="Question">
+        <input type="text" data-in="cardA" maxlength="${LIM.a}" placeholder="Answer">
+        <button class="btn btn-primary sm" data-act="addCard" data-arg="${t.id}">Add card</button>
+      </div>
+      <div class="mini-label">Notes</div>
+      ${notes || `<div class="note" style="margin:0 0 8px;">No notes yet.</div>`}
+      <div class="add-row" data-topic="${t.id}">
+        <input type="text" data-in="noteTitle" maxlength="${LIM.noteTitle}" placeholder="Note title">
+        <textarea data-in="noteBody" maxlength="${LIM.noteBody}" placeholder="Write the note here"></textarea>
+        <button class="btn sm" data-act="addNote" data-arg="${t.id}">Add note</button>
+      </div>
+    </div>`;
+}
+function renderDraftSubject(s){
+  return `
+    <div class="term sub-block">
+      <div class="titlebar">${dotsHTML()}<span class="path">subject: ${esc(s.name)}</span><button class="titlebar-back" style="color:var(--red);" data-act="removeSubject" data-arg="${s.id}">Remove</button></div>
+      <div class="screen">
+        ${s.topics.map(renderDraftTopic).join("")}
+        <div class="add-row" data-subject="${s.id}">
+          <input type="text" data-in="newTopic" maxlength="${LIM.topicName}" placeholder="New topic, e.g. Quadratics">
+          <button class="btn btn-ghost sm" data-act="addTopic" data-arg="${s.id}">Add topic</button>
+        </div>
+      </div>
+    </div>`;
+}
+function renderCreate(){
+  const c = draftTotals();
+  return `
+    ${pageTitle("Create deck")}
+    <div class="note" style="margin:-4px 0 14px;">Build it the way you do in K.I.T.E: add a subject, add topics inside it, then flashcards and notes inside each topic. Your draft is saved on this device as you go.</div>
+    <div class="card">
+      <div class="qa-label" style="color:var(--cyan);">Deck details</div>
+      <div class="auth-field"><label>Title</label><input type="text" maxlength="80" data-draft="title" value="${esc(draft.title)}" placeholder="e.g. CSEC Math: Algebra"></div>
+      <div class="auth-field"><label>Description (optional)</label><textarea maxlength="500" data-draft="description" placeholder="What is in this deck?">${esc(draft.description)}</textarea></div>
+      <div class="auth-field" style="margin-bottom:0;"><label>Tags (comma separated, optional)</label><input type="text" data-draft="tags" value="${esc(draft.tags)}" placeholder="algebra, csec"></div>
+    </div>
+    ${draft.subjects.map(renderDraftSubject).join("")}
+    <div class="card">
+      <div class="qa-label" style="color:var(--amber);">Add a subject</div>
+      <div class="add-row">
+        <input type="text" data-in="newSubject" maxlength="${LIM.subjectName}" placeholder="e.g. Mathematics">
+        <button class="btn btn-primary sm" data-act="addSubject">Add subject</button>
+      </div>
+    </div>
+    <div class="sum-line"><b>${c.subjects}</b> subject${c.subjects === 1 ? "" : "s"} · <b>${c.topics}</b> topic${c.topics === 1 ? "" : "s"} · <b>${c.cards}</b> flashcard${c.cards === 1 ? "" : "s"} · <b>${c.notes}</b> note${c.notes === 1 ? "" : "s"}</div>
+    <div class="btn-row">
+      <button class="btn btn-primary" data-act="publishDraft">Publish deck</button>
+      <button class="btn" data-act="importDraft">Import to my K.I.T.E</button>
+    </div>
+    <div class="btn-row"><button class="btn btn-danger" data-act="clearDraft">Clear draft</button></div>
+    <div class="note">Published decks can be downloaded by everyone. Only publish things you made yourself or have the right to share.</div>`;
+}
+function draftAction(act, arg, el){
+  const row = el.closest(".add-row");
+  const val = n => { const i = row && row.querySelector(`[data-in="${n}"]`); return i ? String(i.value || "").trim() : ""; };
+  switch(act){
+    case "addSubject": {
+      const name = val("newSubject").slice(0, LIM.subjectName);
+      if(!name){ toast("Type a subject name first"); return; }
+      if(draft.subjects.length >= LIM.subjects){ toast(`Max ${LIM.subjects} subjects per deck`); return; }
+      if(draft.subjects.some(s => s.name.toLowerCase() === name.toLowerCase())){ toast("That subject is already there"); return; }
+      const s = { id: rid(), name, topics: [] }; draft.subjects.push(s);
+      pendingFocus = `[data-subject="${s.id}"] [data-in="newTopic"]`; break;
+    }
+    case "removeSubject": draft.subjects = draft.subjects.filter(s => s.id !== arg); break;
+    case "addTopic": {
+      const s = draft.subjects.find(x => x.id === arg); if(!s) return;
+      const name = val("newTopic").slice(0, LIM.topicName);
+      if(!name){ toast("Type a topic name first"); return; }
+      if(s.topics.length >= LIM.topicsPer){ toast(`Max ${LIM.topicsPer} topics per subject`); return; }
+      if(s.topics.some(t => t.name.toLowerCase() === name.toLowerCase())){ toast("That topic is already there"); return; }
+      const t = { id: rid(), name, cards: [], notes: [] }; s.topics.push(t);
+      pendingFocus = `[data-topic="${t.id}"] [data-in="cardQ"]`; break;
+    }
+    case "removeTopic": draft.subjects.forEach(s => { s.topics = s.topics.filter(t => t.id !== arg); }); break;
+    case "addCard": {
+      const f = findTopic(arg); if(!f) return;
+      const q = val("cardQ"), a = val("cardA");
+      if(!q || !a){ toast("Fill in both the question and the answer"); return; }
+      if(draftTotals().cards >= LIM.cards){ toast(`Max ${LIM.cards} flashcards per deck`); return; }
+      f.t.cards.push({ q, a });
+      pendingFocus = `[data-topic="${f.t.id}"] [data-in="cardQ"]`; break;
+    }
+    case "removeCard": { const [tid, i] = arg.split("|"); const f = findTopic(tid); if(f) f.t.cards.splice(parseInt(i, 10), 1); break; }
+    case "addNote": {
+      const f = findTopic(arg); if(!f) return;
+      const title = val("noteTitle"), content = val("noteBody");
+      if(!content){ toast("Write the note first"); return; }
+      if(draftTotals().notes >= LIM.notes){ toast(`Max ${LIM.notes} notes per deck`); return; }
+      f.t.notes.push({ title: title || "Untitled", content }); break;
+    }
+    case "removeNote": { const [tid, i] = arg.split("|"); const f = findTopic(tid); if(f) f.t.notes.splice(parseInt(i, 10), 1); break; }
+  }
+  saveDraft(); render();
+}
+async function publishFromDraft(btn){
+  if(btn){ btn.disabled = true; btn.textContent = "Publishing…"; }
+  try{
+    const saved = await publishDeck(draftStructure(), draft);
+    draft = blankDraft(); saveDraft();
+    toast(`Published "${saved.title}"`);
+    go("uploads");
+  }catch(e){
+    toast((e && e.code === "permission-denied") ? "Couldn't publish (permission denied). Check the library rules in Firebase." : ((e && e.message) || "Couldn't publish."));
+    if(btn){ btn.disabled = false; btn.textContent = "Publish deck"; }
+  }
+}
+function importFromDraft(btn){
+  const clean = sanitizeStructure(draftStructure());
+  if(clean.error){ toast(clean.error); return; }
+  if(!structureCounts(clean.structure).cards){ toast("Add at least one flashcard first."); return; }
+  const title = (draft.title || "").trim() || "My deck";
+  doImportDeck({ title, subject: clean.structure[0].name, subjects: clean.structure }, btn);
+}
+
+/* ---------- PC: hovering a deck pulses its lights blue ---------- */
+const canHover = !!(window.matchMedia && matchMedia("(hover: hover) and (pointer: fine)").matches);
+const hoverRuns = new WeakMap();
+function pulseCard(card){
+  if(hoverRuns.has(card)) return;
+  const dots = Array.from(card.querySelectorAll(".dot[data-dot]"));
+  const timers = [];
+  hoverRuns.set(card, timers);
+  let t = 0;
+  dotShow.FRAMES.forEach(([blues, ms]) => {
+    const at = t;
+    timers.push(setTimeout(() => dots.forEach(d => d.classList.toggle("hint", blues.includes(parseInt(d.dataset.dot, 10)))), at));
+    t += ms;
+  });
+  timers.push(setTimeout(() => hoverRuns.delete(card), t + 80));
+}
+
+/* ---------- badge tooltips: keep them small and on screen ---------- */
+function placeBadgeTip(b){
+  const r = b.getBoundingClientRect();
+  const win = b.closest(".term");
+  const box = (win || document.documentElement).getBoundingClientRect();
+  const leftSpace = r.left - Math.max(0, box.left);
+  const rightSpace = Math.min(window.innerWidth, box.right) - r.right;
+  b.classList.remove("tip-l", "tip-r", "tip-c", "tip-up", "tip-down");
+  b.classList.add(leftSpace < 95 ? "tip-l" : (rightSpace < 95 ? "tip-r" : "tip-c"));
+  b.classList.add((win || r.top < 70) ? "tip-down" : "tip-up");
 }
 
 /* ---------- navigation ---------- */
@@ -1190,6 +1866,7 @@ function go(v, fromHash){
   render();
   window.scrollTo(0, 0);
   if(v === "downloads") loadDownloads();
+  if(v === "admin"){ cleanupStaleBadges(); loadReports(); }
 }
 function showLogin(){ showingLogin = true; render(); }
 
@@ -1204,6 +1881,7 @@ function render(){
       <main class="main"><div class="main-inner">${content}</div></main>
     </div>`;
   dotShow.maybeIntro();
+  if(pendingFocus){ const f = document.querySelector(pendingFocus); pendingFocus = null; if(f) f.focus(); }
   if(!showingLogin && view === "profile" && currentUser && !pwaRan){ pwaRan = true; runPwaCheck(); }
 }
 
@@ -1229,6 +1907,15 @@ appEl.addEventListener("click", e => {
       break;
     case "theme": showThemes(); break;
     case "pwaInstall": doInstallApp(); break;
+    case "openUpload": showUploadModal(); break;
+    case "newDeck": go("create"); break;
+    case "addSubject": case "removeSubject": case "addTopic": case "removeTopic":
+    case "addCard": case "removeCard": case "addNote": case "removeNote": draftAction(act, arg, el); break;
+    case "publishDraft": publishFromDraft(el); break;
+    case "importDraft": importFromDraft(el); break;
+    case "clearDraft": if(confirm("Clear this draft? This can't be undone.")){ draft = blankDraft(); saveDraft(); render(); } break;
+    case "dismissReport": dismissReport(arg); break;
+    case "hideUserDecks": hideUsersDecks(arg); break;
     case "signin": showLogin(); break;
     case "signout": doSignOut(); break;
     case "login": doLogin(); break;
@@ -1260,6 +1947,8 @@ appEl.addEventListener("click", e => {
 });
 let searchTimer;
 appEl.addEventListener("input", e => {
+  const field = e.target.dataset && e.target.dataset.draft;
+  if(field){ draft[field] = e.target.value; saveDraft(); return; }
   if(e.target.id !== "searchInput") return;
   const input = e.target;
   clearTimeout(searchTimer);
@@ -1272,8 +1961,52 @@ appEl.addEventListener("input", e => {
   }, 120);
 });
 appEl.addEventListener("keydown", e => {
-  if(e.target.id === "loginPassword" && e.key === "Enter") doLogin();
+  if(e.target.id === "loginPassword" && e.key === "Enter"){ doLogin(); return; }
+  if(e.key === "Enter" && e.target.tagName === "INPUT" && e.target.closest(".add-row")){
+    const row = e.target.closest(".add-row");
+    const fields = Array.from(row.querySelectorAll("input, textarea"));
+    const i = fields.indexOf(e.target);
+    e.preventDefault();
+    if(i < fields.length - 1) fields[i + 1].focus(); else { const b = row.querySelector("[data-act]"); if(b) b.click(); }
+  }
 });
+/* popups live outside #app, so they get their own click handler */
+const modalEl = document.getElementById("modalOverlay");
+modalEl.addEventListener("click", e => {
+  const el = e.target.closest("[data-mact]");
+  if(!el) return;
+  switch(el.dataset.mact){
+    case "reportDeck": {
+      if(!currentUser){ toast("Sign in to report"); closeModal(); showLogin(); break; }
+      const d = currentDeck; if(!d) break;
+      showReportModal("deck", { id: d.id, name: d.title, deckId: d.id, ownerUid: ownerOf(d), ownerName: d.ownerName });
+      break;
+    }
+    case "reportUser": {
+      if(!currentUser){ toast("Sign in to report"); closeModal(); showLogin(); break; }
+      const d = currentDeck; if(!d) break;
+      showReportModal("user", { id: ownerOf(d), name: d.ownerName || "anonymous" });
+      break;
+    }
+    case "reportSend": sendPendingReport(); break;
+    case "uploadPublish": doUploadPublish(); break;
+    case "importFailedDownload": if(failedDeck) downloadDeckFile(failedDeck); break;
+    case "importFailedReport": sendImportErrorReport(); break;
+  }
+});
+modalEl.addEventListener("change", e => { if(e.target.id === "uploadFile") handleUploadFile(e.target.files[0]); });
+/* PC hover on a deck, and badge tooltips */
+if(canHover){
+  appEl.addEventListener("mouseover", e => {
+    const card = e.target.closest(".deck-term");
+    if(!card || (e.relatedTarget && card.contains(e.relatedTarget))) return;
+    pulseCard(card);
+  });
+}
+["pointerover", "focusin"].forEach(ev => document.addEventListener(ev, e => {
+  const b = e.target.closest && e.target.closest(".badge");
+  if(b) placeBadgeTip(b);
+}));
 window.addEventListener("hashchange", () => {
   const v = viewFromHash();
   if(v === view && !showingLogin) return;
@@ -1289,6 +2022,7 @@ onAuthStateChanged(auth, async (user) => {
   if(!user && GATED.includes(view)) view = "home";
   render();
   if(user) await loadMyProfile();
+  if(user){ await badgesPromise; if(isMeAdmin()) loadReports(); }
   if(user && pendingView){ const v = pendingView; pendingView = null; go(v, true); }
   else if(!user && pendingView){ showLogin(); }
   else render();
@@ -1297,7 +2031,8 @@ onAuthStateChanged(auth, async (user) => {
 
 /* ---------- init ---------- */
 if(viewFromHash() !== "home") pendingView = viewFromHash();
-loadBadges().then(() => render());
+const badgesPromise = loadBadges();
+badgesPromise.then(() => render());
 loadDecks();
 
 /* ---------- service worker ---------- */
