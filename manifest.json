@@ -1,10 +1,10 @@
 {
-  "id": "./",
+  "id": "/K.I.T.E-Library/",
   "name": "K.I.T.E Library",
   "short_name": "KITE Library",
   "description": "Find and import flashcard decks shared by other K.I.T.E users.",
-  "start_url": "./",
-  "scope": "./",
+  "start_url": "/K.I.T.E-Library/",
+  "scope": "/K.I.T.E-Library/",
   "display": "standalone",
   "orientation": "any",
   "background_color": "#0c0e0f",
