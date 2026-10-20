@@ -319,6 +319,62 @@ select.rep-select:focus{outline:none;border-color:var(--cyan)}
   .brand{align-items:center}
   .deck-grid{grid-template-columns:minmax(0,1fr)}
 }
+/* ===== guided tour (same engine in K.I.T.E and the Library) ===== */
+.tour-layer{position:fixed;inset:0;z-index:30000;font-family:inherit}
+.tour-block{position:absolute;inset:0;background:transparent}
+.tour-layer.dim .tour-block{background:rgba(0,0,0,.76)}
+.tour-hole{position:absolute;border:2px solid var(--cyan);border-radius:10px;box-shadow:0 0 0 9999px rgba(0,0,0,.76);pointer-events:none;transition:left .2s,top .2s,width .2s,height .2s}
+.tour-card{position:absolute;width:min(440px,calc(100vw - 20px));max-height:calc(100vh - 20px);background:var(--panel);border:1px solid var(--border-bright);border-radius:10px;box-shadow:0 18px 50px -12px rgba(0,0,0,.9);display:flex;flex-direction:column;overflow:hidden}
+.tour-titlebar{display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--panel-2);border-bottom:1px solid var(--border)}
+.tour-titlebar .td{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.tour-titlebar .td.r{background:#ff5f56}.tour-titlebar .td.y{background:#ffbd2e}.tour-titlebar .td.g{background:#27c93f}
+.tour-path{flex:1;min-width:0;margin-left:6px;font-size:11px;color:var(--grey-dim);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tour-skip{flex-shrink:0;background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--grey);font-family:inherit;font-size:11.5px;padding:5px 10px;cursor:pointer}
+.tour-skip:hover{color:var(--white);border-color:var(--border-bright)}
+.tour-body{padding:14px 16px 6px;overflow-y:auto}
+.tour-kicker{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--cyan);font-weight:700;margin-bottom:6px}
+.tour-title{margin:0 0 8px;font-size:16px;color:var(--amber);line-height:1.3;font-weight:700}
+.tour-text{font-size:13px;line-height:1.65;color:var(--grey)}
+.tour-text b{color:var(--white)}
+.tour-mock{margin-top:12px}
+.tour-mock:empty{display:none}
+.tour-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 16px 14px;flex-wrap:wrap}
+.tour-dots{display:flex;gap:5px;flex-wrap:wrap;max-width:150px}
+.tour-dots i{width:6px;height:6px;border-radius:50%;background:var(--border);display:block;transition:transform .15s}
+.tour-dots i.on{background:var(--cyan);transform:scale(1.5)}
+.tour-btns{display:flex;gap:8px;margin-left:auto}
+.tour-btn{background:var(--panel-2);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:inherit;font-size:13px;font-weight:600;padding:9px 14px;cursor:pointer;width:auto}
+.tour-btn.primary{background:var(--cyan);color:var(--on-primary);border-color:var(--cyan)}
+.tour-btn:disabled{opacity:.35;cursor:default}
+.tm{border:1px solid var(--border);border-radius:8px;background:var(--bg);padding:8px;font-size:12px;display:flex;flex-direction:column;gap:6px}
+.tm-path{font-size:10.5px;color:var(--grey-dim)}
+.tm-row{display:flex;gap:8px;align-items:center;border:1px solid var(--border);border-radius:6px;padding:7px 9px;background:var(--panel-2);color:var(--white)}
+.tm-row .n{color:var(--cyan);font-weight:700;min-width:18px}
+.tm-row .m{margin-left:auto;color:var(--grey-dim);font-size:10.5px}
+.tm-row.hl{border-color:var(--cyan);background:color-mix(in srgb, var(--cyan) 10%, var(--panel-2))}
+.tm-row.acc .l{color:var(--green)}
+.tm-field{border:1px solid var(--border);border-radius:6px;padding:7px 9px;color:var(--white);background:var(--panel)}
+.tm-field i{color:var(--grey-dim);font-style:normal}
+.tm-arrow{text-align:center;color:var(--cyan);font-size:12px;line-height:1}
+.tm-note{color:var(--grey);font-size:11.5px}
+.tm-light{width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#000;font-weight:700;font-size:11px;flex-shrink:0}
+.tm-seq{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+
+/* ===== likes, sorting, verified-badge applications, notification picker ===== */
+.vote-row{display:inline-flex;gap:6px;align-items:center}
+.vote-row .notif-react{padding:3px 9px;font-size:12px}
+.notif-react:disabled{opacity:.45;cursor:not-allowed}
+.vote-line{margin:-4px 0 12px}
+.sort-row{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin:0 0 12px;font-size:11.5px;color:var(--grey)}
+.sort-row select{width:auto;min-width:160px;padding:7px 10px;font-size:12.5px}
+.verify-bar{height:8px;border-radius:6px;background:var(--bg);border:1px solid var(--border);overflow:hidden;margin:8px 0}
+.verify-bar>div{height:100%;background:var(--cyan)}
+.verify-msg{font-size:12.5px;color:var(--grey);line-height:1.6}
+.verify-msg.ok{color:var(--green)}
+.sel-chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border-bright);border-radius:20px;padding:4px 10px;font-size:12px;margin:0 6px 6px 0;color:var(--cyan)}
+.sel-chip button{background:transparent;border:0;color:var(--red);cursor:pointer;font-family:inherit;font-size:14px;padding:0;line-height:1}
+.notif-badge-ico{display:inline-flex;width:16px;height:16px;vertical-align:-3px;margin-right:6px}
+.notif-badge-ico svg{width:100%;height:100%}
 </style>
 </head>
 <body>
@@ -376,6 +432,18 @@ const GATED = ["profile", "uploads", "downloads", "create", "admin"];
 let myNotifications = [];
 let openTagRequests = [];
 let reports = [];
+let myVotes = {};                 // deckId -> "like" | "dislike"
+let applications = [];            // admin: open verified-badge applications
+let myApplication = null;         // my own open application
+const SORT_KEY = "kite_lib_sort_v1";
+let sortMode = "recommended";
+try{ const sv = localStorage.getItem(SORT_KEY); if(sv && ["recommended","liked","newest","oldest","downloads","az"].includes(sv)) sortMode = sv; }catch(e){}
+let bDraft = { title: "", body: "", target: "all" };
+let bSelected = new Map();        // uid -> label, for "specific users" notifications
+let bUserQuery = "";
+let allUsersCache = null;         // owner only: every user, for the picker
+const AUTO_HIDE_AT = 10;          // reports before a deck hides itself
+const VERIFY_AT = 100;            // likes before someone can apply for the verified badge
 
 /* NEW: admin tabs + broadcast state */
 let adminTab = "overview";       // overview | subjects | broadcast | decks
@@ -577,6 +645,7 @@ async function loadDecks(){
   allDecks = allDecksRaw.filter(d => !d.hidden);
   loadingDecks = false;
   render();
+  maybeNotifyEligible();
 }
 async function loadSubjects(){
   try{
@@ -702,7 +771,8 @@ function filteredDecks(){
     return matchesSearch(d, q);
   });
 }
-function groupByTag(decks){
+function groupByTag(decks, mode){
+  const m = mode || sortMode, cmp = sortCmp(m);
   const map = new Map();
   decks.forEach(d => {
     const tags = deckTags(d);
@@ -712,14 +782,15 @@ function groupByTag(decks){
       if(!map.get(t).find(x => x.id === d.id)) map.get(t).push(d);
     });
   });
-  return Array.from(map.entries()).sort((a, b) => {
+  return Array.from(map.entries()).map(([k, list]) => [k, list.slice().sort(cmp)]).sort((a, b) => {
     if(a[0] === "Uncategorized") return 1;
     if(b[0] === "Uncategorized") return -1;
-    return a[0].localeCompare(b[0]);
+    if(m === "az") return a[0].localeCompare(b[0]);
+    return cmp(a[1][0], b[1][0]) || a[0].localeCompare(b[0]);   // groups follow the sort too
   });
 }
-function renderGroupsByTag(decks, cardFn){
-  return groupByTag(decks).map(([tag, list]) => `
+function renderGroupsByTag(decks, cardFn, mode){
+  return groupByTag(decks, mode).map(([tag, list]) => `
     <section>
       <h2 class="subject-head"><span class="prompt">#</span> ${esc(tag)} <span class="cnt">${list.length}</span></h2>
       <div class="deck-grid">${list.map(cardFn).join("")}</div>
@@ -769,7 +840,7 @@ function renderLogin(){
 /* ---------- sidebar + top bar ---------- */
 function renderSidebar(){
   const nav = (v, n, label, extra) => `<button class="menu-item${view===v?" active":""}${extra||""}" data-act="nav" data-arg="${v}"><span class="mk">&gt;</span><span class="num">${n}.</span><span class="label">${label}</span></button>`;
-  const reqCount = openTagRequests.length;
+  const reqCount = openTagRequests.length + applications.length;
   return `
     <aside class="sidebar" id="sidebar">
       <div class="term sb-term">
@@ -845,6 +916,7 @@ function deckCardHTML(d, opts){
         ${deckSubjectName(d) ? kv("subject", `<span class="tagtxt">${esc(deckSubjectName(d))}</span>`) : ""}
         ${kv("cards", n)}
         ${kv("tags", tagsText(d))}
+        ${kv("rating", voteBtns(d, "app"))}
         ${kv(timeLabel, `<span title="${esc(fullDate(d.createdAt))}">${esc(timeText)}</span>`)}
         <div class="dk-actions">
           <button class="btn btn-primary" data-act="import" data-arg="${esc(d.id)}">Import</button>
@@ -861,11 +933,12 @@ function uploadCardHTML(d){
       <div class="titlebar">${dotsHTML()}<span class="path" title="${esc(d.title || "Untitled")}">${esc(d.title || "Untitled")}</span></div>
       <div class="deck-body">
         ${kv("downloads", `<span class="hot">${imp}</span>`)}
+        ${kv("likes", `<span class="hot">${d.likes || 0}</span><span class="dim">&nbsp;/ ${d.dislikes || 0} dislikes</span>`)}
         ${deckSubjectName(d) ? kv("subject", `<span class="tagtxt">${esc(deckSubjectName(d))}</span>`) : ""}
         ${kv("cards", d.cardCount || 0)}
         ${kv("tags", tagsText(d))}
         ${kv("uploaded", `<span title="${esc(fullDate(d.createdAt))}">${esc(timeAgo(d.createdAt))}</span>`)}
-        ${d.hidden ? kv("status", `<span class="dc-flag">Hidden by an admin</span>`) : ""}
+        ${d.hidden ? kv("status", `<span class="dc-flag">${d.autoHidden ? "Hidden after " + AUTO_HIDE_AT + " reports" : "Hidden by an admin"}</span>`) : ""}
         <div class="dk-actions"><button class="btn btn-ghost" data-act="preview" data-arg="${esc(d.id)}">Preview</button></div>
       </div>
     </div>
@@ -900,6 +973,7 @@ function renderBrowse(){
       <input type="text" class="search-input" id="searchInput" placeholder="Search title, subject, tag, or author…" value="${esc(searchQuery)}">
     </div>
     <div class="filters">${chips}</div>
+    ${sortRowHTML()}
     ${body}
     <div class="footnote">Decks are grouped by tag. Search "math" to see everything under Mathematics.</div>
   `;
@@ -940,6 +1014,7 @@ function renderProfile(){
       ${since ? row("Member since", esc(since.toLocaleDateString())) : ""}
       ${row("Status", esc(status))}
     </div>
+    ${verifyCardHTML()}
     ${pwaCardHTML()}
     <div class="btn-row">
       <a class="btn" href="${KITE_URL}">Go to KITE</a>
@@ -953,7 +1028,7 @@ function renderUploads(){
   if(loadingDecks) return `${pageTitle("My uploads")}<div class="spinner"></div>`;
   const mine = myUploads().sort((a, b) => tsMs(b.createdAt) - tsMs(a.createdAt));
   const body = mine.length
-    ? renderGroupsByTag(mine, uploadCardHTML)
+    ? renderGroupsByTag(mine, uploadCardHTML, "newest")
     : emptyBlock("📭", "You haven't uploaded any decks yet.", "Publish a deck from K.I.T.E or use Create Deck.");
   return `
     ${pageTitle("My uploads")}
@@ -1017,6 +1092,7 @@ function reportRowHTML(r){
   if(r.type === "deck"){
     const id = r.deckId || r.targetId, d = deckById.get(id), gone = deckById.has(id) && !d;
     title = esc(r.deckTitle || r.targetName || "Deck") + (gone ? ` <span class="dc-flag">&nbsp;(deck removed)</span>` : "");
+    if(d && (d.reportCount || 0)) title += ` <span class="dc-flag">&nbsp;(${d.reportCount} report${d.reportCount === 1 ? "" : "s"}${d.autoHidden ? ", auto-hidden" : ""})</span>`;
     if(d) actions = `<button class="btn sm btn-ghost" data-act="preview" data-arg="${esc(d.id)}">Preview</button><button class="btn sm${d.hidden ? " btn-primary" : ""}" data-act="adminHide" data-arg="${esc(d.id)}">${d.hidden ? "Unhide" : "Hide"}</button><button class="btn sm btn-danger" data-act="adminDelete" data-arg="${esc(d.id)}">Delete</button>`;
   }else if(r.type === "user"){
     title = esc(r.targetName || "User") + badgesHTML(r.targetId);
@@ -1096,6 +1172,8 @@ function renderAdminOverview(){
         ${sup ? `<button class="btn sm" data-act="adminAdmin" data-arg="${esc(p.uid)}">Make admin</button>` : ""}
       </div>`).join("");
   return `
+    <div class="sec-title">Verified badge requests (${applications.length})</div>
+    ${applications.length ? applications.map(applicationRowHTML).join("") : `<div class="note">No verification requests.</div>`}
     <div class="sec-title">Tag requests (${openTagRequests.length})</div>
     ${openTagRequests.length ? openTagRequests.map(tagRequestRowHTML).join("") : `<div class="note">No open tag requests.</div>`}
     <div class="sec-title">Reports (${reports.length})</div>
@@ -1161,13 +1239,15 @@ function renderAdminBroadcast(){
   return `
     <div class="sec-title">Send a notification</div>
     <div class="card">
-      <div class="auth-field"><label>Title</label><input type="text" id="bTitle" maxlength="120" placeholder="e.g. Welcome!"></div>
-      <div class="auth-field"><label>Body</label><textarea id="bBody" maxlength="500" placeholder="Hello all new users..."></textarea></div>
+      <div class="auth-field"><label>Title</label><input type="text" id="bTitle" maxlength="120" placeholder="e.g. Welcome!" value="${esc(bDraft.title)}"></div>
+      <div class="auth-field"><label>Body</label><textarea id="bBody" maxlength="500" placeholder="Hello all new users...">${esc(bDraft.body)}</textarea></div>
       <div class="auth-field">
         <label>Send to</label>
-        <label class="check-row"><input type="radio" name="bTarget" value="all" checked><span>All users <span class="dim">— everyone</span></span></label>
-        <label class="check-row"><input type="radio" name="bTarget" value="old"><span>Old users <span class="dim">— accounts older than 2 months</span></span></label>
-        <label class="check-row"><input type="radio" name="bTarget" value="new"><span>New users <span class="dim">— accounts younger than 2 months</span></span></label>
+        <label class="check-row"><input type="radio" name="bTarget" value="all"${bDraft.target === "all" ? " checked" : ""}><span>All users <span class="dim">— everyone</span></span></label>
+        <label class="check-row"><input type="radio" name="bTarget" value="old"${bDraft.target === "old" ? " checked" : ""}><span>Old users <span class="dim">— accounts older than 2 months</span></span></label>
+        <label class="check-row"><input type="radio" name="bTarget" value="new"${bDraft.target === "new" ? " checked" : ""}><span>New users <span class="dim">— accounts younger than 2 months</span></span></label>
+        <label class="check-row"><input type="radio" name="bTarget" value="users"${bDraft.target === "users" ? " checked" : ""}><span>Specific users <span class="dim">— pick one or more people</span></span></label>
+        <div id="bPicker" style="display:${bDraft.target === "users" ? "block" : "none"};margin:0 0 8px 26px;"><div id="bPickerInner">${broadcastPickerHTML()}</div></div>
       </div>
       <div class="auth-err" id="bErr"></div>
       <button class="btn btn-primary" data-act="sendBroadcast">Send broadcast</button>
@@ -1182,7 +1262,7 @@ function renderAdminDecks(){
   const decks = allDecksRaw.slice().sort((a, b) => tsMs(b.createdAt) - tsMs(a.createdAt)).map(d => `
       <div class="row-card">
         <div class="ar-main">
-          <div class="ar-title">${esc(d.title || "Untitled")}${d.hidden ? ` <span class="dc-flag">&nbsp;Hidden</span>` : ""}</div>
+          <div class="ar-title">${esc(d.title || "Untitled")}${d.hidden ? ` <span class="dc-flag">&nbsp;${d.autoHidden ? "Auto-hidden" : "Hidden"}${(d.reportCount || 0) ? " · " + d.reportCount + " reports" : ""}</span>` : ""}</div>
           <div class="ar-sub">by ${esc(d.ownerName || "anonymous")}${badgesHTML(ownerOf(d))} · ${esc(deckSubjectName(d) || "no subject")} · ${plural(d.cardCount || 0, "card")} · ${plural(d.importCount || 0, "download")} · ${esc(timeAgo(d.createdAt))}</div>
         </div>
         <button class="btn sm btn-ghost" data-act="preview" data-arg="${esc(d.id)}">Preview</button>
@@ -1232,6 +1312,7 @@ function renderDeckPreview(d){
           <span class="sep">·</span>
           <span title="${esc(fullDate(d.createdAt))}">${esc(timeAgo(d.createdAt))}</span>
         </div>
+        <div class="vote-line">${voteBtns(d, "modal")}</div>
         ${(deckTags(d).length) ? `<div style="color:var(--cyan);font-size:12px;margin-bottom:12px;">{ ${esc(deckTags(d).join(", "))} }</div>` : ""}
         ${d.description ? `<div class="desc-block">${esc(d.description)}</div>` : ""}
         ${preview ? `
@@ -1297,10 +1378,12 @@ function showNotificationsModal(){
       <h2>Notifications</h2>
       ${myNotifications.map(n => `
         <div class="notif-item ${n.read ? "" : "unread"}" data-mact="readNotif" data-arg="${esc(n.id)}">
-          <div class="nt">${esc(n.title || "Notification")}</div>
+          <div class="nt">${n.type === "badge" ? `<span class="notif-badge-ico">${n.badge === "teacher" ? ICON_APPLE : (n.badge === "admin" ? ICON_HAMMER : ICON_VERIFIED)}</span>` : ""}${esc(n.title || "Notification")}</div>
           ${n.body ? `<div class="nb2">${esc(n.body)}</div>` : ""}
           <div class="ntime">${esc(timeAgo(n.createdAt))}</div>
           <div class="notif-actions">
+            ${n.type === "badge" ? `<button class="btn btn-primary sm" data-mact="acceptBadge" data-arg="${esc(n.id)}"${n.accepted ? " disabled" : ""}>${n.accepted ? "Accepted" : "Accept"}</button>` : ""}
+            ${n.type === "verify_eligible" ? `<button class="btn btn-primary sm" data-mact="openVerifyApply">Open my profile</button>` : ""}
             <button class="notif-react${n.reaction === "like" ? " active-like" : ""}" data-mact="toggleLike" data-arg="${esc(n.id)}">👍 Like</button>
             <button class="notif-react${n.reaction === "dislike" ? " active-dislike" : ""}" data-mact="toggleDislike" data-arg="${esc(n.id)}">👎 Dislike</button>
           </div>
@@ -1451,64 +1534,55 @@ async function sendBroadcast(){
   if(!body){ if(errEl) errEl.textContent = "Write something in the body."; return; }
 
   const btn = document.querySelector('[data-act="sendBroadcast"]');
+  const reset = () => { if(btn){ btn.disabled = false; btn.textContent = "Send broadcast"; } };
   if(btn){ btn.disabled = true; btn.textContent = "Sending…"; }
   try{
-    const snap = await getDocs(collection(db, "users"));
-    const twoMonthsAgo = new Date(); twoMonthsAgo.setMonth(twoMonthsAgo.getMonth() - 2);
-    const recipients = [];
-    snap.forEach(d => {
-      const u = d.data();
-      if(d.id === currentUser.uid) return;
-      if(target === "all"){ recipients.push(d.id); return; }
-      const created = tsDate(u.createdAt);
-      if(!created) return;
-      if(target === "old" && created < twoMonthsAgo) recipients.push(d.id);
-      if(target === "new" && created >= twoMonthsAgo) recipients.push(d.id);
-    });
-    if(!recipients.length){
-      toast("No users match that target");
-      if(btn){ btn.disabled = false; btn.textContent = "Send broadcast"; }
-      return;
+    let recipients = [];
+    if(target === "users"){
+      const set = new Set(bSelected.keys());
+      String((document.getElementById("bUids") || {}).value || "").split(/[\s,;]+/).map(x => x.trim()).filter(x => x.length >= 20).forEach(x => set.add(x));
+      recipients = Array.from(set).slice(0, 200);
+      if(!recipients.length){ if(errEl) errEl.textContent = "Pick at least one person, or paste a UID."; reset(); return; }
+    }else{
+      const snap = await getDocs(collection(db, "users"));
+      const twoMonthsAgo = new Date(); twoMonthsAgo.setMonth(twoMonthsAgo.getMonth() - 2);
+      snap.forEach(d => {
+        const u = d.data();
+        if(d.id === currentUser.uid) return;
+        if(target === "all"){ recipients.push(d.id); return; }
+        const created = tsDate(u.createdAt);
+        if(!created) return;
+        if(target === "old" && created < twoMonthsAgo) recipients.push(d.id);
+        if(target === "new" && created >= twoMonthsAgo) recipients.push(d.id);
+      });
     }
-    if(!confirm(`Send this notification to ${recipients.length} user${recipients.length===1?"":"s"}?`)){
-      if(btn){ btn.disabled = false; btn.textContent = "Send broadcast"; }
-      return;
-    }
+    if(!recipients.length){ toast("No users match that target"); reset(); return; }
+    if(!confirm(`Send this notification to ${recipients.length} user${recipients.length===1?"":"s"}?`)){ reset(); return; }
     const bcastRef = doc(collection(db, "broadcasts"));
-    await setDoc(bcastRef, {
-      title, body, target,
-      recipientCount: recipients.length,
-      sentBy: currentUser.uid,
-      sentByName: reporterName(),
-      createdAt: serverTimestamp()
-    });
+    const bdoc = { title, body, target, recipientCount: recipients.length, sentBy: currentUser.uid, sentByName: reporterName(), createdAt: serverTimestamp() };
+    if(target === "users") bdoc.recipientUids = recipients.slice(0, 100);
+    await setDoc(bcastRef, bdoc);
     const CHUNK = 400;
     for(let i = 0; i < recipients.length; i += CHUNK){
       const slice = recipients.slice(i, i + CHUNK);
       const batch = writeBatch(db);
       for(const uid of slice){
         const ref = doc(collection(db, "notifications"));
-        batch.set(ref, {
-          uid,
-          broadcastId: bcastRef.id,
-          type: "broadcast",
-          title, body,
-          read: false,
-          reaction: null,
-          createdAt: serverTimestamp()
-        });
+        batch.set(ref, { uid, broadcastId: bcastRef.id, type: target === "users" ? "message" : "broadcast", title, body, read: false, reaction: null, createdAt: serverTimestamp() });
       }
       await batch.commit();
     }
-    toast(`Broadcast sent to ${recipients.length} user${recipients.length===1?"":"s"}`);
+    toast(`Notification sent to ${recipients.length} user${recipients.length===1?"":"s"}`);
     if(titleEl) titleEl.value = "";
     if(bodyEl) bodyEl.value = "";
-    if(btn){ btn.disabled = false; btn.textContent = "Send broadcast"; }
+    bDraft = { title: "", body: "", target };
+    if(target === "users"){ bSelected.clear(); bUserQuery = ""; refreshBroadcastPicker(); }
+    reset();
     await loadBroadcasts();
   }catch(e){
     console.error(e);
     if(errEl) errEl.textContent = (e && e.code === "permission-denied") ? "Permission denied. Check the broadcast/notification rules in Firebase." : ((e && e.message) || "Couldn't send.");
-    if(btn){ btn.disabled = false; btn.textContent = "Send broadcast"; }
+    reset();
   }
 }
 
@@ -1544,7 +1618,7 @@ function adminError(e){
 function hasAnyFlag(b){ return !!b && (b.verified === true || b.admin === true || b.teacher === true); }
 function hasRole(uid){ return isAdminUid(uid) || hasAnyFlag(badges[uid]); }
 async function setBadge(uid, field, value){
-  if(!uid) return;
+  if(!uid) return false;
   try{
     const next = Object.assign({}, badges[uid] || {}, { [field]: value });
     if(hasAnyFlag(next)){
@@ -1556,8 +1630,10 @@ async function setBadge(uid, field, value){
     }
     const msg = { verified: ["Blue check given", "Blue check removed"], teacher: ["Teacher badge given", "Teacher badge removed"], admin: ["Admin added", "Admin removed"] }[field];
     toast(msg ? (value ? msg[0] : msg[1]) : "Updated");
+    if(value) await notifyBadge(uid, field);      // "Congrats! You earned the ... badge. Click here to accept it."
     render();
-  }catch(e){ adminError(e); }
+    return true;
+  }catch(e){ adminError(e); return false; }
 }
 let badgesCleaned = false;
 async function cleanupStaleBadges(){
@@ -1570,11 +1646,23 @@ async function cleanupStaleBadges(){
   if(stale.length) render();
 }
 async function setDeckHidden(id, hidden){
+  const d = deckById.get(id);
   try{
-    await updateDoc(doc(db, "public_decks", id), { hidden });
-    const d = deckById.get(id); if(d) d.hidden = hidden;
+    const upd = { hidden };
+    const clear = [];
+    // un-hiding a deck that hid itself after too many reports: reset its report count and clear those reports
+    if(!hidden && d && (d.autoHidden || (d.reportCount || 0) >= AUTO_HIDE_AT)){
+      upd.autoHidden = false; upd.reportCount = 0;
+      reports.forEach(r => { if(r.type === "deck" && (r.deckId || r.targetId) === id) clear.push(r.id); });
+    }
+    const batch = writeBatch(db);
+    batch.update(doc(db, "public_decks", id), upd);
+    clear.forEach(rid => batch.delete(doc(db, "reports", rid)));
+    await batch.commit();
+    if(d){ d.hidden = hidden; if(upd.autoHidden === false){ d.autoHidden = false; d.reportCount = 0; } }
+    reports = reports.filter(r => !clear.includes(r.id));
     allDecks = allDecksRaw.filter(x => !x.hidden);
-    toast(hidden ? "Deck hidden" : "Deck visible again"); render();
+    toast(hidden ? "Deck hidden" : (clear.length ? "Deck visible again, its reports were cleared" : "Deck visible again")); render();
   }catch(e){ adminError(e); }
 }
 async function deleteDeckAdmin(id){
@@ -1911,6 +1999,21 @@ async function submitReport(rep){
   if(!currentUser) throw { code: "app/no-user" };
   const id = `${rep.type}_${rep.targetId || rep.deckId || "x"}_${currentUser.uid}`.replace(/[\/\s]/g, "_");
   const data = Object.assign({}, rep, { reporterUid: currentUser.uid, reporterName: reporterName(), createdAt: serverTimestamp() });
+  if(rep.type === "deck"){
+    // one batch: the report itself + the deck's report counter. The 10th report hides the deck automatically.
+    const deckId = rep.deckId || rep.targetId, d = deckById.get(deckId);
+    const next = ((d && d.reportCount) || 0) + 1;
+    const willHide = !!d && !d.hidden && next >= AUTO_HIDE_AT;
+    const upd = { reportCount: increment(1) };
+    if(willHide){ upd.hidden = true; upd.autoHidden = true; }
+    const batch = writeBatch(db);
+    batch.set(doc(db, "reports", id), data);
+    batch.update(doc(db, "public_decks", deckId), upd);
+    await batch.commit();
+    if(d){ d.reportCount = next; if(willHide){ d.hidden = true; d.autoHidden = true; allDecks = allDecksRaw.filter(x => !x.hidden); } }
+    if(willHide) render();     // the deck just hid itself: take it off the screen
+    return;
+  }
   await setDoc(doc(db, "reports", id), data);
 }
 function reportErrorMessage(e){
@@ -2003,7 +2106,7 @@ async function publishDeck(structure, meta){
     subjectId, subjectName: s.name,
     tags: finalTags,
     subjects: clean.structure, cardCount: counts.cards, noteCount: counts.notes,
-    importCount: 0, ownerUid: currentUser.uid, ownerName: (myProfile && myProfile.username) || currentUser.displayName || "anonymous",
+    importCount: 0, likes: 0, dislikes: 0, reportCount: 0, ownerUid: currentUser.uid, ownerName: (myProfile && myProfile.username) || currentUser.displayName || "anonymous",
     createdAt: serverTimestamp(), hidden: false
   };
   if(JSON.stringify(data).length > LIM.docBytes) throw new Error("This deck is too big to publish. Remove some cards or notes.");
@@ -2135,7 +2238,10 @@ function renderTagPicker(containerId, subjectId, selectedArr){
   const sel = new Set((selectedArr || []).map(t => t.toLowerCase()));
   box.innerHTML = tags.map(t => `<button class="tag-chip${sel.has(t.toLowerCase()) ? " active" : ""}" data-tag-value="${esc(t)}" type="button">${esc(t)}</button>`).join("");
   box.querySelectorAll(".tag-chip").forEach(chip => {
-    chip.addEventListener("click", () => chip.classList.toggle("active"));
+    chip.addEventListener("click", () => {
+      chip.classList.toggle("active");
+      if(containerId === "createTags"){ draft.tagIds = getSelectedTags("createTags"); saveDraft(); }   // keep them when the page redraws
+    });
   });
 }
 function getSelectedTags(containerId){
@@ -2256,6 +2362,7 @@ function renderCreate(){
   const c = draftTotals();
   return `
     ${pageTitle("Create deck")}
+    <div style="margin:-4px 0 12px;"><button class="btn btn-ghost sm" data-act="createTour">Show tutorial</button></div>
     <div class="note" style="margin:-4px 0 14px;">Build it the way you do in K.I.T.E: add a subject, add topics inside it, then flashcards and notes inside each topic. Your draft is saved on this device as you go. When publishing, you must pick a library subject and at least one tag.</div>
     <div class="card">
       <div class="qa-label" style="color:var(--cyan);">Deck details</div>
@@ -2395,6 +2502,404 @@ function placeBadgeTip(b){
   b.classList.add((win || r.top < 70) ? "tip-down" : "tip-up");
 }
 
+/* ---------- guided tour (same engine in K.I.T.E and the Library) ---------- */
+const Tour = (() => {
+  let layer = null, steps = [], idx = 0, opts = {}, tick = null, keyFn = null, resizeFn = null;
+  const find = sel => { try{ return typeof sel === "function" ? sel() : (sel ? document.querySelector(sel) : null); }catch(e){ return null; } };
+  const visible = el => { if(!el) return false; const r = el.getBoundingClientRect(); return r.width > 4 && r.height > 4 && r.right > 0 && r.bottom > 0 && r.left < window.innerWidth && r.top < window.innerHeight; };
+  function isOpen(){ return !!layer; }
+  function step(){ return steps[idx]; }
+  function start(list, options){
+    stop();
+    steps = list.slice(); idx = 0; opts = options || {};
+    layer = document.createElement("div");
+    layer.className = "tour-layer dim"; layer.id = "tourLayer";
+    layer.innerHTML = `
+      <div class="tour-block"></div>
+      <div class="tour-hole" style="display:none"></div>
+      <div class="tour-card" role="dialog" aria-modal="true" aria-label="Tutorial">
+        <div class="tour-titlebar"><span class="td r"></span><span class="td y"></span><span class="td g"></span><span class="tour-path" data-t="path"></span><button class="tour-skip" data-t="skip">Skip tutorial</button></div>
+        <div class="tour-body"><div class="tour-kicker" data-t="kicker"></div><h3 class="tour-title" data-t="title"></h3><div class="tour-text" data-t="text"></div><div class="tour-mock" data-t="mock"></div></div>
+        <div class="tour-foot"><div class="tour-dots" data-t="dots"></div><div class="tour-btns"><button class="tour-btn" data-t="back">Back</button><button class="tour-btn primary" data-t="next">Next</button></div></div>
+      </div>`;
+    document.body.appendChild(layer);
+    layer.querySelector('[data-t="skip"]').onclick = () => finish(true);
+    layer.querySelector('[data-t="back"]').onclick = () => go(idx - 1);
+    layer.querySelector('[data-t="next"]').onclick = () => next();
+    keyFn = e => {
+      if(!layer) return;
+      if(e.key === "Escape"){ e.preventDefault(); e.stopPropagation(); finish(true); }
+      else if(e.key === "ArrowRight" || e.key === "Enter"){ if(!(e.target && /^(BUTTON|A)$/.test(e.target.tagName))){ e.preventDefault(); next(); } }
+      else if(e.key === "ArrowLeft"){ e.preventDefault(); go(idx - 1); }
+    };
+    document.addEventListener("keydown", keyFn, true);
+    resizeFn = () => place();
+    window.addEventListener("resize", resizeFn);
+    tick = setInterval(place, 400);
+    go(0);
+  }
+  function next(){ if(idx >= steps.length - 1) finish(false); else go(idx + 1); }
+  function go(i){
+    if(!layer) return;
+    idx = Math.max(0, Math.min(steps.length - 1, i));
+    const s = step(), q = sel => layer.querySelector('[data-t="' + sel + '"]');
+    q("path").textContent = s.path || "tutorial";
+    q("kicker").textContent = s.kicker || ("Step " + (idx + 1) + " of " + steps.length);
+    q("title").textContent = s.title || "";
+    q("text").innerHTML = s.text || "";
+    q("mock").innerHTML = s.mock || "";
+    q("dots").innerHTML = steps.map((_, k) => `<i class="${k === idx ? "on" : ""}"></i>`).join("");
+    q("back").disabled = idx === 0;
+    q("next").textContent = idx >= steps.length - 1 ? (s.doneLabel || "Done") : "Next";
+    if(typeof s.before === "function"){ try{ s.before(); }catch(e){} }
+    const t = find(s.target);
+    if(t && typeof t.scrollIntoView === "function"){ try{ t.scrollIntoView({ block: "center", inline: "nearest" }); }catch(e){} }
+    setTimeout(place, 60);
+    place();
+  }
+  function place(){
+    if(!layer) return;
+    const s = step(), card = layer.querySelector(".tour-card"), hole = layer.querySelector(".tour-hole");
+    const vw = window.innerWidth, vh = window.innerHeight, gap = 14;
+    const t = find(s.target);
+    const cw = card.offsetWidth, ch = card.offsetHeight;
+    if(t && visible(t)){
+      const r = t.getBoundingClientRect(), pad = 6;
+      layer.classList.remove("dim");
+      hole.style.display = "block";
+      hole.style.left = (r.left - pad) + "px"; hole.style.top = (r.top - pad) + "px";
+      hole.style.width = (r.width + pad * 2) + "px"; hole.style.height = (r.height + pad * 2) + "px";
+      let top, left;
+      if(vw < 560){
+        left = Math.max(10, (vw - cw) / 2);
+        top = (r.top + r.height / 2 > vh * 0.5) ? 10 : vh - ch - 10;
+      }else{
+        left = Math.min(Math.max(10, r.left + r.width / 2 - cw / 2), vw - cw - 10);
+        if(r.bottom + gap + ch <= vh - 8) top = r.bottom + gap + pad;
+        else if(r.top - gap - ch >= 8) top = r.top - gap - ch - pad;
+        else { top = Math.max(10, (vh - ch) / 2); left = (r.left > vw / 2) ? Math.max(10, r.left - cw - gap) : Math.min(vw - cw - 10, r.right + gap); }
+      }
+      card.style.left = left + "px"; card.style.top = Math.max(8, Math.min(vh - ch - 8, top)) + "px";
+    }else{
+      layer.classList.add("dim");
+      hole.style.display = "none";
+      card.style.left = Math.max(10, (vw - cw) / 2) + "px";
+      card.style.top = Math.max(10, (vh - ch) / 2) + "px";
+    }
+  }
+  function finish(skipped){
+    const cb = skipped ? opts.onSkip : opts.onFinish, always = opts.onEnd;
+    stop();
+    try{ if(cb) cb(); if(always) always(skipped); }catch(e){ console.warn(e); }
+  }
+  function stop(){
+    if(tick){ clearInterval(tick); tick = null; }
+    if(keyFn){ document.removeEventListener("keydown", keyFn, true); keyFn = null; }
+    if(resizeFn){ window.removeEventListener("resize", resizeFn); resizeFn = null; }
+    if(layer){ layer.remove(); layer = null; }
+  }
+  return { start, stop, isOpen, next, go: i => go(i) };
+})();
+
+/* ---------- votes: like / dislike on decks ---------- */
+const voting = new Set();
+async function loadMyVotes(){
+  myVotes = {};
+  if(!currentUser) return;
+  try{
+    const snap = await getDocs(query(collection(db, "votes"), where("uid", "==", currentUser.uid)));
+    snap.forEach(d => { const v = d.data(); if(v && v.deckId) myVotes[v.deckId] = v.vote; });
+  }catch(e){ console.warn("Failed to load your votes (add the votes rule in Firebase):", e); }
+}
+function voteBtns(d, ctx){
+  const mine = !!currentUser && ownerOf(d) === currentUser.uid, my = myVotes[d.id];
+  const attr = ctx === "modal" ? "data-mact" : "data-act";
+  const dis = mine ? " disabled" : "";
+  const tip = mine ? "You can't vote on your own deck" : "";
+  return `<span class="vote-row" data-deck="${esc(d.id)}" data-ctx="${ctx}"><button class="notif-react${my === "like" ? " active-like" : ""}" ${attr}="vote" data-arg="${esc(d.id)}|like" title="${tip || "Like"}"${dis}>👍 ${d.likes || 0}</button><button class="notif-react${my === "dislike" ? " active-dislike" : ""}" ${attr}="vote" data-arg="${esc(d.id)}|dislike" title="${tip || "Dislike"}"${dis}>👎 ${d.dislikes || 0}</button></span>`;
+}
+function refreshVoteUI(d){
+  Array.from(document.querySelectorAll(".vote-row")).filter(el => el.dataset.deck === d.id).forEach(el => { el.outerHTML = voteBtns(d, el.dataset.ctx); });
+}
+async function voteDeck(deckId, kind){
+  if(!currentUser){ toast("Sign in to vote"); closeModal(); showLogin(); return; }
+  const d = deckById.get(deckId);
+  if(!d) return;
+  if(ownerOf(d) === currentUser.uid){ toast("You can't vote on your own deck"); return; }
+  if(voting.has(deckId)) return;
+  voting.add(deckId);
+  const prev = myVotes[deckId] || null;
+  const next = prev === kind ? null : kind;
+  const dl = (next === "like" ? 1 : 0) - (prev === "like" ? 1 : 0);
+  const dd = (next === "dislike" ? 1 : 0) - (prev === "dislike" ? 1 : 0);
+  d.likes = (d.likes || 0) + dl; d.dislikes = (d.dislikes || 0) + dd;
+  if(next) myVotes[deckId] = next; else delete myVotes[deckId];
+  refreshVoteUI(d);
+  try{
+    const batch = writeBatch(db);
+    const vref = doc(db, "votes", deckId + "_" + currentUser.uid);
+    if(next) batch.set(vref, { deckId, uid: currentUser.uid, vote: next, createdAt: serverTimestamp() });
+    else batch.delete(vref);
+    const upd = {};
+    if(dl) upd.likes = increment(dl);
+    if(dd) upd.dislikes = increment(dd);
+    batch.update(doc(db, "public_decks", deckId), upd);
+    await batch.commit();
+  }catch(e){
+    console.warn("Vote failed:", e);
+    d.likes -= dl; d.dislikes -= dd;
+    if(prev) myVotes[deckId] = prev; else delete myVotes[deckId];
+    refreshVoteUI(d);
+    toast("Couldn't save your vote");
+  }finally{
+    voting.delete(deckId);
+  }
+}
+
+/* ---------- sorting ---------- */
+const SORTS = [["recommended", "Recommended"], ["liked", "Most liked"], ["newest", "Newest"], ["oldest", "Oldest"], ["downloads", "Most downloaded"], ["az", "A to Z"]];
+function sortCmp(mode){
+  const likes = d => d.likes || 0, net = d => (d.likes || 0) - (d.dislikes || 0), imp = d => d.importCount || 0, t = d => tsMs(d.createdAt);
+  switch(mode){
+    case "liked":     return (a, b) => likes(b) - likes(a) || net(b) - net(a) || t(b) - t(a);
+    case "newest":    return (a, b) => t(b) - t(a);
+    case "oldest":    return (a, b) => t(a) - t(b);
+    case "downloads": return (a, b) => imp(b) - imp(a) || t(b) - t(a);
+    case "az":        return (a, b) => String(a.title || "").localeCompare(String(b.title || ""));
+    default:          return (a, b) => net(b) - net(a) || likes(b) - likes(a) || imp(b) - imp(a) || t(b) - t(a);   // recommended
+  }
+}
+function sortRowHTML(){
+  return `<div class="sort-row"><label for="sortSelect">Sort by</label><select id="sortSelect" class="rep-select">${SORTS.map(([v, l]) => `<option value="${v}"${sortMode === v ? " selected" : ""}>${l}</option>`).join("")}</select></div>`;
+}
+
+/* ---------- notifications: badges, verified-badge applications ---------- */
+async function writeNotification(uid, fields){
+  if(!uid) return false;
+  try{
+    await setDoc(doc(collection(db, "notifications")), Object.assign({ uid, read: false, reaction: null, createdAt: serverTimestamp() }, fields));
+    return true;
+  }catch(e){ console.warn("Could not write notification:", e); return false; }
+}
+const BADGE_LABEL = { verified: "Verified (blue check)", teacher: "Verified Teacher (apple)", admin: "Admin (hammer)" };
+function nameForUid(uid){
+  const d = allDecksRaw.find(x => ownerOf(x) === uid);
+  if(d && d.ownerName) return d.ownerName;
+  if(allUsersCache){ const u = allUsersCache.find(x => x.uid === uid); if(u && u.name) return u.name; }
+  return "there";
+}
+async function notifyBadge(uid, field){
+  const label = BADGE_LABEL[field] || "new";
+  await writeNotification(uid, {
+    type: "badge", badge: field, accepted: false,
+    title: `You earned the ${label} badge`,
+    body: `Congrats ${nameForUid(uid)}! You have earned the ${label} badge. Click here to accept it.`
+  });
+}
+async function acceptBadge(id){
+  const n = myNotifications.find(x => x.id === id);
+  if(!n || n.accepted) return;
+  n.accepted = true; n.read = true;
+  try{
+    await updateDoc(doc(db, "notifications", id), { accepted: true, read: true });
+  }catch(e){
+    n.accepted = false;
+    console.warn(e); toast("Couldn't accept it right now"); return;
+  }
+  toast("Badge accepted. It's on your profile.");
+  closeModal(); render(); go("profile");
+}
+
+function likesOfUid(uid){ return allDecksRaw.filter(d => ownerOf(d) === uid).reduce((n, d) => n + (d.likes || 0), 0); }
+async function loadMyApplication(){
+  myApplication = null;
+  if(!currentUser) return;
+  try{
+    const s = await getDoc(doc(db, "verify_applications", currentUser.uid));
+    if(s.exists()) myApplication = s.data();
+  }catch(e){ console.warn("Failed to load your application (add the verify_applications rule):", e); }
+}
+async function loadApplications(){
+  if(!isMeAdmin()) return;
+  try{
+    const snap = await getDocs(collection(db, "verify_applications"));
+    applications = [];
+    snap.forEach(d => applications.push({ id: d.id, ...d.data() }));
+    applications.sort((a, b) => tsMs(a.createdAt) - tsMs(b.createdAt));
+  }catch(e){ console.warn("Failed to load applications:", e); applications = []; }
+  render();
+}
+function verifyCardHTML(){
+  const uid = currentUser.uid, likes = likesOfUid(uid);
+  const verified = !!(badges[uid] && badges[uid].verified === true);
+  let body;
+  if(verified){
+    body = `<div class="verify-msg ok">You're verified. Your blue check shows on all of your decks.</div>`;
+  }else if(myApplication){
+    body = `<div class="verify-msg">Application sent ${esc(timeAgo(myApplication.createdAt))}. An admin will look at your decks and get back to you.</div>`;
+  }else if(likes >= VERIFY_AT){
+    body = `<div class="verify-msg ok">Your decks have ${likes} likes in total. You can apply for the verified badge.</div><button class="btn btn-primary" style="margin-top:10px;" data-act="applyVerify">Apply for the verified badge</button>`;
+  }else{
+    const pct = Math.min(100, Math.round(likes / VERIFY_AT * 100));
+    body = `<div class="verify-bar"><div style="width:${pct}%"></div></div><div class="verify-msg">${likes} / ${VERIFY_AT} likes across all your decks. Reach ${VERIFY_AT} and you can apply for the verified badge.</div>`;
+  }
+  return `<div class="card"><div class="qa-label" style="color:var(--cyan);">Verified badge</div>${body}</div>`;
+}
+async function applyForVerify(){
+  if(!currentUser || myApplication) return;
+  const likes = likesOfUid(currentUser.uid);
+  if(likes < VERIFY_AT){ toast(`You need ${VERIFY_AT} likes first`); return; }
+  const data = { uid: currentUser.uid, username: reporterName(), likes, decks: myUploads().length, status: "open", createdAt: serverTimestamp() };
+  try{
+    await setDoc(doc(db, "verify_applications", currentUser.uid), data);
+    myApplication = Object.assign({}, data, { createdAt: new Date() });
+    toast("Application sent. An admin will review your decks."); render();
+  }catch(e){
+    console.warn(e);
+    toast((e && e.code === "permission-denied") ? "Couldn't apply (permission denied). Check the library rules." : "Couldn't send your application");
+  }
+}
+let eligibleChecking = false;
+async function maybeNotifyEligible(){
+  if(eligibleChecking || !currentUser || loadingDecks) return;
+  const uid = currentUser.uid, key = "kite_lib_eligible_sent_" + uid;
+  if(badges[uid] && badges[uid].verified) return;
+  if(likesOfUid(uid) < VERIFY_AT || myApplication) return;
+  try{ if(localStorage.getItem(key) === "1") return; }catch(e){}
+  if(myNotifications.some(n => n.type === "verify_eligible")) return;
+  eligibleChecking = true;
+  try{
+    await setDoc(doc(db, "notifications", "verify_eligible_" + uid), {
+      uid, type: "verify_eligible", read: false, reaction: null, createdAt: serverTimestamp(),
+      title: "You can apply for the verified badge",
+      body: `Your decks have ${likesOfUid(uid)} likes. Open your profile and tap "Apply for the verified badge". An admin will look at your decks.`
+    });
+    try{ localStorage.setItem(key, "1"); }catch(e){}
+    await loadNotifications();
+  }catch(e){
+    console.warn("Could not send the eligibility notification:", e);
+    try{ localStorage.setItem(key, "1"); }catch(err){}
+  }finally{ eligibleChecking = false; }
+}
+function applicationRowHTML(a){
+  const uid = a.uid || a.id;
+  const decks = allDecksRaw.filter(d => ownerOf(d) === uid).sort((x, y) => (y.likes || 0) - (x.likes || 0));
+  const likes = decks.reduce((n, d) => n + (d.likes || 0), 0), dis = decks.reduce((n, d) => n + (d.dislikes || 0), 0);
+  return `
+    <div class="row-card">
+      <div class="ar-main">
+        <div class="ar-title">${esc(a.username || nameForUid(uid))}${badgesHTML(uid)}</div>
+        <div class="ar-sub">${plural(decks.length, "deck")} · ${likes} likes · ${dis} dislikes · applied ${esc(timeAgo(a.createdAt))}</div>
+        <div class="ar-sub" style="margin-top:6px;gap:6px;">${decks.slice(0, 3).map(d => `<button class="btn sm btn-ghost" data-act="preview" data-arg="${esc(d.id)}">${esc((d.title || "Untitled").slice(0, 22))} · ${d.likes || 0}</button>`).join("")}</div>
+      </div>
+      <button class="btn sm btn-primary" data-act="approveApp" data-arg="${esc(uid)}">Approve</button>
+      <button class="btn sm btn-danger" data-act="denyApp" data-arg="${esc(uid)}">Deny</button>
+    </div>`;
+}
+async function approveApplication(uid){
+  const ok = await setBadge(uid, "verified", true);       // also sends the "you earned a badge" notification
+  if(!ok) return;
+  try{ await deleteDoc(doc(db, "verify_applications", uid)); }catch(e){ console.warn(e); }
+  applications = applications.filter(a => (a.uid || a.id) !== uid);
+  render();
+}
+async function denyApplication(uid){
+  if(!confirm("Deny this application? They can apply again later.")) return;
+  try{
+    await deleteDoc(doc(db, "verify_applications", uid));
+    applications = applications.filter(a => (a.uid || a.id) !== uid);
+    await writeNotification(uid, { type: "message", title: "Verified badge application", body: "Thanks for applying. We looked at your decks and couldn't verify you this time. Keep improving them and you can apply again." });
+    toast("Application denied"); render();
+  }catch(e){ adminError(e); }
+}
+
+/* ---------- send a notification to specific people ---------- */
+async function loadUsersForPicker(){
+  if(allUsersCache !== null || !isMeSuper()) return;
+  try{
+    const snap = await getDocs(collection(db, "users"));
+    allUsersCache = [];
+    snap.forEach(d => { const u = d.data(); allUsersCache.push({ uid: d.id, name: u.username || "", email: u.email || "", displayId: u.displayId || "" }); });
+  }catch(e){ allUsersCache = []; console.warn("Could not list users:", e); }
+  refreshBroadcastPicker();
+}
+function knownPeople(){
+  const map = new Map();
+  allDecksRaw.forEach(d => { const u = ownerOf(d); if(u && !map.has(u)) map.set(u, { uid: u, name: d.ownerName || "", email: "", displayId: "" }); });
+  Object.keys(badges).forEach(u => { if(!map.has(u)) map.set(u, { uid: u, name: "", email: "", displayId: "" }); });
+  reports.forEach(r => { if(r.reporterUid && !map.has(r.reporterUid)) map.set(r.reporterUid, { uid: r.reporterUid, name: r.reporterName || "", email: "", displayId: "" }); });
+  applications.forEach(a => { const u = a.uid || a.id; if(u && !map.has(u)) map.set(u, { uid: u, name: a.username || "", email: "", displayId: "" }); });
+  return Array.from(map.values());
+}
+function pickerPeople(){ return (allUsersCache && allUsersCache.length) ? allUsersCache : knownPeople(); }
+function broadcastPickerHTML(){
+  const q = bUserQuery.trim().toLowerCase();
+  const matches = q ? pickerPeople().filter(p => [p.name, p.email, p.displayId, p.uid].some(x => String(x || "").toLowerCase().includes(q)) && !bSelected.has(p.uid)).slice(0, 8) : [];
+  const chips = Array.from(bSelected.entries()).map(([uid, label]) => `<span class="sel-chip">${esc(label)}<button data-act="bUnpick" data-arg="${esc(uid)}" aria-label="Remove">×</button></span>`).join("");
+  return `
+    <div class="note" style="margin:0 0 8px;">${allUsersCache && allUsersCache.length ? `Searching all ${allUsersCache.length} users.` : "Searching people the library knows (uploaders, reporters, badge holders). You can also paste UIDs below."}</div>
+    <div>${chips || `<span class="dim" style="font-size:12px;">No one picked yet.</span>`}</div>
+    <input type="text" id="bUserSearch" class="grant-input" style="width:100%;margin:8px 0;" placeholder="Search by name, email, User ID or UID" value="${esc(bUserQuery)}" autocomplete="off">
+    ${matches.map(p => `<div class="row-card" style="padding:8px 10px;margin-bottom:6px;"><div class="ar-main"><div class="ar-title">${esc(p.name || "(no name)")}</div><div class="ar-sub">${esc(p.email || "")} ${esc(p.displayId || "")} · ${esc(p.uid.slice(0, 8))}…</div></div><button class="btn sm" data-act="bPick" data-arg="${esc(p.uid)}">Add</button></div>`).join("")}
+    <div class="auth-field" style="margin-top:8px;"><label>Or paste UIDs (comma or new line separated)</label><textarea id="bUids" style="min-height:54px;"></textarea></div>`;
+}
+function refreshBroadcastPicker(){
+  const el = document.getElementById("bPickerInner");
+  if(!el) return;
+  const a = document.activeElement, hadFocus = a && a.id === "bUserSearch", pos = hadFocus ? a.selectionStart : 0;
+  const uids = (document.getElementById("bUids") || {}).value || "";
+  el.innerHTML = broadcastPickerHTML();
+  const ta = document.getElementById("bUids"); if(ta) ta.value = uids;
+  if(hadFocus){ const i = document.getElementById("bUserSearch"); i.focus(); try{ i.setSelectionRange(pos, pos); }catch(e){} }
+}
+function bPickUser(uid){
+  const p = pickerPeople().find(x => x.uid === uid);
+  bSelected.set(uid, (p && (p.name || p.email)) || uid.slice(0, 8));
+  bUserQuery = ""; refreshBroadcastPicker();
+}
+function bUnpickUser(uid){ bSelected.delete(uid); refreshBroadcastPicker(); }
+
+/* ---------- Create Deck tutorial ---------- */
+const CREATE_TOUR_KEY = "kite_lib_create_tour_done_v1";
+function createTourSteps(){
+  const row = (n, label, meta, cls) => `<div class="tm-row ${cls || ""}"><span class="n">${n}</span><span class="l">${label}</span>${meta ? `<span class="m">${meta}</span>` : ""}</div>`;
+  const mock = (path, inner) => `<div class="tm"><div class="tm-path">${path}</div>${inner}</div>`;
+  const cardOf = sel => () => { const el = document.querySelector(sel); return el ? (el.closest(".card") || el) : null; };
+  return [
+    { path: "create-deck", kicker: "Welcome", title: "Make a deck in a few minutes",
+      text: "A deck is built the <b>same way as in K.I.T.E</b>: subjects, then topics inside them, then flashcards and notes inside each topic. This tour shows each part. You can skip it any time, and reopen it with <b>Show tutorial</b>." },
+    { path: "create-deck/details", kicker: "Step 1", title: "Name your deck", target: cardOf('[data-draft="title"]'),
+      text: "Give it a clear <b>title</b> and an optional <b>description</b>, so other people know what's inside before they import it." },
+    { path: "create-deck/library", kicker: "Step 2", title: "Pick where people will find it", target: cardOf("#createSubject"),
+      text: "Choose the library <b>subject</b> and a few <b>tags</b>. This is how people browse. If yours isn't listed, use <b>Request a subject</b> or <b>Request a tag</b> and an admin will review it." },
+    { path: "create-deck/subjects", kicker: "Step 3", title: "Add a subject to your deck", target: cardOf('[data-act="addSubject"]'),
+      text: "Type a subject name (like Mathematics) and tap <b>Add subject</b>. Your deck can hold more than one. This is the first level, exactly like <b>Select Subject</b> in K.I.T.E.",
+      mock: mock("your deck", row("", "Mathematics", "subject", "hl")) },
+    { path: "create-deck/topics", kicker: "Step 4", title: "Add topics inside it",
+      text: "Each subject gets a window with a box called <b>New topic</b>. Add topics like Algebra or Fractions. Every flashcard and note lives inside a topic.",
+      mock: mock("subject: Mathematics", row("", "Algebra", "topic", "hl") + `<div class="tm-field"><i>New topic</i> Fractions</div>`) },
+    { path: "create-deck/cards", kicker: "Step 5", title: "Add flashcards",
+      text: "Inside a topic, type the <b>question</b> and the <b>answer</b>, then press <b>Enter</b> (or tap <b>Add card</b>). Keep adding as many as you need.",
+      mock: mock("topic: Algebra", `<div class="tm-field"><i>Question</i> What is 2 + 2?</div><div class="tm-field"><i>Answer</i> 4</div>` + row("", "Add card", "", "acc hl")) },
+    { path: "create-deck/notes", kicker: "Step 6", title: "Add notes",
+      text: "Under the flashcards there's a <b>Notes</b> box. Give the note a title, write it, and tap <b>Add note</b>. Notes travel with the deck when someone imports it.",
+      mock: mock("topic: Algebra", `<div class="tm-field"><i>Note title</i> Solving equations</div><div class="tm-field"><i>Note</i> Do the same thing to both sides...</div>` + row("", "Add note", "", "acc hl")) },
+    { path: "create-deck/publish", kicker: "Step 7", title: "Publish it, or keep it for yourself", target: () => { const b = document.querySelector('[data-act="publishDraft"]'); return b ? (b.closest(".btn-row") || b) : null; },
+      text: "<b>Publish deck</b> shares it with everyone, so they can like it and import it. <b>Import to my K.I.T.E</b> puts it in your own account only. Your draft saves on this device while you work." },
+    { path: "upload-deck", kicker: "Bonus", title: "Already made cards in K.I.T.E?", target: () => document.querySelector('.sidebar [data-act="openUpload"]'),
+      text: "In K.I.T.E, open <b>Import / Export</b> and download a backup. Then tap <b>Upload Deck</b> here, pick the file, choose what to include, and publish.", doneLabel: "Start building" }
+  ];
+}
+function startCreateTour(){
+  Tour.start(createTourSteps(), { onEnd: () => { try{ localStorage.setItem(CREATE_TOUR_KEY, "1"); }catch(e){} } });
+}
+function maybeAutoCreateTour(){
+  if(view !== "create" || !currentUser || Tour.isOpen()) return;
+  let done = false;
+  try{ done = localStorage.getItem(CREATE_TOUR_KEY) === "1"; }catch(e){}
+  if(!done) startCreateTour();
+}
+
 /* ---------- navigation ---------- */
 function viewFromHash(){
   const h = location.hash.replace("#", "");
@@ -2414,7 +2919,8 @@ function go(v, fromHash){
   render();
   window.scrollTo(0, 0);
   if(v === "downloads") loadDownloads();
-  if(v === "admin"){ cleanupStaleBadges(); loadTagRequests(); loadReports(); loadBroadcasts(); }
+  if(v === "admin"){ cleanupStaleBadges(); loadTagRequests(); loadReports(); loadBroadcasts(); loadApplications(); }
+  if(v === "create") setTimeout(maybeAutoCreateTour, 600);
 }
 function showLogin(){ showingLogin = true; render(); }
 
@@ -2456,6 +2962,13 @@ appEl.addEventListener("click", e => {
     case "theme": showThemes(); break;
     case "showNotifs": showNotificationsModal(); break;
     case "pwaInstall": doInstallApp(); break;
+    case "vote": { const [vid, vk] = String(arg).split("|"); voteDeck(vid, vk); break; }
+    case "applyVerify": applyForVerify(); break;
+    case "approveApp": approveApplication(arg); break;
+    case "denyApp": denyApplication(arg); break;
+    case "bPick": bPickUser(arg); break;
+    case "bUnpick": bUnpickUser(arg); break;
+    case "createTour": startCreateTour(); break;
     case "openUpload": closeSidebar(); showUploadModal(); break;
     case "newDeck": go("create"); break;
     case "requestSubject": showRequestSubjectModal(); break;
@@ -2507,6 +3020,17 @@ appEl.addEventListener("click", e => {
   }
 });
 appEl.addEventListener("change", e => {
+  if(e.target.id === "sortSelect"){
+    sortMode = e.target.value;
+    try{ localStorage.setItem(SORT_KEY, sortMode); }catch(err){}
+    render(); return;
+  }
+  if(e.target.name === "bTarget"){
+    bDraft.target = e.target.value;
+    const p = document.getElementById("bPicker"); if(p) p.style.display = e.target.value === "users" ? "block" : "none";
+    if(e.target.value === "users") loadUsersForPicker();
+    return;
+  }
   if(e.target.id === "createSubject"){
     draft.subjectId = e.target.value; draft.tagIds = []; saveDraft();
     renderTagPicker("createTags", draft.subjectId, []);
@@ -2514,6 +3038,9 @@ appEl.addEventListener("change", e => {
 });
 let searchTimer;
 appEl.addEventListener("input", e => {
+  if(e.target.id === "bTitle"){ bDraft.title = e.target.value; return; }
+  if(e.target.id === "bBody"){ bDraft.body = e.target.value; return; }
+  if(e.target.id === "bUserSearch"){ bUserQuery = e.target.value; refreshBroadcastPicker(); return; }
   const field = e.target.dataset && e.target.dataset.draft;
   if(field){ draft[field] = e.target.value; saveDraft(); return; }
   if(e.target.id !== "searchInput") return;
@@ -2548,6 +3075,9 @@ modalEl.addEventListener("click", e => {
     case "reportMenu": el.closest(".report-wrap").classList.toggle("open"); break;
     case "importConfirm": confirmImport(el); break;
     case "readNotif": markNotificationRead(el.dataset.arg); break;
+    case "vote": { const [vid, vk] = String(el.dataset.arg).split("|"); voteDeck(vid, vk); break; }
+    case "acceptBadge": acceptBadge(el.dataset.arg); break;
+    case "openVerifyApply": closeModal(); go("profile"); break;
     case "toggleLike": toggleReaction(el.dataset.arg, "like"); break;
     case "toggleDislike": toggleReaction(el.dataset.arg, "dislike"); break;
     case "requestSubject": showRequestSubjectModal(); break;
@@ -2606,10 +3136,14 @@ onAuthStateChanged(auth, async (user) => {
   if(user){
     await loadMyProfile();
     await loadNotifications();
+    await loadMyVotes();
+    await loadMyApplication();
     await badgesPromise;
-    if(isMeAdmin()){ loadTagRequests(); loadReports(); loadBroadcasts(); }
+    if(isMeAdmin()){ loadTagRequests(); loadReports(); loadBroadcasts(); loadApplications(); }
+    maybeNotifyEligible();
   }else{
     myImports = {}; myNotifications = []; openTagRequests = []; broadcasts = []; broadcastStats = {};
+    myVotes = {}; myApplication = null; applications = []; allUsersCache = null; bSelected.clear();
   }
   if(user && pendingView){ const v = pendingView; pendingView = null; go(v, true); }
   else if(!user && pendingView){ showLogin(); }
