@@ -377,7 +377,7 @@ const firebaseConfig = {
 
 const KITE_URL = "https://d4nd4d.github.io/K.I.T.E/";
 const SUPER_ADMIN_UID = "EMTxL9cIU4dhRQeOptEaHfrhWty2";
-const LIB_VERSION = "1.0.1";
+const LIB_VERSION = "1.0.2";
 const HIDE_KEY = "kite_lib_hide_imported";
 const IMPORTS_LS_KEY = "kite_imports_v1";
 
@@ -782,7 +782,7 @@ function showSubjectTopicPickerModal(target){
   if(!state) return;
   openModal(`
     <div class="modal term" role="dialog" aria-modal="true" aria-label="Select Subject and Topics">
-      <div class="titlebar">${dotsHTML()}<span class="path">kite@library:~/ Create Deck/ Topic & Subject managment</span><button class="titlebar-back" id="closeModal">close</button></div>
+      <div class="titlebar">${dotsHTML()}<span class="path">add-subject-topics</span><button class="titlebar-back" id="closeModal">close</button></div>
       <div class="modal-body" data-target="${target}">
         <h2>Add Subject/Topics</h2>
         <div class="auth-field">
@@ -1719,7 +1719,8 @@ async function acceptBadge(id){
     toast("Badge claimed! It's now on your profile.");
     closeModal(); render(); go("profile");
   }catch(e){
-    console.warn(e); toast("Couldn't claim the badge right now.");
+    console.warn(e); 
+    toast("Couldn't claim the badge. Check Firebase rules.");
   }
 }
 
